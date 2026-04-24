@@ -184,9 +184,11 @@ sources/0 = SubResource("TileSetAtlasSource_jqbve")
 [node name="Mekanik Gelistirme" type="Node2D" unique_id=819999275]
 
 [node name="CharacterBody2D" parent="." unique_id=1224785084 instance=ExtResource("1_ssejl")]
-position = Vector2(1, -1)
+position = Vector2(-12, -25)
+collision_layer = 2
 
 [node name="Camera2D" type="Camera2D" parent="CharacterBody2D" unique_id=528242437]
+position = Vector2(30, -11)
 
 [node name="TileMap" type="TileMap" parent="." unique_id=799906512]
 tile_set = SubResource("TileSet_f0rl4")
@@ -202,7 +204,9 @@ shape = SubResource("WorldBoundaryShape2D_f0rl4")
 
 [node name="DarknessBlock" parent="." unique_id=1823739080 instance=ExtResource("4_f0rl4")]
 position = Vector2(-66, -125)
+collision_mask = 2
 
 [node name="DarknessManager" type="Node2D" parent="." unique_id=227686670]
+position = Vector2(-544, 278)
 script = ExtResource("5_d5u1p")
 darkness_block_scene = ExtResource("4_f0rl4")
