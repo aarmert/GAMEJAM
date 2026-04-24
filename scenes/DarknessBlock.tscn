@@ -7,6 +7,7 @@
 size = Vector2(11.25, 11.25)
 
 [node name="DarknessBlock" type="Area2D" unique_id=1823739080]
+collision_mask = 2
 script = ExtResource("1_3aid2")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1783010414]
