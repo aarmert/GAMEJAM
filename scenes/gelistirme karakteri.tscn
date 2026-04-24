@@ -178,6 +178,14 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_fphme")
+}],
+"loop": true,
+"name": &"wall_slide",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_m5sfa")
 }, {
 "duration": 1.0,

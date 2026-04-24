@@ -4,6 +4,8 @@ extends CharacterBody2D
 const SPEED = 130.0
 const JUMP_VELOCITY = -300.0
 const DASH_SPEED = 390.0
+const WALL_SLIDE_SPEED = 70.0
+const WALL_JUMP_PUSH = 180.0
 
 var dashing = false
 var can_dash = true
@@ -25,15 +27,23 @@ func _physics_process(delta: float) -> void:
 	else:
 		extra_jumps = 1
 
+	var direction := Input.get_axis("move_left", "move_right")
+	var touching_wall := is_on_wall() and not is_on_floor()
+
+	if touching_wall and not dashing and velocity.y > WALL_SLIDE_SPEED:
+		velocity.y = WALL_SLIDE_SPEED
+
 	# Handle jump.
 	if Input.is_action_just_pressed("jump"):
 		if is_on_floor():
 			velocity.y = JUMP_VELOCITY
+		elif touching_wall:
+			velocity.y = JUMP_VELOCITY
+			velocity.x = get_wall_normal().x * WALL_JUMP_PUSH
+			extra_jumps = 1
 		elif extra_jumps > 0:
 			velocity.y = JUMP_VELOCITY
 			extra_jumps -= 1
-
-	var direction := Input.get_axis("move_left", "move_right")
 
 	if Input.is_action_just_pressed("dash") and can_dash and $dash_cooldown_timer.is_stopped():
 		dashing = true
@@ -63,6 +73,8 @@ func _physics_process(delta: float) -> void:
 				animated_sprit.play("idle")
 			else:
 				animated_sprit.play("run")
+		elif touching_wall:
+			animated_sprit.play("wall_slide")
 		else:
 			animated_sprit.play("jump")
 
