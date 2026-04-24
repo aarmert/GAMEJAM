@@ -8,6 +8,7 @@ const DASH_SPEED = 390.0
 var dashing = false
 var can_dash = true
 var is_dead = false
+var extra_jumps = 1
 @onready var animated_sprit: AnimatedSprite2D = $AnimatedSprite2D
 @onready var health_bar: ProgressBar = $HealthBar
 
@@ -15,10 +16,16 @@ func _physics_process(delta: float) -> void:
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
+	else:
+		extra_jumps = 1
 
 	# Handle jump.
-	if Input.is_action_just_pressed("jump") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
+	if Input.is_action_just_pressed("jump"):
+		if is_on_floor():
+			velocity.y = JUMP_VELOCITY
+		elif extra_jumps > 0:
+			velocity.y = JUMP_VELOCITY
+			extra_jumps -= 1
 
 	var direction := Input.get_axis("move_left", "move_right")
 
