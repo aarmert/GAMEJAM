@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://dtdncmd6dus80" path="res://blockholders/sprites/world_tileset.png" id="2_fa8wy"]
 [ext_resource type="PackedScene" uid="uid://bsiot8o0bnp2g" path="res://scenes/killzone.tscn" id="3_jqbve"]
 [ext_resource type="PackedScene" uid="uid://bbbcr3ehux0yj" path="res://scenes/canavar.tscn" id="4_f0rl4"]
+[ext_resource type="PackedScene" uid="uid://cembhkjqm4imv" path="res://scenes/heal.tscn" id="5_d5u1p"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jqbve"]
 texture = ExtResource("2_fa8wy")
@@ -201,3 +202,6 @@ shape = SubResource("WorldBoundaryShape2D_f0rl4")
 
 [node name="Area2D" parent="." unique_id=481011045 instance=ExtResource("4_f0rl4")]
 position = Vector2(127, -5)
+
+[node name="Area2D2" parent="." unique_id=1852679614 instance=ExtResource("5_d5u1p")]
+position = Vector2(-71, -9)
