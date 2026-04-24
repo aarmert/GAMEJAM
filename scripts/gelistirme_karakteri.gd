@@ -7,7 +7,7 @@ const DASH_SPEED = 390.0
 
 var dashing = false
 var can_dash = true
-
+var is_dead = false
 @onready var animated_sprit: AnimatedSprite2D = $AnimatedSprite2D
 @onready var health_bar: ProgressBar = $HealthBar
 
@@ -67,4 +67,19 @@ func _ready() -> void:
 	health_bar.init_health(100)
 	
 func take_damage(amount: int) -> void:
+	if is_dead:
+		return
 	health_bar.health -= amount
+	if health_bar.health <= 0:
+		Engine.time_scale = 0.5
+		die()
+
+
+func die() -> void:
+	is_dead = true
+	velocity = Vector2.ZERO
+	collision_layer = 0
+	collision_mask = 0
+	await get_tree().create_timer(0.7, true, false, true).timeout
+	Engine.time_scale = 1.0
+	get_tree().reload_current_scene()
