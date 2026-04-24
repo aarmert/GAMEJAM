@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://cfsd4p82x83g" path="res://blockholders/sprites/knight.png" id="1_a0xbm"]
 [ext_resource type="Script" uid="uid://0oko25m261yo" path="res://scripts/gelistirme_karakteri.gd" id="1_ffdbh"]
+[ext_resource type="PackedScene" uid="uid://cim6738qbdawp" path="res://scenes/healthbar.tscn" id="3_3el4n"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1dp20"]
 atlas = ExtResource("1_a0xbm")
@@ -251,6 +252,12 @@ wait_time = 0.2
 [node name="dash_cooldown_timer" type="Timer" parent="." unique_id=826335408]
 wait_time = 5.0
 one_shot = true
+
+[node name="HealthBar" parent="." unique_id=1521640008 instance=ExtResource("3_3el4n")]
+offset_left = -16.0
+offset_top = -29.0
+offset_right = 16.0
+offset_bottom = -25.0
 
 [connection signal="timeout" from="dash_stop_timer" to="." method="_on_dash_stop_timer_timeout"]
 [connection signal="timeout" from="dash_cooldown_timer" to="." method="_on_dash_cooldown_timer_timeout"]
