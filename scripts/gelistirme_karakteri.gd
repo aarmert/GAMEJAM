@@ -9,6 +9,7 @@ var dashing = false
 var can_dash = true
 
 @onready var animated_sprit: AnimatedSprite2D = $AnimatedSprite2D
+@onready var health_bar: ProgressBar = $HealthBar
 
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
@@ -61,3 +62,9 @@ func _on_dash_stop_timer_timeout() -> void:
 
 func _on_dash_cooldown_timer_timeout() -> void:
 	can_dash = true
+	
+func _ready() -> void:
+	health_bar.init_health(100)
+	
+func take_damage(amount: int) -> void:
+	health_bar.health -= amount

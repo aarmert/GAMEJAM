@@ -44,7 +44,6 @@ size = Vector2(10, 12)
 
 [node name="Area2D" type="Area2D" unique_id=481011045]
 collision_layer = 2
-collision_mask = 2
 script = ExtResource("1_77a6a")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1749065333]
