@@ -21,10 +21,10 @@ func _physics_process(delta: float) -> void:
 
 	var direction := Input.get_axis("move_left", "move_right")
 
-	if Input.is_action_just_pressed("dash") and can_dash:
+	if Input.is_action_just_pressed("dash") and can_dash and $dash_cooldown_timer.is_stopped():
 		dashing = true
-		$dash_stop_timer.start()
 		can_dash = false
+		$dash_stop_timer.start()
 		$dash_cooldown_timer.start()
 
 	if direction > 0:

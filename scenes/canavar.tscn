@@ -1,0 +1,59 @@
+[gd_scene format=3 uid="uid://bbbcr3ehux0yj"]
+
+[ext_resource type="Script" uid="uid://c6u8fxqy5pgog" path="res://scripts/canavar.gd" id="1_77a6a"]
+[ext_resource type="Texture2D" uid="uid://cliopbcgorq1h" path="res://blockholders/sprites/slime_green.png" id="1_xv1l6"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xv1l6"]
+atlas = ExtResource("1_xv1l6")
+region = Rect2(0, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_77a6a"]
+atlas = ExtResource("1_xv1l6")
+region = Rect2(24, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bd08p"]
+atlas = ExtResource("1_xv1l6")
+region = Rect2(48, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_beuot"]
+atlas = ExtResource("1_xv1l6")
+region = Rect2(72, 24, 24, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_rtwo4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xv1l6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_77a6a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bd08p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_beuot")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xv1l6"]
+size = Vector2(10, 12)
+
+[node name="Area2D" type="Area2D" unique_id=481011045]
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("1_77a6a")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1749065333]
+position = Vector2(0, -12)
+sprite_frames = SubResource("SpriteFrames_rtwo4")
+autoplay = "default"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2066154769]
+position = Vector2(0, -6)
+shape = SubResource("RectangleShape2D_xv1l6")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
