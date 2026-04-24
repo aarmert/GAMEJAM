@@ -196,7 +196,7 @@ layer_0/tile_data = PackedInt32Array(65527, 0, 0, 65528, 0, 0, 65529, 0, 0, 6553
 [node name="Killzone" parent="." unique_id=1162322151 instance=ExtResource("3_jqbve")]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Killzone" unique_id=194410973]
-position = Vector2(867, 77)
+position = Vector2(867, 75.39)
 shape = SubResource("WorldBoundaryShape2D_f0rl4")
 
 [node name="Area2D" parent="." unique_id=481011045 instance=ExtResource("4_f0rl4")]
