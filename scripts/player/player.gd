@@ -4,6 +4,7 @@ extends CharacterBody2D
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var health_bar: ProgressBar = $HealthBar
 @onready var dash_bar_ui: DashBarUI = $UI/DashBar
+@onready var flashlight_bar_ui: Control = $UI/FlashlightBar
 @onready var dash_stop_timer: Timer = $dash_stop_timer
 @onready var dash_cooldown_timer: Timer = $dash_cooldown_timer
 @onready var movement_component: Node = $Components/MovementComponent
@@ -11,6 +12,7 @@ extends CharacterBody2D
 @onready var jump_wall_component: Node = $Components/JumpWallComponent
 @onready var dash_component: Node = $Components/DashComponent
 @onready var health_component: Node = $Components/HealthComponent
+@onready var flashlight_component: PlayerFlashlightComponent = $Components/FlashlightComponent
 
 @export var starts_with_dash_skill := false
 @export var starts_with_flashlight_skill := false
@@ -20,26 +22,22 @@ var double_jump_orbit_overlap_count := 0
 var dash_orbit_overlap_count := 0
 var has_dash_skill := false
 var has_flashlight_skill := false
-var flashlight_is_on := false
-var flashlight_light: PointLight2D = null
+var _flashlight_light: PointLight2D = null
 
 
 func _ready() -> void:
 	health_component.init_health(health_bar)
 	has_dash_skill = starts_with_dash_skill
-	has_flashlight_skill = starts_with_flashlight_skill
 	if not has_dash_skill:
 		dash_component.can_dash = false
-
-	flashlight_light = get_node_or_null("FlashlightPivot/PointLight2D") as PointLight2D
-	if has_flashlight_skill:
-		_ensure_flashlight_light()
-		_set_flashlight_enabled(true)
-	else:
-		_set_flashlight_enabled(false)
-
 	dash_bar_ui.init_dash(dash_cooldown_timer.wait_time)
 	_update_dash_cooldown_ui()
+
+	has_flashlight_skill = starts_with_flashlight_skill
+	if has_flashlight_skill:
+		_setup_flashlight()
+	else:
+		flashlight_bar_ui.set_locked()
 
 
 func _physics_process(delta: float) -> void:
@@ -93,6 +91,10 @@ func _physics_process(delta: float) -> void:
 	dash_component.update_cooldown_display(delta)
 	move_and_slide()
 	_update_dash_cooldown_ui()
+
+	if has_flashlight_skill:
+		flashlight_component.flashlight_update(delta)
+		_update_flashlight_direction()
 
 
 func _update_dash_cooldown_ui() -> void:
@@ -159,13 +161,6 @@ func _on_darkness_damage_timer_timeout() -> void:
 		take_damage(5)
 
 
-func _unhandled_input(event: InputEvent) -> void:
-	if not has_flashlight_skill:
-		return
-	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F:
-		_set_flashlight_enabled(not flashlight_is_on)
-
-
 func unlock_skill(skill_name: String) -> bool:
 	match skill_name:
 		"dash":
@@ -190,51 +185,76 @@ func unlock_flashlight_skill() -> bool:
 	if has_flashlight_skill:
 		return false
 	has_flashlight_skill = true
-	_ensure_flashlight_light()
-	_set_flashlight_enabled(true)
+	_setup_flashlight()
 	return true
 
 
-func _set_flashlight_enabled(is_enabled: bool) -> void:
-	flashlight_is_on = is_enabled and has_flashlight_skill
-	if flashlight_light:
-		flashlight_light.enabled = flashlight_is_on
+func _setup_flashlight() -> void:
+	_ensure_flashlight_light()
+	flashlight_component.init_flashlight(_flashlight_light, null)
+	flashlight_component.battery_changed.connect(_on_flashlight_battery_changed)
+	flashlight_bar_ui.update_battery(1.0, false)
+
+
+func _on_flashlight_battery_changed(percent: float) -> void:
+	flashlight_bar_ui.update_battery(percent, flashlight_component.is_on)
+
+
+func _update_flashlight_direction() -> void:
+	var pivot := get_node_or_null("FlashlightPivot") as Node2D
+	if pivot == null:
+		return
+	pivot.scale.x = -1.0 if animated_sprite.flip_h else 1.0
 
 
 func _ensure_flashlight_light() -> void:
-	if flashlight_light and is_instance_valid(flashlight_light):
+	if _flashlight_light and is_instance_valid(_flashlight_light):
 		return
 
 	var pivot := get_node_or_null("FlashlightPivot") as Node2D
 	if pivot == null:
 		pivot = Node2D.new()
 		pivot.name = "FlashlightPivot"
+		pivot.position = Vector2(0, -28)
 		add_child(pivot)
 
-	flashlight_light = PointLight2D.new()
-	flashlight_light.name = "PointLight2D"
-	flashlight_light.position = Vector2(0, -24)
-	flashlight_light.energy = 1.3
-	flashlight_light.texture_scale = 0.2
-	flashlight_light.range_z_min = -4096
-	flashlight_light.range_z_max = 4096
-	flashlight_light.range_layer_min = -128
-	flashlight_light.range_layer_max = 128
+	_flashlight_light = PointLight2D.new()
+	_flashlight_light.name = "PointLight2D"
+	_flashlight_light.position = Vector2(0, 0)
+	_flashlight_light.energy = 1.5
+	_flashlight_light.texture_scale = 1.5
+	_flashlight_light.range_z_min = -4096
+	_flashlight_light.range_z_max = 4096
+	_flashlight_light.range_layer_min = -128
+	_flashlight_light.range_layer_max = 128
+	_flashlight_light.enabled = false
+	_flashlight_light.texture = _create_cone_texture()
 
-	var gradient := Gradient.new()
-	gradient.offsets = PackedFloat32Array([0.0, 1.0])
-	gradient.colors = PackedColorArray([
-		Color(1, 1, 1, 1),
-		Color(1, 1, 1, 0)
-	])
+	pivot.add_child(_flashlight_light)
 
-	var gradient_texture := GradientTexture2D.new()
-	gradient_texture.gradient = gradient
-	gradient_texture.width = 256
-	gradient_texture.height = 256
-	gradient_texture.fill = GradientTexture2D.FILL_RADIAL
-	gradient_texture.fill_from = Vector2(0.5, 0.5)
-	gradient_texture.fill_to = Vector2(1, 0.5)
-	flashlight_light.texture = gradient_texture
 
-	pivot.add_child(flashlight_light)
+func _create_cone_texture() -> ImageTexture:
+	var size: int = 256
+	var img := Image.create(size, size, false, Image.FORMAT_RGBA8)
+	img.fill(Color(0, 0, 0, 0))
+	var half: int = size >> 1
+	var cx: float = float(half)
+	var cy: float = float(half)
+	var max_dist: float = float(half)
+	var half_angle: float = deg_to_rad(35.0)
+	for y in range(size):
+		for x in range(size):
+			var dx: float = float(x) - cx
+			var dy: float = float(y) - cy
+			if dx <= 0.0:
+				continue
+			var dist: float = sqrt(dx * dx + dy * dy)
+			if dist > max_dist:
+				continue
+			var angle: float = abs(atan2(dy, dx))
+			if angle > half_angle:
+				continue
+			var dist_falloff: float = 1.0 - dist / max_dist
+			var angle_falloff: float = 1.0 - angle / half_angle
+			img.set_pixel(x, y, Color(1.0, 1.0, 1.0, clampf(dist_falloff * sqrt(angle_falloff), 0.0, 1.0)))
+	return ImageTexture.create_from_image(img)
