@@ -11,6 +11,7 @@ extends CharacterBody2D
 @onready var jump_wall_component: Node = $Components/JumpWallComponent
 @onready var dash_component: Node = $Components/DashComponent
 @onready var health_component: Node = $Components/HealthComponent
+@onready var flashlight_component: Node = get_node_or_null("Components/FlashlightComponent")
 
 var safe_zones := 0
 var orbit_zone_overlap_count := 0
@@ -21,9 +22,17 @@ func _ready() -> void:
 	health_component.init_health(health_bar)
 	dash_bar_ui.init_dash(dash_cooldown_timer.wait_time)
 	_update_dash_cooldown_ui()
+	if flashlight_component:
+		flashlight_component.init_flashlight(
+			$FlashlightPivot/PointLight2D,
+			$FlashlightPivot/ConeArea
+		)
 
 
 func _physics_process(delta: float) -> void:
+	if flashlight_component:
+		flashlight_component.flashlight_update(delta)
+
 	if not health_component.can_receive_actions():
 		velocity += get_gravity() * delta
 		move_and_slide()
