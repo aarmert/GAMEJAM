@@ -1,7 +1,6 @@
 extends CharacterBody2D
 
 
-@onready var flashlight_pivot: Node2D = $FlashlightPivot
 @onready var animated_sprit: AnimatedSprite2D = $AnimatedSprite2D
 @onready var health_bar: ProgressBar = $HealthBar
 @onready var dash_bar_ui: Node = $UI/DashBar
@@ -49,10 +48,7 @@ func _physics_process(delta: float) -> void:
 
 	movement_component.apply_facing(animated_sprit, direction)
 
-	if direction > 0:
-		flashlight_pivot.scale.x = 1
-	elif direction < 0:
-		flashlight_pivot.scale.x = -1
+	
 
 	if dash_component.dashing:
 		dash_component.apply_dash_velocity(self, direction, animated_sprit.flip_h)

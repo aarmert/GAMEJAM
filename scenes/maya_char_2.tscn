@@ -211,7 +211,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gs77c"]
-size = Vector2(16, 47)
+size = Vector2(16, 30)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aubyo"]
 size = Vector2(48, 40)
@@ -226,7 +226,7 @@ animation = &"run"
 autoplay = "idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=811189942]
-position = Vector2(0, -23.5)
+position = Vector2(0, -32)
 shape = SubResource("RectangleShape2D_gs77c")
 
 [node name="DarknessDamageTimer" type="Timer" parent="." unique_id=271407978]
