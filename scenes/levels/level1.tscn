@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://7uhgpikmv2q" path="res://blockholders/sprites/tileset.png" id="1_x6ivy"]
 [ext_resource type="PackedScene" uid="uid://ctow644cold5d" path="res://scenes/gelistirme karakteri.tscn" id="2_4tcl0"]
 [ext_resource type="PackedScene" uid="uid://6fq8haytgh88" path="res://scenes/levels/level1_Scene/darkness_block_1_1.tscn" id="4_bfxgj"]
+[ext_resource type="Script" uid="uid://qijct5ke70mo" path="res://scripts/level1_Script/Manager_Darkness.gd" id="5_dywbp"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4tcl0"]
 texture = ExtResource("1_x6ivy")
@@ -93,9 +94,14 @@ layer_0/tile_data = PackedInt32Array(196606, 1, 0, 196607, 65537, 0, 131072, 131
 position = Vector2(-482, 277)
 
 [node name="Camera2D" type="Camera2D" parent="CharacterBody2D" unique_id=1024976519]
-position = Vector2(-4, 9)
+position = Vector2(1, -2)
 zoom = Vector2(4, 4)
 
 [node name="Darkness_Block1_1" parent="." unique_id=804301445 instance=ExtResource("4_bfxgj")]
 
-[node name="Darkness_Manager1_1" type="Node2D" parent="." unique_id=319837021]
+[node name="Manager_Darkness" type="Node2D" parent="." unique_id=319837021 node_paths=PackedStringArray("player", "tile_map")]
+script = ExtResource("5_dywbp")
+block_scene = ExtResource("4_bfxgj")
+player = NodePath("../CharacterBody2D")
+tile_map = NodePath("../TileMap")
+speed = null
