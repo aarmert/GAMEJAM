@@ -19,7 +19,8 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		return
 
-	jump_wall_component.apply_gravity(self, delta)
+	if not dash_component.dashing:
+		jump_wall_component.apply_gravity(self, delta)
 	jump_component.reset_on_floor(self)
 
 	var direction := Input.get_axis("move_left", "move_right")
@@ -41,9 +42,11 @@ func _physics_process(delta: float) -> void:
 
 	if dash_component.dashing:
 		dash_component.apply_dash_velocity(self, direction, animated_sprit.flip_h)
+		dash_component.spawn_dash_trail(self, animated_sprit, delta)
 		animated_sprit.play("dash")
 	else:
-		movement_component.apply_horizontal_movement(self, direction)
+		if not dash_component.apply_recovery_movement(self, direction, movement_component.speed, delta):
+			movement_component.apply_horizontal_movement(self, direction)
 
 		if is_on_floor():
 			if direction == 0:
