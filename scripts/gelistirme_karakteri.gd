@@ -1,72 +1,47 @@
 extends CharacterBody2D
 
 
-const SPEED = 130.0
-const JUMP_VELOCITY = -300.0
-const DASH_SPEED = 390.0
-const WALL_SLIDE_SPEED = 70.0
-const WALL_JUMP_PUSH = 180.0
-
-var dashing = false
-var can_dash = true
-var extra_jumps = 1
-var is_dead = false
-
 @onready var animated_sprit: AnimatedSprite2D = $AnimatedSprite2D
 @onready var health_bar: ProgressBar = $HealthBar
+@onready var dash_stop_timer: Timer = $dash_stop_timer
+@onready var dash_cooldown_timer: Timer = $dash_cooldown_timer
+@onready var movement_component: Node = $Components/MovementComponent
+@onready var jump_component: Node = $Components/JumpComponent
+@onready var jump_wall_component: Node = $Components/JumpWallComponent
+@onready var dash_component: Node = $Components/DashComponent
+@onready var health_component: Node = $Components/HealthComponent
 
 func _physics_process(delta: float) -> void:
-	if is_dead:
+	if not health_component.can_receive_actions():
 		velocity += get_gravity() * delta
 		move_and_slide()
 		return
 
-	# Add the gravity.
-	if not is_on_floor():
-		velocity += get_gravity() * delta
-	else:
-		extra_jumps = 1
+	jump_wall_component.apply_gravity(self, delta)
+	jump_component.reset_on_floor(self)
 
 	var direction := Input.get_axis("move_left", "move_right")
-	var touching_wall := is_on_wall() and not is_on_floor()
+	var touching_wall: bool = jump_wall_component.apply_wall_slide(self, not dash_component.dashing)
 
-	if touching_wall and not dashing and velocity.y > WALL_SLIDE_SPEED:
-		velocity.y = WALL_SLIDE_SPEED
-
-	# Handle jump.
 	if Input.is_action_just_pressed("jump"):
 		if is_on_floor():
-			velocity.y = JUMP_VELOCITY
+			jump_component.jump_from_floor(self)
 		elif touching_wall:
-			velocity.y = JUMP_VELOCITY
-			velocity.x = get_wall_normal().x * WALL_JUMP_PUSH
-			extra_jumps = 1
-		elif extra_jumps > 0:
-			velocity.y = JUMP_VELOCITY
-			extra_jumps -= 1
+			jump_wall_component.wall_jump(self, jump_component.jump_velocity)
+			jump_component.restore_extra_jumps()
+		else:
+			jump_component.try_extra_jump(self)
 
-	if Input.is_action_just_pressed("dash") and can_dash and $dash_cooldown_timer.is_stopped():
-		dashing = true
-		can_dash = false
-		$dash_stop_timer.start()
-		$dash_cooldown_timer.start()
+	if Input.is_action_just_pressed("dash"):
+		dash_component.try_start_dash(dash_stop_timer, dash_cooldown_timer)
 
-	if direction > 0:
-		animated_sprit.flip_h = false
-	elif direction < 0:
-		animated_sprit.flip_h = true
+	movement_component.apply_facing(animated_sprit, direction)
 
-	if dashing:
-		var dash_dir = direction
-		if dash_dir == 0:
-			dash_dir = -1 if animated_sprit.flip_h else 1
-		velocity.x = dash_dir * DASH_SPEED
+	if dash_component.dashing:
+		dash_component.apply_dash_velocity(self, direction, animated_sprit.flip_h)
 		animated_sprit.play("dash")
 	else:
-		if direction:
-			velocity.x = direction * SPEED
-		else:
-			velocity.x = move_toward(velocity.x, 0, SPEED)
+		movement_component.apply_horizontal_movement(self, direction)
 
 		if is_on_floor():
 			if direction == 0:
@@ -82,34 +57,29 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_dash_stop_timer_timeout() -> void:
-	dashing = false
+	dash_component.on_dash_stop_timeout()
 
 
 func _on_dash_cooldown_timer_timeout() -> void:
-	can_dash = true
+	dash_component.on_dash_cooldown_timeout()
 
 
 func _ready() -> void:
-	health_bar.init_health(100)
+	health_component.init_health(health_bar)
 
 
 func take_damage(amount: int) -> void:
-	if is_dead:
-		return
-	health_bar.health -= amount
-	if health_bar.health <= 0:
+	if health_component.apply_damage(health_bar, amount):
 		Engine.time_scale = 0.5
 		die()
 
 
 func heal(amount: int) -> void:
-	if is_dead:
-		return
-	health_bar.health += amount
+	health_component.apply_heal(health_bar, amount)
 
 
 func die() -> void:
-	is_dead = true
+	health_component.mark_dead()
 	velocity = Vector2.ZERO
 	collision_layer = 0
 	collision_mask = 0

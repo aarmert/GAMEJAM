@@ -3,6 +3,11 @@
 [ext_resource type="Texture2D" uid="uid://cfsd4p82x83g" path="res://blockholders/sprites/knight.png" id="1_a0xbm"]
 [ext_resource type="Script" uid="uid://0oko25m261yo" path="res://scripts/gelistirme_karakteri.gd" id="1_ffdbh"]
 [ext_resource type="PackedScene" uid="uid://cim6738qbdawp" path="res://scenes/healthbar.tscn" id="3_3el4n"]
+[ext_resource type="Script" path="res://scripts/player/player_movement_component.gd" id="4_mvcpn"]
+[ext_resource type="Script" path="res://scripts/player/player_jump_wall_component.gd" id="5_jwcpn"]
+[ext_resource type="Script" path="res://scripts/player/player_dash_component.gd" id="6_dscpn"]
+[ext_resource type="Script" path="res://scripts/player/player_health_component.gd" id="7_hlcpn"]
+[ext_resource type="Script" path="res://scripts/player/player_jump_component.gd" id="8_jpcpn"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1dp20"]
 atlas = ExtResource("1_a0xbm")
@@ -267,6 +272,23 @@ offset_left = -16.0
 offset_top = -29.0
 offset_right = 16.0
 offset_bottom = -25.0
+
+[node name="Components" type="Node" parent="."]
+
+[node name="MovementComponent" type="Node" parent="Components"]
+script = ExtResource("4_mvcpn")
+
+[node name="JumpComponent" type="Node" parent="Components"]
+script = ExtResource("8_jpcpn")
+
+[node name="JumpWallComponent" type="Node" parent="Components"]
+script = ExtResource("5_jwcpn")
+
+[node name="DashComponent" type="Node" parent="Components"]
+script = ExtResource("6_dscpn")
+
+[node name="HealthComponent" type="Node" parent="Components"]
+script = ExtResource("7_hlcpn")
 
 [connection signal="timeout" from="dash_stop_timer" to="." method="_on_dash_stop_timer_timeout"]
 [connection signal="timeout" from="dash_cooldown_timer" to="." method="_on_dash_cooldown_timer_timeout"]
