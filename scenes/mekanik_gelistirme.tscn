@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://bsiot8o0bnp2g" path="res://scenes/killzone.tscn" id="3_jqbve"]
 [ext_resource type="PackedScene" uid="uid://diftucm75sxs5" path="res://scenes/DarknessBlock.tscn" id="4_f0rl4"]
 [ext_resource type="PackedScene" path="res://scenes/orbit/dash_orbiti.tscn" id="5_cihii"]
-[ext_resource type="Script" path="res://scripts/darkness_manager.gd" id="5_d5u1p"]
+[ext_resource type="Script" uid="uid://cf48tudvsyonc" path="res://scripts/darkness_manager.gd" id="5_d5u1p"]
 [ext_resource type="PackedScene" uid="uid://bbbcr3ehux0yj" path="res://scenes/canavar.tscn" id="6_o8r7p"]
 [ext_resource type="PackedScene" uid="uid://cembhkjqm4imv" path="res://scenes/heal.tscn" id="7_yu0b6"]
 [ext_resource type="PackedScene" path="res://scenes/orbit/double_jump_orbiti.tscn" id="8_orbzn"]
