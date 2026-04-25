@@ -4,6 +4,8 @@
 [ext_resource type="PackedScene" uid="uid://bxwiy1x2a35gc" path="res://scenes/enemy.tscn" id="2_672k7"]
 [ext_resource type="PackedScene" uid="uid://bbbcr3ehux0yj" path="res://scenes/canavar.tscn" id="3_81rl0"]
 [ext_resource type="PackedScene" path="res://scenes/asil_karakter.tscn" id="4_e311u"]
+[ext_resource type="PackedScene" path="res://scenes/items/dash_pickup.tscn" id="5_7yj6c"]
+[ext_resource type="PackedScene" path="res://scenes/items/flashlight_pickup.tscn" id="6_7uk2o"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2vbcs"]
 texture = ExtResource("1_cpls8")
@@ -276,3 +278,9 @@ position = Vector2(111, -3)
 
 [node name="Camera2D" type="Camera2D" parent="player" unique_id=1691889475]
 zoom = Vector2(2, 2)
+
+[node name="DashPickup" parent="." instance=ExtResource("5_7yj6c")]
+position = Vector2(-141, -21)
+
+[node name="FlashlightPickup" parent="." instance=ExtResource("6_7uk2o")]
+position = Vector2(186, -21)

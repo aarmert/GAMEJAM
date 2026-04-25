@@ -7,6 +7,7 @@ class_name DashBarUI
 
 var ready_color := Color(0.55, 1.0, 0.55, 1.0)
 var cooldown_color := Color(1.0, 0.75, 0.45, 1.0)
+var locked_color := Color(0.8, 0.35, 0.35, 1.0)
 
 
 func init_dash(max_seconds: float) -> void:
@@ -33,4 +34,10 @@ func update_dash(remaining: float, max_seconds: float) -> void:
 func set_ready() -> void:
 	dash_label.text = "Dash: Ready"
 	dash_label.modulate = ready_color
+
+
+func set_locked() -> void:
+	dash_label.text = "Dash: Locked"
+	dash_label.modulate = locked_color
+	dash_bar.value = 0.0
 

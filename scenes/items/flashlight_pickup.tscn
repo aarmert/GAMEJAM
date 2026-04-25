@@ -1,0 +1,20 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/items/skill_pickup.gd" id="1_9l6tw"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_flashlight"]
+radius = 8.0
+
+[node name="FlashlightPickup" type="Area2D"]
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("1_9l6tw")
+skill_name = "flashlight"
+pickup_label = "El feneri açıldı (F ile aç/kapat)"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_flashlight")
+
+[node name="Visual" type="Polygon2D" parent="."]
+color = Color(1, 0.95, 0.45, 1)
+polygon = PackedVector2Array(-5, -10, 5, -10, 7, -4, 7, 6, 0, 10, -7, 6, -7, -4)
