@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://6fq8haytgh88"]
 
-[ext_resource type="Script" uid="uid://bfu04se3gvsea" path="res://scripts/level1_Script/darkness_block_1_1.gd" id="1_l6cnf"]
+[ext_resource type="Script" path="res://scripts/darkness/darkness_block_1_1.gd" id="1_l6cnf"]
 [ext_resource type="Texture2D" uid="uid://7uhgpikmv2q" path="res://blockholders/sprites/tileset.png" id="1_qtw0r"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dd0lh"]

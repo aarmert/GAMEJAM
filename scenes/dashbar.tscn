@@ -1,6 +1,6 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://scripts/dashbar.gd" id="1_dashbar"]
+[ext_resource type="Script" path="res://scripts/ui/dashbar.gd" id="1_dashbar"]
 [ext_resource type="Texture2D" uid="uid://d70w2e3m5w3u4" path="res://icon.svg" id="2_dashicon"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dashpanel"]

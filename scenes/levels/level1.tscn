@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://d1buep7rqwlbl"]
 
-[ext_resource type="Script" uid="uid://q0d58e0u5i4y" path="res://scripts/darkness_block.gd" id="1_dywbp"]
+[ext_resource type="Script" path="res://scripts/darkness/darkness_block.gd" id="1_dywbp"]
 [ext_resource type="Texture2D" uid="uid://7uhgpikmv2q" path="res://blockholders/sprites/tileset.png" id="1_x6ivy"]
 [ext_resource type="PackedScene" uid="uid://6fq8haytgh88" path="res://scenes/levels/level1_Scene/darkness_block_1_1.tscn" id="4_bfxgj"]
-[ext_resource type="Script" uid="uid://qijct5ke70mo" path="res://scripts/level1_Script/Manager_Darkness.gd" id="5_dywbp"]
-[ext_resource type="PackedScene" uid="uid://cm0udogbmydbq" path="res://scenes/maya_char_2.tscn" id="6_1seuy"]
+[ext_resource type="Script" path="res://scripts/darkness/Manager_Darkness.gd" id="5_dywbp"]
+[ext_resource type="PackedScene" uid="uid://cm0udogbmydbq" path="res://scenes/asil_karakter.tscn" id="6_1seuy"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4tcl0"]
 texture = ExtResource("1_x6ivy")

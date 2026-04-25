@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cembhkjqm4imv"]
 
-[ext_resource type="Script" uid="uid://dewcrrmnp37tr" path="res://scripts/heal.gd" id="1_8vb04"]
+[ext_resource type="Script" path="res://scripts/world/heal.gd" id="1_8vb04"]
 [ext_resource type="Texture2D" uid="uid://cu0kbp5sl3b0i" path="res://blockholders/sprites/coin.png" id="1_iej0i"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_8vb04"]

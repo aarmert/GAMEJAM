@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bbbcr3ehux0yj"]
 
-[ext_resource type="Script" uid="uid://c6u8fxqy5pgog" path="res://scripts/canavar.gd" id="1_77a6a"]
+[ext_resource type="Script" path="res://scripts/enemies/canavar.gd" id="1_77a6a"]
 [ext_resource type="Texture2D" uid="uid://cliopbcgorq1h" path="res://blockholders/sprites/slime_green.png" id="1_xv1l6"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xv1l6"]
