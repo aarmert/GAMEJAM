@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://scripts/darkness_manager.gd" id="5_d5u1p"]
 [ext_resource type="PackedScene" uid="uid://bbbcr3ehux0yj" path="res://scenes/canavar.tscn" id="6_o8r7p"]
 [ext_resource type="PackedScene" uid="uid://cembhkjqm4imv" path="res://scenes/heal.tscn" id="7_yu0b6"]
+[ext_resource type="PackedScene" path="res://scenes/orbit_zone.tscn" id="8_orbzn"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jqbve"]
 texture = ExtResource("2_fa8wy")
@@ -231,6 +232,9 @@ collision_mask = 2
 
 [node name="WallTestArea" type="Node2D" parent="Level 1 (Arda)" unique_id=151507892]
 position = Vector2(-7, -70)
+
+[node name="OrbitZone" parent="Level 1 (Arda)" instance=ExtResource("8_orbzn")]
+position = Vector2(-6, -86)
 
 [node name="WallLeft" type="StaticBody2D" parent="WallTestArea" unique_id=2004279919]
 position = Vector2(-70, 0)
