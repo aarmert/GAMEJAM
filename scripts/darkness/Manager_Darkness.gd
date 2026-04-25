@@ -6,6 +6,7 @@ extends Node2D
 @export var speed: float = 0.16 # Selin hızı
 @export var spawn_count: int = 5 # Tek seferde eklenecek blok sayısı
 
+
 const TILE_SIZE = 32
 
 var time_passed: float = 0.0
@@ -21,6 +22,8 @@ func _ready() -> void:
 	occupied_blocks[global_position] = true
 
 func _process(delta: float) -> void:
+	
+
 	if not player or frontier_blocks.is_empty():
 		return
 

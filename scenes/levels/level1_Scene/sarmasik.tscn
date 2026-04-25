@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://dqqsb320dgdhl"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rjvrp"]
+size = Vector2(20, 82)
+
+[node name="sarmasik" type="Area2D" unique_id=1950956920]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=80369547]
+position = Vector2(-1, -1)
+shape = SubResource("RectangleShape2D_rjvrp")
