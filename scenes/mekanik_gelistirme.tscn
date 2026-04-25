@@ -7,7 +7,7 @@
 [ext_resource type="Script" uid="uid://cf48tudvsyonc" path="res://scripts/darkness_manager.gd" id="5_d5u1p"]
 [ext_resource type="PackedScene" uid="uid://bbbcr3ehux0yj" path="res://scenes/canavar.tscn" id="6_o8r7p"]
 [ext_resource type="PackedScene" uid="uid://cembhkjqm4imv" path="res://scenes/heal.tscn" id="7_yu0b6"]
-[ext_resource type="PackedScene" path="res://scenes/orbit_zone.tscn" id="8_orbzn"]
+[ext_resource type="PackedScene" uid="uid://myetscf5df70" path="res://scenes/orbit_zone.tscn" id="8_orbzn"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jqbve"]
 texture = ExtResource("2_fa8wy")
