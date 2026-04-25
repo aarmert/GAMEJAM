@@ -211,7 +211,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gs77c"]
-size = Vector2(16, 47)
+size = Vector2(16, 32)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aubyo"]
 size = Vector2(48, 40)
@@ -226,7 +226,7 @@ animation = &"run"
 autoplay = "idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=811189942]
-position = Vector2(0, -23.5)
+position = Vector2(0, -31)
 shape = SubResource("RectangleShape2D_gs77c")
 
 [node name="DarknessDamageTimer" type="Timer" parent="." unique_id=271407978]
@@ -283,3 +283,6 @@ offset_bottom = 0.0
 [connection signal="timeout" from="DarknessDamageTimer" to="." method="_on_darkness_damage_timer_timeout"]
 [connection signal="timeout" from="dash_stop_timer" to="." method="_on_dash_stop_timer_timeout"]
 [connection signal="timeout" from="dash_cooldown_timer" to="." method="_on_dash_cooldown_timer_timeout"]
+[connection signal="area_entered" from="OrbitDetector" to="." method="_on_orbit_detector_area_entered"]
+[connection signal="area_exited" from="OrbitDetector" to="." method="_on_orbit_detector_area_exited"]
+[connection signal="area_shape_exited" from="OrbitDetector" to="." method="_on_orbit_detector_area_shape_exited"]
