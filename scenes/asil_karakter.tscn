@@ -13,6 +13,8 @@
 [ext_resource type="Script" uid="uid://bbmkrbh7klrwl" path="res://scripts/player/player_dash_component.gd" id="7_bvqhj"]
 [ext_resource type="Script" uid="uid://8n78egk216uk" path="res://scripts/player/player_health_component.gd" id="8_lqk5f"]
 [ext_resource type="PackedScene" path="res://scenes/dashbar.tscn" id="9_f5x6t"]
+[ext_resource type="Script" path="res://scripts/player/player_flashlight_component.gd" id="10_flcomp"]
+[ext_resource type="PackedScene" path="res://scenes/flashlightbar.tscn" id="11_flbar"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qhn6r"]
 atlas = ExtResource("2_d78kl")
@@ -487,14 +489,23 @@ script = ExtResource("7_bvqhj")
 [node name="HealthComponent" type="Node" parent="Components" unique_id=1652147034]
 script = ExtResource("8_lqk5f")
 
+[node name="FlashlightComponent" type="Node" parent="Components"]
+script = ExtResource("10_flcomp")
+
 [node name="UI" type="CanvasLayer" parent="." unique_id=1938775163]
 
 [node name="DashBar" parent="UI" unique_id=1422109252 instance=ExtResource("9_f5x6t")]
-anchors_preset = 3
-offset_left = -232.0
-offset_top = -60.0
-offset_right = 0.0
-offset_bottom = 0.0
+
+[node name="FlashlightBar" parent="UI" instance=ExtResource("11_flbar")]
+anchors_preset = 2
+anchor_left = 0.0
+anchor_top = 1.0
+anchor_right = 0.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = -124.0
+offset_right = 356.0
+offset_bottom = -64.0
 
 [connection signal="timeout" from="DarknessDamageTimer" to="." method="_on_darkness_damage_timer_timeout"]
 [connection signal="timeout" from="dash_stop_timer" to="." method="_on_dash_stop_timer_timeout"]
