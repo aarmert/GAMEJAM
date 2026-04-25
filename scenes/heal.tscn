@@ -3,6 +3,9 @@
 [ext_resource type="Script" uid="uid://dewcrrmnp37tr" path="res://scripts/heal.gd" id="1_8vb04"]
 [ext_resource type="Texture2D" uid="uid://cu0kbp5sl3b0i" path="res://blockholders/sprites/coin.png" id="1_iej0i"]
 
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_8vb04"]
+light_mode = 1
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_8vb04"]
 atlas = ExtResource("1_iej0i")
 region = Rect2(0, 0, 16, 16)
@@ -98,11 +101,24 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_jle0f"]
 radius = 4.1231055
 
+[sub_resource type="Gradient" id="Gradient_531e2"]
+offsets = PackedFloat32Array(0, 0.9819277)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_8vb04"]
+gradient = SubResource("Gradient_531e2")
+width = 256
+height = 256
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
 [node name="Area2D" type="Area2D" unique_id=1852679614]
 collision_layer = 2
 script = ExtResource("1_8vb04")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=319148297]
+material = SubResource("CanvasItemMaterial_8vb04")
 sprite_frames = SubResource("SpriteFrames_ks0tl")
 autoplay = "default"
 
@@ -111,6 +127,14 @@ shape = SubResource("CircleShape2D_jle0f")
 
 [node name="HealTimer" type="Timer" parent="." unique_id=1322249233]
 wait_time = 0.5
+
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=1850437032]
+position = Vector2(0, 1.0000019)
+scale = Vector2(2.3359375, 2.140625)
+color = Color(1, 0.8235294, 0.49803922, 1)
+energy = 3.0
+texture = SubResource("GradientTexture2D_8vb04")
+texture_scale = 0.2
 
 [connection signal="area_shape_exited" from="." to="." method="_on_area_shape_exited"]
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
