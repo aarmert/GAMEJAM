@@ -7,7 +7,7 @@
 [ext_resource type="Script" uid="uid://cf48tudvsyonc" path="res://scripts/darkness_manager.gd" id="5_d5u1p"]
 [ext_resource type="PackedScene" uid="uid://bbbcr3ehux0yj" path="res://scenes/canavar.tscn" id="6_o8r7p"]
 [ext_resource type="PackedScene" uid="uid://cembhkjqm4imv" path="res://scenes/heal.tscn" id="7_yu0b6"]
-[ext_resource type="PackedScene" uid="uid://myetscf5df70" path="res://scenes/orbit_zone.tscn" id="8_orbzn"]
+[ext_resource type="PackedScene" path="res://scenes/orbit/double_jump_orbiti.tscn" id="8_orbzn"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jqbve"]
 texture = ExtResource("2_fa8wy")
@@ -196,6 +196,10 @@ z_index = 5
 position = Vector2(-12, -25)
 collision_layer = 2
 
+[node name="Camera2D" type="Camera2D" parent="Level 1 (Arda)/CharacterBody2D" unique_id=528242437]
+position = Vector2(30, -11)
+zoom = Vector2(4, 4)
+
 [node name="Canavar" parent="Level 1 (Arda)" unique_id=481011045 instance=ExtResource("6_o8r7p")]
 position = Vector2(31, -1)
 collision_layer = 1
@@ -209,12 +213,8 @@ collision_mask = 2
 [node name="WallTestArea" type="Node2D" parent="Level 1 (Arda)" unique_id=151507892]
 position = Vector2(-7, -70)
 
-[node name="OrbitZone" parent="Level 1 (Arda)" unique_id=530270284 instance=ExtResource("8_orbzn")]
+[node name="DoubleJumpOrbiti" parent="Level 1 (Arda)" unique_id=530270284 instance=ExtResource("8_orbzn")]
 position = Vector2(-6, -86)
-
-[node name="CharacterBody2D#Camera2D" type="Camera2D" parent="." unique_id=528242437]
-position = Vector2(30, -11)
-zoom = Vector2(4, 4)
 
 [node name="TileMap" type="TileMap" parent="." unique_id=799906512]
 tile_set = SubResource("TileSet_f0rl4")
@@ -266,5 +266,5 @@ position = Vector2(-34, -8)
 collision_layer = 1
 collision_mask = 2
 
-[node name="OrbitZone" parent="." unique_id=530585221 instance=ExtResource("8_orbzn")]
+[node name="DoubleJumpOrbiti" parent="." unique_id=530585221 instance=ExtResource("8_orbzn")]
 position = Vector2(126, -47)
