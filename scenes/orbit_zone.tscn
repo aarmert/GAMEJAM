@@ -1,20 +1,21 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://myetscf5df70"]
 
 [ext_resource type="Script" path="res://scripts/orbit_zone.gd" id="1_orbit"]
+[ext_resource type="Texture2D" uid="uid://cu0kbp5sl3b0i" path="res://blockholders/sprites/coin.png" id="2_gh06q"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_orbit"]
-size = Vector2(140, 12)
+[sub_resource type="CircleShape2D" id="CircleShape2D_2dcna"]
 
-[node name="OrbitZone" type="Area2D"]
+[node name="OrbitZone" type="Area2D" unique_id=1272669099]
 collision_layer = 8
 collision_mask = 0
-monitoring = true
-monitorable = true
 script = ExtResource("1_orbit")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_orbit")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=803983952]
+shape = SubResource("CircleShape2D_2dcna")
 
-[node name="Polygon2D" type="Polygon2D" parent="."]
-color = Color(0.447059, 0.8, 1, 0.6)
-polygon = PackedVector2Array(-70, -6, 70, -6, 70, 6, -70, 6)
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1854099513]
+position = Vector2(2.3841858e-07, -0.9999995)
+scale = Vector2(1.857143, 1.6730769)
+texture = ExtResource("2_gh06q")
+region_enabled = true
+region_rect = Rect2(1, 1, 14, 13)

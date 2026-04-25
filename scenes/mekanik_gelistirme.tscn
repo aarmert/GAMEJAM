@@ -4,10 +4,10 @@
 [ext_resource type="Texture2D" uid="uid://dtdncmd6dus80" path="res://blockholders/sprites/world_tileset.png" id="2_fa8wy"]
 [ext_resource type="PackedScene" uid="uid://bsiot8o0bnp2g" path="res://scenes/killzone.tscn" id="3_jqbve"]
 [ext_resource type="PackedScene" uid="uid://diftucm75sxs5" path="res://scenes/DarknessBlock.tscn" id="4_f0rl4"]
-[ext_resource type="Script" path="res://scripts/darkness_manager.gd" id="5_d5u1p"]
+[ext_resource type="Script" uid="uid://cf48tudvsyonc" path="res://scripts/darkness_manager.gd" id="5_d5u1p"]
 [ext_resource type="PackedScene" uid="uid://bbbcr3ehux0yj" path="res://scenes/canavar.tscn" id="6_o8r7p"]
 [ext_resource type="PackedScene" uid="uid://cembhkjqm4imv" path="res://scenes/heal.tscn" id="7_yu0b6"]
-[ext_resource type="PackedScene" path="res://scenes/orbit_zone.tscn" id="8_orbzn"]
+[ext_resource type="PackedScene" uid="uid://myetscf5df70" path="res://scenes/orbit_zone.tscn" id="8_orbzn"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jqbve"]
 texture = ExtResource("2_fa8wy")
@@ -196,7 +196,23 @@ z_index = 5
 position = Vector2(-12, -25)
 collision_layer = 2
 
-[node name="Camera2D" type="Camera2D" parent="CharacterBody2D" unique_id=528242437]
+[node name="Canavar" parent="Level 1 (Arda)" unique_id=481011045 instance=ExtResource("6_o8r7p")]
+position = Vector2(31, -1)
+collision_layer = 1
+collision_mask = 2
+
+[node name="Heal" parent="Level 1 (Arda)" unique_id=1852679614 instance=ExtResource("7_yu0b6")]
+position = Vector2(-34, -8)
+collision_layer = 1
+collision_mask = 2
+
+[node name="WallTestArea" type="Node2D" parent="Level 1 (Arda)" unique_id=151507892]
+position = Vector2(-7, -70)
+
+[node name="OrbitZone" parent="Level 1 (Arda)" unique_id=530270284 instance=ExtResource("8_orbzn")]
+position = Vector2(-6, -86)
+
+[node name="CharacterBody2D#Camera2D" type="Camera2D" parent="." unique_id=528242437]
 position = Vector2(30, -11)
 zoom = Vector2(4, 4)
 
@@ -220,48 +236,35 @@ position = Vector2(-544, 278)
 script = ExtResource("5_d5u1p")
 darkness_block_scene = ExtResource("4_f0rl4")
 
-[node name="Canavar" parent="Level 1 (Arda)" unique_id=481011045 instance=ExtResource("6_o8r7p")]
-position = Vector2(31, -1)
-collision_layer = 1
-collision_mask = 2
-
-[node name="Heal" parent="Level 1 (Arda)" unique_id=1852679614 instance=ExtResource("7_yu0b6")]
-position = Vector2(-34, -8)
-collision_layer = 1
-collision_mask = 2
-
-[node name="WallTestArea" type="Node2D" parent="Level 1 (Arda)" unique_id=151507892]
-position = Vector2(-7, -70)
-
-[node name="OrbitZone" parent="Level 1 (Arda)" instance=ExtResource("8_orbzn")]
-position = Vector2(-6, -86)
-
-[node name="WallLeft" type="StaticBody2D" parent="WallTestArea" unique_id=2004279919]
+[node name="WallTestArea#WallLeft" type="StaticBody2D" parent="." unique_id=2004279919]
 position = Vector2(-70, 0)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="WallTestArea/WallLeft" unique_id=547962002]
+[node name="WallTestArea_WallLeft#CollisionShape2D" type="CollisionShape2D" parent="." unique_id=547962002]
 shape = SubResource("RectangleShape2D_wall_test")
 
-[node name="Polygon2D" type="Polygon2D" parent="WallTestArea/WallLeft" unique_id=259660678]
+[node name="WallTestArea_WallLeft#Polygon2D" type="Polygon2D" parent="." unique_id=259660678]
 color = Color(0.886275, 0.301961, 0.301961, 0.65)
 polygon = PackedVector2Array(-8, -110, 8, -110, 8, 110, -8, 110)
 
-[node name="WallRight" type="StaticBody2D" parent="WallTestArea" unique_id=1934574392]
+[node name="WallTestArea#WallRight" type="StaticBody2D" parent="." unique_id=1934574392]
 position = Vector2(70, 0)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="WallTestArea/WallRight" unique_id=1012482883]
+[node name="WallTestArea_WallRight#CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1012482883]
 shape = SubResource("RectangleShape2D_wall_test")
 
-[node name="Polygon2D" type="Polygon2D" parent="WallTestArea/WallRight" unique_id=1765829156]
+[node name="WallTestArea_WallRight#Polygon2D" type="Polygon2D" parent="." unique_id=1765829156]
 color = Color(0.301961, 0.6, 0.92549, 0.65)
 polygon = PackedVector2Array(-8, -110, 8, -110, 8, 110, -8, 110)
 
-[node name="Canavar" parent="." unique_id=481011045 instance=ExtResource("6_o8r7p")]
+[node name="Canavar" parent="." unique_id=1738817792 instance=ExtResource("6_o8r7p")]
 position = Vector2(25, -17)
 collision_layer = 1
 collision_mask = 2
 
-[node name="Heal" parent="." unique_id=1852679614 instance=ExtResource("7_yu0b6")]
+[node name="Heal" parent="." unique_id=422821611 instance=ExtResource("7_yu0b6")]
 position = Vector2(-34, -8)
 collision_layer = 1
 collision_mask = 2
+
+[node name="OrbitZone" parent="." unique_id=530585221 instance=ExtResource("8_orbzn")]
+position = Vector2(126, -47)
