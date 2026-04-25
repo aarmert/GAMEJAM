@@ -302,7 +302,11 @@ position = Vector2(0, -2)
 position = Vector2(0, -22.999996)
 rotation = -1.5667393
 scale = Vector2(1.9875875, 2.1494877)
-energy = 4.0
+range_layer_min = -128
+range_layer_max = 128
+range_z_min = -4096
+range_z_max = 4096
+energy = 1.5
 texture = SubResource("GradientTexture2D_4mm27")
 texture_scale = 0.2
 
