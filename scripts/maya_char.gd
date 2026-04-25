@@ -7,6 +7,8 @@ const JUMP_VELOCITY = -400.0
 @onready var flashlight_pivot: Node2D = $FlashlightPivot
 @onready var animated_sprit: AnimatedSprite2D = $AnimatedSprite2D
 @onready var health_bar: ProgressBar = $HealthBar
+@onready var landing_light: PointLight2D = get_node_or_null("LandingLight")
+@onready var floor_ray: RayCast2D = get_node_or_null("FloorRay")
 
 var safe_zones = 0
 var is_dead = false
@@ -40,6 +42,7 @@ func _physics_process(delta: float) -> void:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 
 	move_and_slide()
+
 
 
 func _ready() -> void:

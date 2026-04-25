@@ -4,6 +4,18 @@
 [ext_resource type="Script" uid="uid://brwmmbpxkdf1b" path="res://scripts/maya_char.gd" id="1_2qen3"]
 [ext_resource type="Texture2D" uid="uid://buupvg11rlmly" path="res://assets/5bbc1a9931068-b6594086cf2a19b19b4fcd58283e039b.png" id="3_bdpy2"]
 
+[sub_resource type="Gradient" id="Gradient_light"]
+offsets = PackedFloat32Array(0, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_light"]
+gradient = SubResource("Gradient_light")
+width = 256
+height = 256
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_2qen3"]
 atlas = ExtResource("1_1wx7o")
 region = Rect2(0, 0, 32, 64)
@@ -42,4 +54,24 @@ texture_scale = 0.2
 
 [node name="PointLight2D" type="PointLight2D" parent="." unique_id=1186432824]
 position = Vector2(0, -32)
-texture = ExtResource("1_1wx7o")
+range_layer_min = -128
+range_layer_max = 128
+range_z_min = -4096
+range_z_max = 4096
+energy = 0.4
+texture = SubResource("GradientTexture2D_light")
+texture_scale = 2.0
+
+[node name="FloorRay" type="RayCast2D" parent="." unique_id=1186432825]
+target_position = Vector2(0, 500)
+collision_mask = 1
+
+[node name="LandingLight" type="PointLight2D" parent="." unique_id=1186432826]
+visible = false
+range_layer_min = -128
+range_layer_max = 128
+range_z_min = -4096
+range_z_max = 4096
+texture = SubResource("GradientTexture2D_light")
+texture_scale = 1.5
+energy = 0.6
