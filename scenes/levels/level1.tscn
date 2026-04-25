@@ -5,6 +5,12 @@
 [ext_resource type="PackedScene" uid="uid://6fq8haytgh88" path="res://scenes/levels/level1_Scene/darkness_block_1_1.tscn" id="4_bfxgj"]
 [ext_resource type="Script" uid="uid://e51nuv1yjoit" path="res://scripts/darkness/Manager_Darkness.gd" id="5_dywbp"]
 [ext_resource type="PackedScene" uid="uid://cm0udogbmydbq" path="res://scenes/asil_karakter.tscn" id="6_1seuy"]
+[ext_resource type="PackedScene" path="res://scenes/orbit/double_jump_orbiti.tscn" id="6_2r1tl"]
+[ext_resource type="PackedScene" uid="uid://bu7q1xng6etri" path="res://scenes/levels/level1_Scene/activation_point_slow.tscn" id="6_8a7m2"]
+[ext_resource type="Script" uid="uid://b74k46pst250e" path="res://scripts/levels/activation_point_slow.gd" id="8_8a7m2"]
+[ext_resource type="PackedScene" uid="uid://bhf74tnovdeaa" path="res://scenes/levels/level1_Scene/schneller.tscn" id="9_plydf"]
+[ext_resource type="PackedScene" uid="uid://dqqsb320dgdhl" path="res://scenes/levels/level1_Scene/sarmasik.tscn" id="10_5ntmo"]
+[ext_resource type="Script" uid="uid://cu0ucmtau0pl3" path="res://scenes/levels/level1_Scene/sarmasik.gd" id="11_nkeig"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4tcl0"]
 texture = ExtResource("1_x6ivy")
@@ -79,30 +85,67 @@ texture_region_size = Vector2i(32, 32)
 [sub_resource type="TileSet" id="TileSet_dd0lh"]
 tile_size = Vector2i(32, 32)
 physics_layer_0/collision_layer = 1
-physics_layer_0/collision_mask = 2
+physics_layer_1/collision_layer = 1
 sources/1 = SubResource("TileSetAtlasSource_4tcl0")
 
 [node name="Level1" type="Node2D" unique_id=2080830563]
 script = ExtResource("1_dywbp")
 
 [node name="AsılKarakter" parent="." unique_id=102941817 instance=ExtResource("6_1seuy")]
-position = Vector2(-478, 270)
+position = Vector2(-180, 82)
+collision_layer = 3
 
 [node name="Camera2D" type="Camera2D" parent="AsılKarakter" unique_id=1333722321]
 
 [node name="TileMap" type="TileMap" parent="." unique_id=163212694]
 tile_set = SubResource("TileSet_dd0lh")
 format = 2
-layer_0/tile_data = PackedInt32Array(196606, 1, 0, 196607, 65537, 0, 131072, 131073, 0, 131073, 196609, 0, 655344, 1, 0, 655345, 1, 0, 655346, 1, 0, 655347, 1, 0, 655348, 1, 0, 655349, 1, 0, 655350, 1, 0, 393198, 65537, 5, 393199, 65537, 5, 393200, 65537, 5, 393201, 65537, 5, 393202, 65537, 5, 393203, 65537, 5, 393204, 65537, 5, 393205, 65537, 5, 393206, 65537, 5, 393207, 65537, 5, 393208, 65537, 5, 655342, 131073, 1, 655343, 131073, 1, 524269, 262145, 2, 458733, 262145, 2, 393197, 262145, 2, 655351, 65537, 0, 655352, 65537, 0, 655353, 65537, 0, 655354, 65537, 0, 655355, 65537, 0, 589819, 65537, 0, 589820, 65537, 0, 589821, 65537, 0, 589822, 65537, 0, 589823, 65537, 0, 524288, 65537, 0, 589824, 65537, 0, 589825, 65537, 0, 589826, 65537, 0, 589827, 65537, 0, 327672, 65537, 0, 327673, 65537, 0, 327674, 65537, 0, 327675, 65537, 0, 327676, 65537, 0, 327677, 65537, 0, 327678, 65537, 0, 327679, 65537, 0, 262144, 65537, 0, 262145, 65537, 0, 262146, 65537, 0, 262147, 65537, 0, 196611, 65537, 0, 196612, 65537, 0, 131076, 65537, 0, 131077, 65537, 0, 131078, 65537, 0, 65543, 65537, 0, 65544, 65537, 0, 65545, 65537, 0, 65546, 65537, 0, 10, 65537, 0, 11, 65537, 0, 524292, 65537, 0, 524293, 65537, 0, 524294, 65537, 0, 458759, 65537, 0, 458760, 65537, 0, 458761, 65537, 0, 393225, 65537, 0, 393226, 65537, 0, 393227, 65537, 0, 393228, 65537, 0, 327692, 65537, 0, 327693, 65537, 0, 327694, 65537, 0, 327695, 65537, 0, 262159, 65537, 0, 262160, 65537, 0, 262161, 65537, 0, -65524, 65537, 0, -65523, 65537, 0, -131059, 65537, 0, -131058, 65537, 0, -131057, 65537, 0, -131056, 65537, 0, -131055, 65537, 0, -196590, 65537, 0, -196589, 65537, 0, -196588, 65537, 0, -196587, 65537, 0, -196586, 65537, 0, -196585, 65537, 0, -196584, 65537, 0, -196583, 65537, 0, -262119, 65537, 0, -262118, 65537, 0, -262117, 65537, 0, -262116, 65537, 0, -327652, 65537, 0, 262162, 65537, 0, 262163, 65537, 0, 262164, 65537, 0, 262165, 65537, 0, 262166, 65537, 0, 262167, 65537, 0, 196632, 65537, 0, 196633, 65537, 0, 196634, 65537, 0, 196635, 65537, 0, 196636, 65537, 0, 196637, 65537, 0, 196638, 65537, 0, 196639, 65537, 0, 196640, 65537, 0, 196641, 65537, 0, 196642, 65537, 0, 196643, 65537, 0, 131107, 65537, 0, 131108, 65537, 0, 131109, 65537, 0, 131110, 65537, 0, 131111, 65537, 0, 131112, 65537, 0, 131113, 65537, 0, 131114, 65537, 0, 131115, 65537, 0, 65579, 65537, 0, 65580, 65537, 0, 65581, 65537, 0, 65582, 65537, 0, 589805, 262145, 2, 655341, 262145, 2)
+layer_0/tile_data = PackedInt32Array(655344, 1, 0, 655345, 1, 0, 655346, 1, 0, 655347, 1, 0, 655348, 1, 0, 655349, 1, 0, 655350, 1, 0, 393198, 65537, 5, 393199, 65537, 5, 393200, 65537, 5, 393201, 65537, 5, 393202, 65537, 5, 393203, 65537, 5, 393204, 65537, 5, 393205, 65537, 5, 393206, 65537, 5, 393207, 65537, 5, 393208, 65537, 5, 655342, 131073, 1, 655343, 131073, 1, 524269, 262145, 2, 458733, 262145, 2, 393197, 262145, 2, 655351, 65537, 0, 655352, 65537, 0, 655353, 65537, 0, 655354, 65537, 0, 655355, 65537, 0, 589819, 65537, 0, 589820, 65537, 0, 589821, 65537, 0, 589822, 65537, 0, 589823, 65537, 0, 524288, 65537, 0, 589824, 65537, 0, 589825, 65537, 0, 589826, 65537, 0, 589827, 65537, 0, 327672, 65537, 0, 327673, 65537, 0, 327674, 65537, 0, 327675, 65537, 0, 327676, 65537, 0, 327677, 65537, 0, 327678, 65537, 0, 327679, 65537, 0, 262144, 65537, 0, 262145, 65537, 0, 262146, 65537, 0, 262147, 65537, 0, 196611, 65537, 0, 196612, 65537, 0, 131076, 65537, 0, 131077, 65537, 0, 131078, 65537, 0, 65543, 65537, 0, 65544, 65537, 0, 65545, 65537, 0, 65546, 65537, 0, 10, 65537, 0, 11, 65537, 0, 524292, 65537, 0, 524293, 65537, 0, 524294, 65537, 0, 458759, 65537, 0, 458760, 65537, 0, 458761, 65537, 0, 393225, 65537, 0, 393226, 65537, 0, 393227, 65537, 0, 393228, 65537, 0, 327692, 65537, 0, 327693, 65537, 0, 327694, 65537, 0, 327695, 65537, 0, 262159, 65537, 0, 262160, 65537, 0, 262161, 65537, 0, 262162, 65537, 0, 262163, 65537, 0, 262164, 65537, 0, 262165, 65537, 0, 262166, 65537, 0, 262167, 65537, 0, 196632, 65537, 0, 196633, 65537, 0, 196634, 65537, 0, 196635, 65537, 0, 196636, 65537, 0, 196637, 65537, 0, 196638, 65537, 0, 196639, 65537, 0, 196640, 65537, 0, 196641, 65537, 0, 196642, 65537, 0, 131107, 65537, 0, 589805, 262145, 2, 655341, 262145, 2, -65524, 131073, 5, -65523, 131073, 5, -65522, 131073, 5, -65521, 131073, 5, -65520, 131073, 5, -65519, 131073, 5, -65518, 131073, 5, -65517, 131073, 5, -65516, 131073, 5, 20, 131073, 5, 21, 131073, 5, 22, 131073, 5, 23, 131073, 5, -65513, 131073, 5, -65512, 131073, 5, -65511, 131073, 5, 25, 131073, 5, 26, 131073, 5, 27, 131073, 5, 28, 131073, 5, -65508, 131073, 5, -65507, 131073, 5, -65506, 131073, 5, -196578, 262145, 2, -196577, 262145, 2, -262113, 262145, 2, -327649, 262145, 2, -393185, 262145, 2, -458721, 262145, 2, -131041, 262145, 2, -131042, 262145, 2, 65571, 1, 3, 65572, 1, 3, 36, 1, 3, 37, 1, 3, -65499, 1, 3, -65498, 1, 3, -131034, 1, 3, -196570, 1, 3, -262106, 1, 3, -327642, 1, 3, -393178, 1, 3, -458714, 1, 3, -524250, 1, 3, -589786, 1, 3, -655322, 1, 3, 131106, 1, 4, -131035, 1, 4, -196571, 1, 4, -327643, 1, 4, -393179, 1, 4, -458715, 1, 4, -524251, 1, 4, -65500, 1, 4, -131036, 1, 4, -393180, 1, 4, -458716, 1, 4, -524252, 1, 4, -655324, 131073, 5, -655325, 131073, 5, -655326, 131073, 5, -720862, 131073, 5, -720863, 131073, 5, -720864, 131073, 5, -786400, 131073, 5, -786401, 131073, 5, -786402, 131073, 5, -589788, 131073, 1, -458722, 131073, 1, -458723, 131073, 1, -458724, 131073, 1, -524260, 131073, 1, -524261, 131073, 1, -524262, 131073, 1, -524263, 131073, 1, -458727, 131073, 1, -458728, 131073, 1, -458729, 131073, 1, -524265, 131073, 1, -524266, 131073, 1, -524267, 131073, 1, -524264, 131073, 1, -524268, 131073, 1, -524269, 131073, 1, -524270, 131073, 1, -524271, 131073, 1, -851939, 131073, 5, -851940, 131073, 5, -851941, 131073, 5, -851942, 131073, 5, -851943, 131073, 5, -851944, 131073, 5, -917481, 131073, 5, -983017, 131073, 5, -983018, 131073, 5, -917482, 131073, 5, -917483, 131073, 5, -983019, 131073, 5, -983020, 131073, 5, -983021, 131073, 5, -983022, 131073, 5, -917486, 131073, 5, -917487, 131073, 5, -786403, 131073, 5, -786404, 131073, 5, -786405, 131073, 5, -786406, 131073, 5, -786407, 131073, 5, -851945, 131073, 5, -851946, 131073, 5, -851947, 131073, 5, -851948, 131073, 5, -851949, 131073, 5, -851950, 131073, 5, -851951, 131073, 5, -786415, 131073, 5, -786414, 131073, 5, -786413, 131073, 5, -786412, 131073, 5, -786411, 131073, 5, -786410, 131073, 5, -786408, 131073, 5, -786409, 131073, 5, 327691, 131073, 0, 327690, 131073, 0, 327689, 131073, 0, 393224, 131073, 0, 393223, 131073, 0, 393222, 131073, 0, 458758, 131073, 0, 458757, 131073, 0, 458756, 131073, 0, 458755, 131073, 0, 524291, 131073, 0, 524290, 131073, 0, 524289, 131073, 0, 65570, 1, 2, 262142, 1, 3, 196606, 1, 3, 131070, 1, 3, 65534, 1, 3)
 
-[node name="Darkness_Block1_1" parent="." unique_id=804301445 instance=ExtResource("4_bfxgj")]
+[node name="Orb" type="Node2D" parent="." unique_id=1145223795]
+
+[node name="DoubleJumpOrbiti2" parent="Orb" unique_id=1821764326 instance=ExtResource("6_2r1tl")]
+position = Vector2(982, -253)
+
+[node name="DoubleJumpOrbiti3" parent="Orb" unique_id=1026880770 instance=ExtResource("6_2r1tl")]
+position = Vector2(1104, -60)
+
+[node name="DoubleJumpOrbiti" parent="Orb" unique_id=1819381080 instance=ExtResource("6_2r1tl")]
+position = Vector2(1053, 51)
+
+[node name="Darkness_Bullshit" type="Node2D" parent="." unique_id=779993344]
+
+[node name="Manager_Darkness" type="Node2D" parent="Darkness_Bullshit" unique_id=319837021 node_paths=PackedStringArray("player", "tile_map")]
+position = Vector2(-559, 271)
+script = ExtResource("5_dywbp")
+block_scene = ExtResource("4_bfxgj")
+player = NodePath("../../AsılKarakter")
+tile_map = NodePath("../../TileMap")
+
+[node name="slow_down" parent="Darkness_Bullshit" unique_id=1054231048 node_paths=PackedStringArray("manager_darkness") instance=ExtResource("6_8a7m2")]
+position = Vector2(657, 103)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("8_8a7m2")
+manager_darkness = NodePath("../Manager_Darkness")
+
+[node name="schneller2" parent="Darkness_Bullshit" unique_id=1763091004 node_paths=PackedStringArray("manager_darkness") instance=ExtResource("9_plydf")]
+position = Vector2(691, -286)
+collision_mask = 2
+manager_darkness = NodePath("../Manager_Darkness")
+
+[node name="Darkness_Block1_1" parent="Darkness_Bullshit" unique_id=804301445 instance=ExtResource("4_bfxgj")]
 position = Vector2(-540, 111)
 collision_layer = 2
 collision_mask = 2
 
-[node name="Manager_Darkness" type="Node2D" parent="." unique_id=319837021 node_paths=PackedStringArray("player", "tile_map")]
-position = Vector2(-559, 271)
-script = ExtResource("5_dywbp")
-block_scene = ExtResource("4_bfxgj")
-player = NodePath("../AsılKarakter")
-tile_map = NodePath("../TileMap")
+[node name="sarmasiklar" type="Node2D" parent="." unique_id=1073335057]
+
+[node name="sarmasik" parent="sarmasiklar" unique_id=1950956920 instance=ExtResource("10_5ntmo")]
+position = Vector2(-59, 61)
+collision_mask = 3
+script = ExtResource("11_nkeig")
+
+[connection signal="body_entered" from="Darkness_Bullshit/slow_down" to="Darkness_Bullshit/slow_down" method="_on_body_entered"]
+[connection signal="body_entered" from="sarmasiklar/sarmasik" to="sarmasiklar/sarmasik" method="_on_body_entered"]
+[connection signal="body_exited" from="sarmasiklar/sarmasik" to="sarmasiklar/sarmasik" method="_on_body_exited"]

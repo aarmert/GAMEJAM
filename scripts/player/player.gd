@@ -15,7 +15,7 @@ extends CharacterBody2D
 var safe_zones := 0
 var double_jump_orbit_overlap_count := 0
 var dash_orbit_overlap_count := 0
-
+var sarmasikta_mi: bool = false
 
 func _ready() -> void:
 	health_component.init_health(health_bar)
@@ -39,7 +39,7 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("jump"):
 		if is_on_floor():
 			jump_component.jump_from_floor(self)
-		elif touching_wall:
+		elif touching_wall and sarmasikta_mi:			
 			jump_wall_component.wall_jump(self, jump_component.jump_velocity)
 			jump_component.restore_extra_jumps()
 		else:

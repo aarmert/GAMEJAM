@@ -3,8 +3,9 @@ extends Node2D
 @export var block_scene: PackedScene
 @export var player: Node2D
 @export var tile_map: TileMap
-@export var speed: float = 0.18 # Selin hızı
+@export var speed: float = 0.16 # Selin hızı
 @export var spawn_count: int = 5 # Tek seferde eklenecek blok sayısı
+
 
 const TILE_SIZE = 32
 
@@ -21,6 +22,8 @@ func _ready() -> void:
 	occupied_blocks[global_position] = true
 
 func _process(delta: float) -> void:
+	
+
 	if not player or frontier_blocks.is_empty():
 		return
 
