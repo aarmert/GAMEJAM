@@ -112,4 +112,7 @@ shape = SubResource("CircleShape2D_jle0f")
 [node name="HealTimer" type="Timer" parent="." unique_id=1322249233]
 wait_time = 2.0
 
+[connection signal="area_shape_exited" from="." to="." method="_on_area_shape_exited"]
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]
+[connection signal="timeout" from="HealTimer" to="." method="_on_heal_timer_timeout"]
