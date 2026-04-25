@@ -212,7 +212,8 @@ position = Vector2(-7, -70)
 [node name="OrbitZone" parent="Level 1 (Arda)" unique_id=530270284 instance=ExtResource("8_orbzn")]
 position = Vector2(-6, -86)
 
-[node name="CharacterBody2D#Camera2D" type="Camera2D" parent="." unique_id=528242437]
+[node name="Camera2D" type="Camera2D" parent="Level 1 (Arda)/CharacterBody2D" unique_id=528242437]
+enabled = true
 position = Vector2(30, -11)
 zoom = Vector2(4, 4)
 
