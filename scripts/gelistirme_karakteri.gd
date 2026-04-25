@@ -13,6 +13,7 @@ extends CharacterBody2D
 @onready var health_component: Node = $Components/HealthComponent
 
 var orbit_zone_overlap_count := 0
+var dash_orbit_overlap_count := 0
 
 func _physics_process(delta: float) -> void:
 	if not health_component.can_receive_actions():
@@ -37,7 +38,10 @@ func _physics_process(delta: float) -> void:
 			jump_component.try_extra_jump(self, orbit_zone_overlap_count > 0)
 
 	if Input.is_action_just_pressed("dash"):
-		dash_component.try_start_dash(dash_stop_timer, dash_cooldown_timer)
+		if dash_orbit_overlap_count > 0:
+			dash_component.try_start_dash_forced(dash_stop_timer, dash_cooldown_timer)
+		else:
+			dash_component.try_start_dash(dash_stop_timer, dash_cooldown_timer)
 
 	movement_component.apply_facing(animated_sprit, direction)
 
@@ -73,13 +77,17 @@ func _on_dash_cooldown_timer_timeout() -> void:
 
 
 func _on_orbit_detector_area_entered(area: Area2D) -> void:
-	if area.is_in_group("orbit_zone"):
+	if area.is_in_group("double_jump_orbit"):
 		orbit_zone_overlap_count += 1
+	if area.is_in_group("dash_orbit"):
+		dash_orbit_overlap_count += 1
 
 
 func _on_orbit_detector_area_exited(area: Area2D) -> void:
-	if area.is_in_group("orbit_zone"):
+	if area.is_in_group("double_jump_orbit"):
 		orbit_zone_overlap_count = max(orbit_zone_overlap_count - 1, 0)
+	if area.is_in_group("dash_orbit"):
+		dash_orbit_overlap_count = max(dash_orbit_overlap_count - 1, 0)
 
 
 func _ready() -> void:

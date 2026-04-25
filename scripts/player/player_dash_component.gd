@@ -90,6 +90,23 @@ func on_dash_cooldown_timeout() -> void:
 	cooldown_time_left = 0.0
 
 
+func try_start_dash_forced(dash_stop_timer: Timer, dash_cooldown_timer: Timer) -> bool:
+	if dashing:
+		return false
+
+	dash_stop_timer.one_shot = true
+	dash_stop_timer.wait_time = dash_duration
+	dashing = true
+	can_dash = false
+	recovery_time_left = 0.0
+	trail_time_accumulator = 0.0
+	cooldown_duration = dash_cooldown_timer.wait_time
+	cooldown_time_left = cooldown_duration
+	dash_stop_timer.start()
+	dash_cooldown_timer.start()
+	return true
+
+
 func apply_recovery_movement(player: CharacterBody2D, direction: float, walk_speed: float, delta: float) -> bool:
 	if recovery_time_left <= 0.0:
 		return false
