@@ -20,6 +20,7 @@ var dash_orbit_overlap_count := 0
 
 func _physics_process(delta: float) -> void:
 	if not health_component.can_receive_actions():
+		
 		velocity += get_gravity() * delta
 		move_and_slide()
 		return
@@ -89,6 +90,7 @@ func _on_orbit_detector_area_entered(area: Area2D) -> void:
 		orbit_zone_overlap_count += 1
 	if area.is_in_group("dash_orbit"):
 		dash_orbit_overlap_count += 1
+		
 
 
 func _on_orbit_detector_area_exited(area: Area2D) -> void:

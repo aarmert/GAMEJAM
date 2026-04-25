@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bt1g0l0t5uwcc"]
 
 [ext_resource type="Texture2D" uid="uid://bk7yhlfmo5t83" path="res://assets/tileset.png" id="1_7436v"]
-[ext_resource type="Script" uid="uid://cwwa3qtcc6ynu" path="res://scripts/parts.gd" id="1_xma56"]
+[ext_resource type="Script" path="res://scripts/parts.gd" id="1_xma56"]
 [ext_resource type="PackedScene" uid="uid://cm0udogbmydbq" path="res://scenes/maya_char_2.tscn" id="2_hfrku"]
 [ext_resource type="Texture2D" uid="uid://cvaqwesa34asg" path="res://assets/parallax-demon-woods-bg.png" id="4_w5oot"]
 [ext_resource type="Texture2D" uid="uid://bhdy5biuylj7" path="res://assets/parallax-demon-woods-far-trees.png" id="5_531e2"]
@@ -302,11 +302,11 @@ position = Vector2(0, -2)
 position = Vector2(0, -22.999996)
 rotation = -1.5667393
 scale = Vector2(1.9875875, 2.1494877)
-range_layer_min = -128
-range_layer_max = 128
+energy = 1.5
 range_z_min = -4096
 range_z_max = 4096
-energy = 1.5
+range_layer_min = -128
+range_layer_max = 128
 texture = SubResource("GradientTexture2D_4mm27")
 texture_scale = 0.2
 
