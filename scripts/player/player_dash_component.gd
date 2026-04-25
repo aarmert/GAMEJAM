@@ -115,3 +115,7 @@ func get_cooldown_ratio() -> float:
 
 func get_cooldown_remaining() -> float:
 	return cooldown_time_left
+
+
+func get_cooldown_duration() -> float:
+	return cooldown_duration

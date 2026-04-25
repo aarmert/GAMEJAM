@@ -3,8 +3,7 @@ extends CharacterBody2D
 
 @onready var animated_sprit: AnimatedSprite2D = $AnimatedSprite2D
 @onready var health_bar: ProgressBar = $HealthBar
-@onready var dash_cooldown_label: Label = $UI/DashCooldownPanel/DashCooldownLabel
-@onready var dash_cooldown_bar: ProgressBar = $UI/DashCooldownPanel/DashCooldownPanelBg/HBoxContainer/DashTextColumn/DashCooldownBar
+@onready var dash_bar_ui: Node = $UI/DashBar
 @onready var dash_stop_timer: Timer = $dash_stop_timer
 @onready var dash_cooldown_timer: Timer = $dash_cooldown_timer
 @onready var movement_component: Node = $Components/MovementComponent
@@ -85,24 +84,21 @@ func _on_orbit_detector_area_exited(area: Area2D) -> void:
 
 func _ready() -> void:
 	health_component.init_health(health_bar)
+	dash_bar_ui.init_dash(dash_cooldown_timer.wait_time)
 	_update_dash_cooldown_ui()
 
 
 func _update_dash_cooldown_ui() -> void:
-	if dash_cooldown_label == null or dash_cooldown_bar == null:
+	if dash_bar_ui == null:
 		return
 
 	if dash_component.can_dash and dash_component.get_cooldown_remaining() <= 0.0:
-		dash_cooldown_label.text = "Dash: Ready"
-		dash_cooldown_label.modulate = Color(0.55, 1.0, 0.55, 1.0)
-		dash_cooldown_bar.value = 100.0
+		dash_bar_ui.set_ready()
 		return
 
 	var remaining: float = max(dash_component.get_cooldown_remaining(), 0.0)
-	var percent_ready: float = dash_component.get_cooldown_ratio()
-	dash_cooldown_label.text = "Dash: %.1f" % remaining
-	dash_cooldown_label.modulate = Color(1.0, 0.75, 0.45, 1.0)
-	dash_cooldown_bar.value = percent_ready * 100.0
+	var cooldown_duration: float = max(dash_component.get_cooldown_duration(), 0.001)
+	dash_bar_ui.update_dash(remaining, cooldown_duration)
 
 
 func take_damage(amount: int) -> void:

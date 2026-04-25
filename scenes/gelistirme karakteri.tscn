@@ -8,7 +8,7 @@
 [ext_resource type="Script" path="res://scripts/player/player_dash_component.gd" id="6_dscpn"]
 [ext_resource type="Script" path="res://scripts/player/player_health_component.gd" id="7_hlcpn"]
 [ext_resource type="Script" path="res://scripts/player/player_jump_component.gd" id="8_jpcpn"]
-[ext_resource type="Texture2D" uid="uid://d70w2e3m5w3u4" path="res://icon.svg" id="9_dashicon"]
+[ext_resource type="PackedScene" path="res://scenes/dashbar.tscn" id="9_dashbar"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1dp20"]
 atlas = ExtResource("1_a0xbm")
@@ -336,68 +336,7 @@ script = ExtResource("7_hlcpn")
 
 [node name="UI" type="CanvasLayer" parent="."]
 
-[node name="DashCooldownPanel" type="Control" parent="UI"]
-layout_mode = 3
-anchors_preset = 10
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -250.0
-offset_top = -78.0
-offset_right = -18.0
-offset_bottom = -18.0
-grow_horizontal = 0
-grow_vertical = 0
-
-[node name="DashCooldownPanelBg" type="Panel" parent="UI/DashCooldownPanel"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_dashpanel")
-
-[node name="HBoxContainer" type="HBoxContainer" parent="UI/DashCooldownPanel/DashCooldownPanelBg"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 10
-
-[node name="DashIcon" type="TextureRect" parent="UI/DashCooldownPanel/DashCooldownPanelBg/HBoxContainer"]
-custom_minimum_size = Vector2(30, 30)
-layout_mode = 2
-texture = ExtResource("9_dashicon")
-stretch_mode = 5
-
-[node name="DashTextColumn" type="VBoxContainer" parent="UI/DashCooldownPanel/DashCooldownPanelBg/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 4
-
-[node name="DashCooldownLabel" type="Label" parent="UI/DashCooldownPanel/DashCooldownPanelBg/HBoxContainer/DashTextColumn"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 0.5
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_font_sizes/font_size = 16
-text = "Dash: Ready"
-horizontal_alignment = 0
-vertical_alignment = 1
-
-[node name="DashCooldownBar" type="ProgressBar" parent="UI/DashCooldownPanel/DashCooldownPanelBg/HBoxContainer/DashTextColumn"]
-custom_minimum_size = Vector2(0, 14)
-layout_mode = 2
-value = 100.0
-show_percentage = false
-theme_override_styles/background = SubResource("StyleBoxFlat_dashbar_bg")
-theme_override_styles/fill = SubResource("StyleBoxFlat_dashbar_fill")
+[node name="DashBar" parent="UI" instance=ExtResource("9_dashbar")]
 
 [connection signal="timeout" from="dash_stop_timer" to="." method="_on_dash_stop_timer_timeout"]
 [connection signal="timeout" from="dash_cooldown_timer" to="." method="_on_dash_cooldown_timer_timeout"]
