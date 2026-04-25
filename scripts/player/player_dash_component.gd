@@ -15,6 +15,8 @@ var can_dash := true
 
 var recovery_time_left := 0.0
 var trail_time_accumulator := 0.0
+var cooldown_time_left := 0.0
+var cooldown_duration := 5.0
 
 
 func try_start_dash(dash_stop_timer: Timer, dash_cooldown_timer: Timer) -> bool:
@@ -29,6 +31,8 @@ func try_start_dash(dash_stop_timer: Timer, dash_cooldown_timer: Timer) -> bool:
 	can_dash = false
 	recovery_time_left = 0.0
 	trail_time_accumulator = 0.0
+	cooldown_duration = dash_cooldown_timer.wait_time
+	cooldown_time_left = cooldown_duration
 	dash_stop_timer.start()
 	dash_cooldown_timer.start()
 	return true
@@ -83,6 +87,7 @@ func on_dash_stop_timeout() -> void:
 
 func on_dash_cooldown_timeout() -> void:
 	can_dash = true
+	cooldown_time_left = 0.0
 
 
 func apply_recovery_movement(player: CharacterBody2D, direction: float, walk_speed: float, delta: float) -> bool:
@@ -93,3 +98,20 @@ func apply_recovery_movement(player: CharacterBody2D, direction: float, walk_spe
 	player.velocity.x = move_toward(player.velocity.x, target_speed, recovery_acceleration * delta)
 	recovery_time_left = max(recovery_time_left - delta, 0.0)
 	return true
+
+
+func update_cooldown_display(delta: float) -> void:
+	if cooldown_time_left > 0.0:
+		cooldown_time_left = max(cooldown_time_left - delta, 0.0)
+
+
+func get_cooldown_ratio() -> float:
+	if can_dash and cooldown_time_left <= 0.0:
+		return 1.0
+
+	var total_time = max(cooldown_duration, 0.001)
+	return clamp(cooldown_time_left / total_time, 0.0, 1.0)
+
+
+func get_cooldown_remaining() -> float:
+	return cooldown_time_left

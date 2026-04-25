@@ -60,6 +60,7 @@ func _physics_process(delta: float) -> void:
 		else:
 			animated_sprit.play("jump")
 
+	dash_component.update_cooldown_display(delta)
 	move_and_slide()
 	_update_dash_cooldown_ui()
 
@@ -88,15 +89,17 @@ func _ready() -> void:
 
 
 func _update_dash_cooldown_ui() -> void:
-	if dash_cooldown_timer.is_stopped() and dash_component.can_dash:
+	if dash_cooldown_label == null or dash_cooldown_bar == null:
+		return
+
+	if dash_component.can_dash and dash_component.get_cooldown_remaining() <= 0.0:
 		dash_cooldown_label.text = "Dash: Ready"
 		dash_cooldown_label.modulate = Color(0.55, 1.0, 0.55, 1.0)
 		dash_cooldown_bar.value = 100.0
 		return
 
-	var remaining: float = max(dash_cooldown_timer.time_left, 0.0)
-	var total_time: float = max(dash_cooldown_timer.wait_time, 0.001)
-	var percent_ready: float = clamp(1.0 - (remaining / total_time), 0.0, 1.0)
+	var remaining: float = max(dash_component.get_cooldown_remaining(), 0.0)
+	var percent_ready: float = dash_component.get_cooldown_ratio()
 	dash_cooldown_label.text = "Dash: %.1f" % remaining
 	dash_cooldown_label.modulate = Color(1.0, 0.75, 0.45, 1.0)
 	dash_cooldown_bar.value = percent_ready * 100.0
