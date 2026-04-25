@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://cvaqwesa34asg" path="res://assets/parallax-demon-woods-bg.png" id="4_w5oot"]
 [ext_resource type="Texture2D" uid="uid://bhdy5biuylj7" path="res://assets/parallax-demon-woods-far-trees.png" id="5_531e2"]
 [ext_resource type="Texture2D" uid="uid://d20y2ct2gwg00" path="res://assets/parallax-demon-woods-mid-trees.png" id="6_4mm27"]
+[ext_resource type="PackedScene" uid="uid://d2du15ano2qh7" path="res://scenes/enemy.tscn" id="7_8diah"]
 [ext_resource type="Texture2D" uid="uid://dp3b1xnfyae5e" path="res://assets/parallax-demon-woods-close-trees.png" id="7_27saf"]
 [ext_resource type="PackedScene" uid="uid://cembhkjqm4imv" path="res://scenes/heal.tscn" id="8_531e2"]
 [ext_resource type="PackedScene" path="res://scenes/orbit/dash_orbiti.tscn" id="9_vbh53"]
@@ -335,9 +336,12 @@ texture = ExtResource("5_531e2")
 [node name="ParallaxLayer3" type="ParallaxLayer" parent="ParallaxBackground" unique_id=1943270765]
 motion_scale = Vector2(0.6, 1)
 
-[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer3" unique_id=9026713]
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer3" unique_id=9026713 groups=["player"]]
 scale = Vector2(5, 5)
 texture = ExtResource("6_4mm27")
+
+[node name="Enemy" parent="ParallaxBackground/ParallaxLayer3" unique_id=679156832 instance=ExtResource("7_8diah")]
+position = Vector2(-223, -1)
 
 [node name="ParallaxLayer4" type="ParallaxLayer" parent="ParallaxBackground" unique_id=1393658068]
 motion_scale = Vector2(0.9, 1)

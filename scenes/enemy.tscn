@@ -1,0 +1,117 @@
+[gd_scene format=3 uid="uid://d2du15ano2qh7"]
+
+[ext_resource type="Texture2D" uid="uid://cliopbcgorq1h" path="res://blockholders/sprites/slime_green.png" id="1_7p1mj"]
+[ext_resource type="Script" uid="uid://c3aaculkpsa6q" path="res://scripts/enemy.gd" id="1_md0e3"]
+[ext_resource type="Script" uid="uid://ds3pbk3nph85d" path="res://scripts/damage_area.gd" id="3_4ra3w"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xv1l6"]
+atlas = ExtResource("1_7p1mj")
+region = Rect2(0, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_77a6a"]
+atlas = ExtResource("1_7p1mj")
+region = Rect2(24, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bd08p"]
+atlas = ExtResource("1_7p1mj")
+region = Rect2(48, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_beuot"]
+atlas = ExtResource("1_7p1mj")
+region = Rect2(72, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4ra3w"]
+atlas = ExtResource("1_7p1mj")
+region = Rect2(48, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5uy6h"]
+atlas = ExtResource("1_7p1mj")
+region = Rect2(72, 24, 24, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_md0e3"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xv1l6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_77a6a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bd08p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_beuot")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4ra3w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5uy6h")
+}],
+"loop": true,
+"name": &"run",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4ra3w"]
+size = Vector2(10, 11)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_md0e3"]
+size = Vector2(28, 12)
+
+[node name="Enemy" type="CharacterBody2D" unique_id=679156832]
+script = ExtResource("1_md0e3")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1074680682]
+position = Vector2(0, -12)
+sprite_frames = SubResource("SpriteFrames_md0e3")
+animation = &"run"
+autoplay = "default"
+frame_progress = 0.37906635
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1294817738]
+position = Vector2(0, -5.5)
+shape = SubResource("RectangleShape2D_4ra3w")
+
+[node name="damage_timer" type="Timer" parent="." unique_id=140513542]
+
+[node name="RayCast2D" type="RayCast2D" parent="." unique_id=517935129]
+target_position = Vector2(0, -20)
+collision_mask = 3
+
+[node name="VisionCone" type="Polygon2D" parent="." unique_id=2048181161]
+color = Color(1, 0, 0, 0.15686275)
+
+[node name="DamageArea" type="Area2D" parent="." unique_id=852062921]
+collision_layer = 0
+monitorable = false
+script = ExtResource("3_4ra3w")
+
+[node name="damage" type="CollisionShape2D" parent="DamageArea" unique_id=633327579]
+position = Vector2(0, -6)
+shape = SubResource("RectangleShape2D_md0e3")
+
+[node name="damage_timer" type="Timer" parent="DamageArea" unique_id=476475523]
+
+[node name="WallCheckLow" type="RayCast2D" parent="." unique_id=1153382606]
+position = Vector2(0, -8)
+scale = Vector2(0.99899584, 1)
+target_position = Vector2(20, 0)
+
+[node name="LedgeCheck" type="RayCast2D" parent="." unique_id=695480495]
+position = Vector2(20, 0)
+target_position = Vector2(0, 20)
+
+[node name="WallCheckHigh" type="RayCast2D" parent="." unique_id=56441229]
+position = Vector2(0, -24)
+target_position = Vector2(20, 0)
+
+[connection signal="body_entered" from="DamageArea" to="DamageArea" method="_on_body_entered"]
+[connection signal="body_exited" from="DamageArea" to="DamageArea" method="_on_body_exited"]
+[connection signal="timeout" from="DamageArea/damage_timer" to="DamageArea" method="_on_damage_timer_timeout"]

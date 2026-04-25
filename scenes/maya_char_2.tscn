@@ -112,6 +112,10 @@ region = Rect2(256, 0, 32, 32)
 atlas = ExtResource("4_qhn6r")
 region = Rect2(288, 0, 32, 32)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_7n4ej"]
+atlas = ExtResource("4_qhn6r")
+region = Rect2(32, 0, 32, 32)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_bdpy2"]
 animations = [{
 "frames": [{
@@ -208,6 +212,14 @@ animations = [{
 "loop": true,
 "name": &"run",
 "speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7n4ej")
+}],
+"loop": true,
+"name": &"wall_slide",
+"speed": 5.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gs77c"]
@@ -222,7 +234,7 @@ script = ExtResource("1_88i03")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=522489782]
 position = Vector2(0, -32)
 sprite_frames = SubResource("SpriteFrames_bdpy2")
-animation = &"run"
+animation = &"wall_slide"
 autoplay = "idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=811189942]
