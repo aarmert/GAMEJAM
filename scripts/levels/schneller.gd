@@ -3,6 +3,6 @@ extends Area2D
  
 
 func _on_body_entered(body: Node2D) -> void:
-	manager_darkness.speed = 0.12
+	manager_darkness.speed = 0.18
 	print("sikik2")
 	
