@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://di4h8m6ue7y1g"]
+
+[ext_resource type="Texture2D" uid="uid://dcscgkimhesqf" path="res://assets/player_idle.png" id="1_1wx7o"]
+[ext_resource type="Script" uid="uid://brwmmbpxkdf1b" path="res://scripts/maya_char.gd" id="1_2qen3"]
+[ext_resource type="Texture2D" uid="uid://buupvg11rlmly" path="res://assets/5bbc1a9931068-b6594086cf2a19b19b4fcd58283e039b.png" id="3_bdpy2"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2qen3"]
+atlas = ExtResource("1_1wx7o")
+region = Rect2(0, 0, 32, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_bdpy2"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2qen3")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gs77c"]
+size = Vector2(16, 47)
+
+[node name="MayaChar" type="CharacterBody2D" unique_id=102941817]
+script = ExtResource("1_2qen3")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=522489782]
+position = Vector2(0, -32)
+sprite_frames = SubResource("SpriteFrames_bdpy2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=811189942]
+position = Vector2(0, -23.5)
+shape = SubResource("RectangleShape2D_gs77c")
+
+[node name="FlashlightPivot" type="Node2D" parent="." unique_id=1352790627]
+
+[node name="PointLight2D" type="PointLight2D" parent="FlashlightPivot" unique_id=1383643003]
+position = Vector2(83, 0)
+texture = ExtResource("3_bdpy2")
+texture_scale = 0.2
+
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=1186432824]
+position = Vector2(0, -32)
+texture = ExtResource("1_1wx7o")

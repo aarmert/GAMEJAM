@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://dtdncmd6dus80" path="res://blockholders/sprites/world_tileset.png" id="2_fa8wy"]
 [ext_resource type="PackedScene" uid="uid://bsiot8o0bnp2g" path="res://scenes/killzone.tscn" id="3_jqbve"]
 [ext_resource type="PackedScene" uid="uid://diftucm75sxs5" path="res://scenes/DarknessBlock.tscn" id="4_f0rl4"]
-[ext_resource type="Script" uid="uid://cf48tudvsyonc" path="res://scripts/darkness_manager.gd" id="5_d5u1p"]
+[ext_resource type="Script" path="res://scripts/darkness_manager.gd" id="5_d5u1p"]
 [ext_resource type="PackedScene" uid="uid://bbbcr3ehux0yj" path="res://scenes/canavar.tscn" id="6_o8r7p"]
 [ext_resource type="PackedScene" uid="uid://cembhkjqm4imv" path="res://scenes/heal.tscn" id="7_yu0b6"]
 
@@ -188,12 +188,16 @@ size = Vector2(16, 220)
 
 [node name="Mekanik Gelistirme" type="Node2D" unique_id=819999275]
 
-[node name="CharacterBody2D" parent="." unique_id=1224785084 instance=ExtResource("1_ssejl")]
+[node name="Level 1 (Arda)" type="Node2D" parent="." unique_id=1953659505]
+
+[node name="CharacterBody2D" parent="Level 1 (Arda)" unique_id=1224785084 instance=ExtResource("1_ssejl")]
+z_index = 5
 position = Vector2(-12, -25)
 collision_layer = 2
 
 [node name="Camera2D" type="Camera2D" parent="CharacterBody2D" unique_id=528242437]
 position = Vector2(30, -11)
+zoom = Vector2(4, 4)
 
 [node name="TileMap" type="TileMap" parent="." unique_id=799906512]
 tile_set = SubResource("TileSet_f0rl4")
@@ -215,7 +219,17 @@ position = Vector2(-544, 278)
 script = ExtResource("5_d5u1p")
 darkness_block_scene = ExtResource("4_f0rl4")
 
-[node name="WallTestArea" type="Node2D" parent="." unique_id=151507892]
+[node name="Canavar" parent="Level 1 (Arda)" unique_id=481011045 instance=ExtResource("6_o8r7p")]
+position = Vector2(31, -1)
+collision_layer = 1
+collision_mask = 2
+
+[node name="Heal" parent="Level 1 (Arda)" unique_id=1852679614 instance=ExtResource("7_yu0b6")]
+position = Vector2(-34, -8)
+collision_layer = 1
+collision_mask = 2
+
+[node name="WallTestArea" type="Node2D" parent="Level 1 (Arda)" unique_id=151507892]
 position = Vector2(-7, -70)
 
 [node name="WallLeft" type="StaticBody2D" parent="WallTestArea" unique_id=2004279919]
