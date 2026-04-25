@@ -6,6 +6,7 @@ extends CharacterBody2D
 @export var vision_range: float = 150.0
 @export var vision_angle_degrees: float = 30.0
 @export var stop_chase_range: float = 400.0
+@export var stun_duration: float = 1.5
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var raycast: RayCast2D = $RayCast2D
@@ -17,6 +18,7 @@ extends CharacterBody2D
 var player: Node2D = null
 var is_chasing: bool = false
 var facing_direction: int = 1
+var is_stunned: bool = false
 
 
 func _ready() -> void:
@@ -33,6 +35,11 @@ func _physics_process(delta: float) -> void:
 	# Yer çekimi
 	if not is_on_floor():
 		velocity += get_gravity() * delta
+
+	if is_stunned:
+		velocity.x = move_toward(velocity.x, 0, patrol_speed)
+		move_and_slide()
+		return
 
 	# Player tespiti
 	var in_cone := is_player_in_cone()
@@ -116,3 +123,12 @@ func build_vision_cone() -> void:
 		points.append(Vector2(cos(angle), sin(angle)) * vision_range)
 	vision_cone.polygon = points
 	vision_cone.color = Color(1.0, 0.0, 0.0, 0.25)
+
+
+func stun() -> void:
+	if is_stunned:
+		return
+	is_stunned = true
+	await get_tree().create_timer(stun_duration).timeout
+	if is_instance_valid(self):
+		is_stunned = false
