@@ -3,7 +3,7 @@ extends Area2D
 @onready var timer = $Timer
 
 # YENİ EKLENEN VE ÇALIŞACAK OLAN FONKSİYON
-func _on_body_entered(body):
+func _on_darkness_block_body_entered(_body) -> void:
 	print("you died")
 	timer.start()
 

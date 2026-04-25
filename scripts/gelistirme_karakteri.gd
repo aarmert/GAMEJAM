@@ -3,6 +3,7 @@ extends CharacterBody2D
 
 @onready var animated_sprit: AnimatedSprite2D = $AnimatedSprite2D
 @onready var health_bar: ProgressBar = $HealthBar
+@onready var dash_cooldown_label: Label = $UI/DashCooldownPanel/DashCooldownLabel
 @onready var dash_stop_timer: Timer = $dash_stop_timer
 @onready var dash_cooldown_timer: Timer = $dash_cooldown_timer
 @onready var movement_component: Node = $Components/MovementComponent
@@ -59,6 +60,7 @@ func _physics_process(delta: float) -> void:
 			animated_sprit.play("jump")
 
 	move_and_slide()
+	_update_dash_cooldown_ui()
 
 
 func _on_dash_stop_timer_timeout() -> void:
@@ -81,6 +83,18 @@ func _on_orbit_detector_area_exited(area: Area2D) -> void:
 
 func _ready() -> void:
 	health_component.init_health(health_bar)
+	_update_dash_cooldown_ui()
+
+
+func _update_dash_cooldown_ui() -> void:
+	if dash_cooldown_timer.is_stopped() and dash_component.can_dash:
+		dash_cooldown_label.text = "Dash: Ready"
+		dash_cooldown_label.modulate = Color(0.55, 1.0, 0.55, 1.0)
+		return
+
+	var remaining := max(dash_cooldown_timer.time_left, 0.0)
+	dash_cooldown_label.text = "Dash: %.1f" % remaining
+	dash_cooldown_label.modulate = Color(1.0, 0.75, 0.45, 1.0)
 
 
 func take_damage(amount: int) -> void:

@@ -24,5 +24,5 @@ shape = SubResource("RectangleShape2D_bboqu")
 wait_time = 0.234
 one_shot = true
 
-[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_entered" from="." to="." method="_on_darkness_block_body_entered"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

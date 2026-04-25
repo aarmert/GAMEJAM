@@ -302,6 +302,34 @@ script = ExtResource("6_dscpn")
 [node name="HealthComponent" type="Node" parent="Components"]
 script = ExtResource("7_hlcpn")
 
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="DashCooldownPanel" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 176.0
+offset_top = -42.0
+offset_right = 311.0
+offset_bottom = -8.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="DashCooldownLabel" type="Label" parent="UI/DashCooldownPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 16
+text = "Dash: Ready"
+horizontal_alignment = 2
+vertical_alignment = 1
+
 [connection signal="timeout" from="dash_stop_timer" to="." method="_on_dash_stop_timer_timeout"]
 [connection signal="timeout" from="dash_cooldown_timer" to="." method="_on_dash_cooldown_timer_timeout"]
 [connection signal="area_entered" from="OrbitDetector" to="." method="_on_orbit_detector_area_entered"]
