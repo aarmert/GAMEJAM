@@ -22,6 +22,10 @@ func _ready() -> void:
 	visited.resize(checkpoints.size())
 	visited.fill(false)
 
+	# Preview kameranın zoom'unu player kameranınkine eşitle
+	if preview_camera and player_camera:
+		preview_camera.zoom = player_camera.zoom
+
 	if checkpoints.size() > 0:
 		await get_tree().process_frame
 		play_preview_to(0)
@@ -32,6 +36,9 @@ func play_preview_to(index: int) -> void:
 		return
 	is_previewing = true
 	player.set_physics_process(false)
+
+	# Her preview başında zoom'u tekrar eşitle (güvence)
+	preview_camera.zoom = player_camera.zoom
 
 	preview_camera.global_position = player.global_position
 	preview_camera.make_current()
