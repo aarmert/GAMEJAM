@@ -1,5 +1,4 @@
 extends Node2D
-
 # Inspector'dan DarknessBlock sahnenizi buraya sürükleyip bırakacaksınız
 @export var darkness_block_scene: PackedScene 
 
