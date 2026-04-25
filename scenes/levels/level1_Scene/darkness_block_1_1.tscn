@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://7uhgpikmv2q" path="res://blockholders/sprites/tileset.png" id="1_qtw0r"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dd0lh"]
-size = Vector2(30, 30)
+size = Vector2(20, 21)
 
 [node name="Darkness_Block1_1" type="Area2D" unique_id=804301445]
 script = ExtResource("1_l6cnf")
