@@ -1,9 +1,9 @@
 extends CharacterBody2D
 
 
-@onready var animated_sprit: AnimatedSprite2D = $AnimatedSprite2D
+@onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var health_bar: ProgressBar = $HealthBar
-@onready var dash_bar_ui: Node = $UI/DashBar
+@onready var dash_bar_ui: DashBarUI = $UI/DashBar
 @onready var dash_stop_timer: Timer = $dash_stop_timer
 @onready var dash_cooldown_timer: Timer = $dash_cooldown_timer
 @onready var movement_component: Node = $Components/MovementComponent
@@ -14,7 +14,7 @@ extends CharacterBody2D
 @onready var flashlight_component: Node = get_node_or_null("Components/FlashlightComponent")
 
 var safe_zones := 0
-var orbit_zone_overlap_count := 0
+var double_jump_orbit_overlap_count := 0
 var dash_orbit_overlap_count := 0
 
 
@@ -52,7 +52,7 @@ func _physics_process(delta: float) -> void:
 			jump_wall_component.wall_jump(self, jump_component.jump_velocity)
 			jump_component.restore_extra_jumps()
 		else:
-			jump_component.try_extra_jump(self, orbit_zone_overlap_count > 0)
+			jump_component.try_extra_jump(self, double_jump_orbit_overlap_count > 0)
 
 	if Input.is_action_just_pressed("dash"):
 		if dash_orbit_overlap_count > 0:
@@ -60,25 +60,25 @@ func _physics_process(delta: float) -> void:
 		else:
 			dash_component.try_start_dash(dash_stop_timer, dash_cooldown_timer)
 
-	movement_component.apply_facing(animated_sprit, direction)
+	movement_component.apply_facing(animated_sprite, direction)
 
 	if dash_component.dashing:
-		dash_component.apply_dash_velocity(self, direction, animated_sprit.flip_h)
-		dash_component.spawn_dash_trail(self, animated_sprit, delta)
-		animated_sprit.play("dash")
+		dash_component.apply_dash_velocity(self, direction, animated_sprite.flip_h)
+		dash_component.spawn_dash_trail(self, animated_sprite, delta)
+		animated_sprite.play("dash")
 	else:
 		if not dash_component.apply_recovery_movement(self, direction, movement_component.speed, delta):
 			movement_component.apply_horizontal_movement(self, direction)
 
 		if is_on_floor():
 			if direction == 0:
-				animated_sprit.play("idle")
+				animated_sprite.play("idle")
 			else:
-				animated_sprit.play("run")
+				animated_sprite.play("run")
 		elif touching_wall:
-			animated_sprit.play("wall_slide")
+			animated_sprite.play("wall_slide")
 		else:
-			animated_sprit.play("jump")
+			animated_sprite.play("jump")
 
 	dash_component.update_cooldown_display(delta)
 	move_and_slide()
@@ -128,14 +128,14 @@ func _on_dash_cooldown_timer_timeout() -> void:
 
 func _on_orbit_detector_area_entered(area: Area2D) -> void:
 	if area.is_in_group("double_jump_orbit"):
-		orbit_zone_overlap_count += 1
+		double_jump_orbit_overlap_count += 1
 	if area.is_in_group("dash_orbit"):
 		dash_orbit_overlap_count += 1
 
 
 func _on_orbit_detector_area_exited(area: Area2D) -> void:
 	if area.is_in_group("double_jump_orbit"):
-		orbit_zone_overlap_count = max(orbit_zone_overlap_count - 1, 0)
+		double_jump_orbit_overlap_count = max(double_jump_orbit_overlap_count - 1, 0)
 	if area.is_in_group("dash_orbit"):
 		dash_orbit_overlap_count = max(dash_orbit_overlap_count - 1, 0)
 
