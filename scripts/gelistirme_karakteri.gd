@@ -11,6 +11,8 @@ extends CharacterBody2D
 @onready var dash_component: Node = $Components/DashComponent
 @onready var health_component: Node = $Components/HealthComponent
 
+var orbit_zone_overlap_count := 0
+
 func _physics_process(delta: float) -> void:
 	if not health_component.can_receive_actions():
 		velocity += get_gravity() * delta
@@ -30,7 +32,7 @@ func _physics_process(delta: float) -> void:
 			jump_wall_component.wall_jump(self, jump_component.jump_velocity)
 			jump_component.restore_extra_jumps()
 		else:
-			jump_component.try_extra_jump(self)
+			jump_component.try_extra_jump(self, orbit_zone_overlap_count > 0)
 
 	if Input.is_action_just_pressed("dash"):
 		dash_component.try_start_dash(dash_stop_timer, dash_cooldown_timer)
@@ -62,6 +64,16 @@ func _on_dash_stop_timer_timeout() -> void:
 
 func _on_dash_cooldown_timer_timeout() -> void:
 	dash_component.on_dash_cooldown_timeout()
+
+
+func _on_orbit_detector_area_entered(area: Area2D) -> void:
+	if area.is_in_group("orbit_zone"):
+		orbit_zone_overlap_count += 1
+
+
+func _on_orbit_detector_area_exited(area: Area2D) -> void:
+	if area.is_in_group("orbit_zone"):
+		orbit_zone_overlap_count = max(orbit_zone_overlap_count - 1, 0)
 
 
 func _ready() -> void:

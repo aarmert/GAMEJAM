@@ -246,6 +246,9 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_a0xbm"]
 radius = 5.0
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_orbit_detector"]
+size = Vector2(48, 40)
+
 [node name="CharacterBody2D" type="CharacterBody2D" unique_id=1224785084]
 visibility_layer = 2
 script = ExtResource("1_ffdbh")
@@ -273,6 +276,15 @@ offset_top = -29.0
 offset_right = 16.0
 offset_bottom = -25.0
 
+[node name="OrbitDetector" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 8
+monitoring = true
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="OrbitDetector"]
+shape = SubResource("RectangleShape2D_orbit_detector")
+
 [node name="Components" type="Node" parent="."]
 
 [node name="MovementComponent" type="Node" parent="Components"]
@@ -292,3 +304,5 @@ script = ExtResource("7_hlcpn")
 
 [connection signal="timeout" from="dash_stop_timer" to="." method="_on_dash_stop_timer_timeout"]
 [connection signal="timeout" from="dash_cooldown_timer" to="." method="_on_dash_cooldown_timer_timeout"]
+[connection signal="area_entered" from="OrbitDetector" to="." method="_on_orbit_detector_area_entered"]
+[connection signal="area_exited" from="OrbitDetector" to="." method="_on_orbit_detector_area_exited"]

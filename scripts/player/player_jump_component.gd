@@ -16,7 +16,10 @@ func jump_from_floor(player: CharacterBody2D) -> void:
 	player.velocity.y = jump_velocity
 
 
-func try_extra_jump(player: CharacterBody2D) -> bool:
+func try_extra_jump(player: CharacterBody2D, can_use_orbit_jump: bool) -> bool:
+	if not can_use_orbit_jump:
+		return false
+
 	if extra_jumps_left <= 0:
 		return false
 
