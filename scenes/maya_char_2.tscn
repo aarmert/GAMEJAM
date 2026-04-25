@@ -3,8 +3,26 @@
 [ext_resource type="Script" uid="uid://brwmmbpxkdf1b" path="res://scripts/maya_char.gd" id="1_88i03"]
 [ext_resource type="Texture2D" uid="uid://dcscgkimhesqf" path="res://assets/player_idle.png" id="2_d78kl"]
 [ext_resource type="PackedScene" uid="uid://cim6738qbdawp" path="res://scenes/healthbar.tscn" id="3_d78kl"]
+[ext_resource type="Script" uid="uid://blo01ekvxx03b" path="res://scripts/player/player_movement_component.gd" id="4_l80sn"]
+[ext_resource type="Script" uid="uid://t21bmvqmm2yy" path="res://scripts/player/player_jump_component.gd" id="5_fmnic"]
+[ext_resource type="Script" uid="uid://kkqauuhsk22w" path="res://scripts/player/player_jump_wall_component.gd" id="6_qhn6r"]
+[ext_resource type="Script" uid="uid://bbmkrbh7klrwl" path="res://scripts/player/player_dash_component.gd" id="7_bvqhj"]
+[ext_resource type="Script" uid="uid://8n78egk216uk" path="res://scripts/player/player_health_component.gd" id="8_lqk5f"]
+[ext_resource type="PackedScene" path="res://scenes/dashbar.tscn" id="9_f5x6t"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qhn6r"]
+atlas = ExtResource("2_d78kl")
+region = Rect2(0, 0, 32, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2qen3"]
+atlas = ExtResource("2_d78kl")
+region = Rect2(0, 0, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l80sn"]
+atlas = ExtResource("2_d78kl")
+region = Rect2(0, 0, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fmnic"]
 atlas = ExtResource("2_d78kl")
 region = Rect2(0, 0, 32, 64)
 
@@ -12,15 +30,42 @@ region = Rect2(0, 0, 32, 64)
 animations = [{
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_qhn6r")
+}],
+"loop": true,
+"name": &"dash",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_2qen3")
 }],
 "loop": true,
-"name": &"default",
-"speed": 5.0
+"name": &"idle",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l80sn")
+}],
+"loop": true,
+"name": &"jump",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fmnic")
+}],
+"loop": true,
+"name": &"run",
+"speed": 10.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gs77c"]
 size = Vector2(16, 47)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_aubyo"]
+size = Vector2(48, 40)
 
 [node name="MayaChar2" type="CharacterBody2D" unique_id=102941817]
 script = ExtResource("1_88i03")
@@ -28,6 +73,8 @@ script = ExtResource("1_88i03")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=522489782]
 position = Vector2(0, -32)
 sprite_frames = SubResource("SpriteFrames_bdpy2")
+animation = &"dash"
+autoplay = "idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=811189942]
 position = Vector2(0, -23.5)
@@ -42,4 +89,48 @@ offset_top = -50.0
 offset_right = 30.0
 offset_bottom = -46.0
 
+[node name="dash_stop_timer" type="Timer" parent="." unique_id=1589807526]
+wait_time = 0.2
+one_shot = true
+
+[node name="dash_cooldown_timer" type="Timer" parent="." unique_id=1685794204]
+wait_time = 5.0
+one_shot = true
+
+[node name="OrbitDetector" type="Area2D" parent="." unique_id=731102824]
+collision_layer = 0
+collision_mask = 8
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="OrbitDetector" unique_id=1515675284]
+shape = SubResource("RectangleShape2D_aubyo")
+
+[node name="Components" type="Node" parent="." unique_id=1115180213]
+
+[node name="MovementComponent" type="Node" parent="Components" unique_id=857823944]
+script = ExtResource("4_l80sn")
+
+[node name="JumpComponent" type="Node" parent="Components" unique_id=72061629]
+script = ExtResource("5_fmnic")
+
+[node name="JumpWallComponent" type="Node" parent="Components" unique_id=1332460124]
+script = ExtResource("6_qhn6r")
+
+[node name="DashComponent" type="Node" parent="Components" unique_id=1098959156]
+script = ExtResource("7_bvqhj")
+
+[node name="HealthComponent" type="Node" parent="Components" unique_id=1652147034]
+script = ExtResource("8_lqk5f")
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=1938775163]
+
+[node name="DashBar" parent="UI" unique_id=1422109252 instance=ExtResource("9_f5x6t")]
+anchors_preset = 3
+offset_left = -232.0
+offset_top = -60.0
+offset_right = 0.0
+offset_bottom = 0.0
+
 [connection signal="timeout" from="DarknessDamageTimer" to="." method="_on_darkness_damage_timer_timeout"]
+[connection signal="timeout" from="dash_stop_timer" to="." method="_on_dash_stop_timer_timeout"]
+[connection signal="timeout" from="dash_cooldown_timer" to="." method="_on_dash_cooldown_timer_timeout"]

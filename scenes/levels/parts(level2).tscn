@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bt1g0l0t5uwcc"]
 
 [ext_resource type="Texture2D" uid="uid://bk7yhlfmo5t83" path="res://assets/tileset.png" id="1_7436v"]
-[ext_resource type="Script" uid="uid://cwwa3qtcc6ynu" path="res://parts.gd" id="1_xma56"]
+[ext_resource type="Script" uid="uid://cwwa3qtcc6ynu" path="res://scripts/parts.gd" id="1_xma56"]
 [ext_resource type="PackedScene" uid="uid://cm0udogbmydbq" path="res://scenes/maya_char_2.tscn" id="2_hfrku"]
 [ext_resource type="Texture2D" uid="uid://cvaqwesa34asg" path="res://assets/parallax-demon-woods-bg.png" id="4_w5oot"]
 [ext_resource type="Texture2D" uid="uid://bhdy5biuylj7" path="res://assets/parallax-demon-woods-far-trees.png" id="5_531e2"]

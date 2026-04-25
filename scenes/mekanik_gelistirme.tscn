@@ -4,7 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://dtdncmd6dus80" path="res://blockholders/sprites/world_tileset.png" id="2_fa8wy"]
 [ext_resource type="PackedScene" uid="uid://bsiot8o0bnp2g" path="res://scenes/killzone.tscn" id="3_jqbve"]
 [ext_resource type="PackedScene" uid="uid://diftucm75sxs5" path="res://scenes/DarknessBlock.tscn" id="4_f0rl4"]
-[ext_resource type="Script" uid="uid://cf48tudvsyonc" path="res://scripts/darkness_manager.gd" id="5_d5u1p"]
+[ext_resource type="PackedScene" path="res://scenes/orbit/dash_orbiti.tscn" id="5_cihii"]
+[ext_resource type="Script" path="res://scripts/darkness_manager.gd" id="5_d5u1p"]
 [ext_resource type="PackedScene" uid="uid://bbbcr3ehux0yj" path="res://scenes/canavar.tscn" id="6_o8r7p"]
 [ext_resource type="PackedScene" uid="uid://cembhkjqm4imv" path="res://scenes/heal.tscn" id="7_yu0b6"]
 [ext_resource type="PackedScene" path="res://scenes/orbit/double_jump_orbiti.tscn" id="8_orbzn"]
@@ -193,7 +194,7 @@ size = Vector2(16, 220)
 
 [node name="CharacterBody2D" parent="Level 1 (Arda)" unique_id=1224785084 instance=ExtResource("1_ssejl")]
 z_index = 5
-position = Vector2(-12, -25)
+position = Vector2(-97, -16)
 collision_layer = 2
 
 [node name="Camera2D" type="Camera2D" parent="Level 1 (Arda)/CharacterBody2D" unique_id=528242437]
@@ -215,6 +216,9 @@ position = Vector2(-7, -70)
 
 [node name="DoubleJumpOrbiti" parent="Level 1 (Arda)" unique_id=530270284 instance=ExtResource("8_orbzn")]
 position = Vector2(-6, -86)
+
+[node name="DashOrbiti" parent="Level 1 (Arda)" unique_id=1893373294 instance=ExtResource("5_cihii")]
+position = Vector2(-138, -11)
 
 [node name="TileMap" type="TileMap" parent="." unique_id=799906512]
 tile_set = SubResource("TileSet_f0rl4")
