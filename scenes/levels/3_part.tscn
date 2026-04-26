@@ -4,7 +4,11 @@
 [ext_resource type="PackedScene" uid="uid://bbbcr3ehux0yj" path="res://scenes/canavar.tscn" id="3_81rl0"]
 [ext_resource type="Texture2D" uid="uid://btls0ltayq6y3" path="res://assets/tileset-Sheet.png" id="4_cpls8"]
 [ext_resource type="PackedScene" uid="uid://cm0udogbmydbq" path="res://scenes/asil_karakter.tscn" id="4_e311u"]
-[ext_resource type="PackedScene" path="res://scenes/level_exit.tscn" id="5_672k7"]
+[ext_resource type="PackedScene" uid="uid://clvlexit2mno0" path="res://scenes/level_exit.tscn" id="5_672k7"]
+[ext_resource type="Texture2D" uid="uid://cvaqwesa34asg" path="res://assets/parallax-demon-woods-bg.png" id="6_jufsy"]
+[ext_resource type="Texture2D" uid="uid://bhdy5biuylj7" path="res://assets/parallax-demon-woods-far-trees.png" id="7_oi8r6"]
+[ext_resource type="Texture2D" uid="uid://d20y2ct2gwg00" path="res://assets/parallax-demon-woods-mid-trees.png" id="8_4ukxg"]
+[ext_resource type="Texture2D" uid="uid://dp3b1xnfyae5e" path="res://assets/parallax-demon-woods-close-trees.png" id="9_u5ixk"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_672k7"]
 texture = ExtResource("4_cpls8")
@@ -81,5 +85,52 @@ layer_0/tile_data = PackedInt32Array(65527, 65536, 0, 65528, 65536, 0, 65529, 65
 
 [node name="LevelExit" parent="." unique_id=1072028092 groups=["player"] instance=ExtResource("5_672k7")]
 position = Vector2(169, -30)
-collision_mask = 3
 next_scene_path = "uid://bt1g0l0t5uwcc"
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="." unique_id=1282402626]
+
+[node name="ParallaxLayer1" type="ParallaxLayer" parent="ParallaxBackground" unique_id=998934171]
+motion_scale = Vector2(0.2, 1)
+motion_mirroring = Vector2(2400, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer1" unique_id=285690477]
+texture_repeat = 2
+position = Vector2(46.999996, -682)
+scale = Vector2(5, 5)
+texture = ExtResource("6_jufsy")
+centered = false
+
+[node name="ParallaxLayer2" type="ParallaxLayer" parent="ParallaxBackground" unique_id=224939273]
+motion_scale = Vector2(0.4, 1)
+motion_mirroring = Vector2(2960, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer2" unique_id=1666890683]
+texture_repeat = 2
+position = Vector2(0, -680)
+scale = Vector2(5, 5)
+texture = ExtResource("7_oi8r6")
+centered = false
+
+[node name="ParallaxLayer3" type="ParallaxLayer" parent="ParallaxBackground" unique_id=548154347]
+motion_scale = Vector2(0.6, 1)
+motion_mirroring = Vector2(2960, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer3" unique_id=861326017]
+texture_repeat = 2
+position = Vector2(0, -680)
+scale = Vector2(5, 5)
+texture = ExtResource("8_4ukxg")
+centered = false
+
+[node name="ParallaxLayer4" type="ParallaxLayer" parent="ParallaxBackground" unique_id=1258664978]
+motion_scale = Vector2(0.8, 1)
+motion_mirroring = Vector2(2960, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer4" unique_id=938877721]
+texture_repeat = 2
+position = Vector2(0, -680)
+scale = Vector2(5, 5)
+texture = ExtResource("9_u5ixk")
+centered = false
+
+[node name="BackgroundModulate" type="CanvasModulate" parent="ParallaxBackground" unique_id=2054205280]

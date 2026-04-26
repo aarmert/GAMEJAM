@@ -1,7 +1,7 @@
 extends Node2D
 
 @onready var canvas_modulate: CanvasModulate = $CanvasModulate
-@onready var background_modulate: CanvasModulate = $ParallaxBackground/BackgroundModulate
+@onready var background_modulate: CanvasModulate = get_node_or_null("ParallaxBackground/BackgroundModulate")
 @onready var flashlight: PointLight2D = $MayaChar2/FlashlightPivot/PointLight2D
 
 @export var checkpoints: Array[Area2D] = []
