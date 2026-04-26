@@ -9,6 +9,10 @@ var notified: bool = false
 @onready var heal_timer: Timer = $HealTimer
 
 
+func _ready() -> void:
+	add_to_group("heal_zone")
+
+
 func _on_body_entered(body: Node2D) -> void:
 	# Aynı body zaten içerdeyse tekrar artırma
 	if player_in_area == body:
