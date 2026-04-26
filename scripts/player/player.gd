@@ -17,6 +17,7 @@ extends CharacterBody2D
 @export var starts_with_dash_skill := true
 @export var starts_with_flashlight_skill := false
 @export var darkness_damage_enabled := false
+@export var use_darkness_mechanics := false
 
 var safe_zones := 0
 var double_jump_orbit_overlap_count := 0
@@ -30,6 +31,9 @@ var sarmasikta_mi: bool = false
 
 
 func _ready() -> void:
+	if CheckpointData.has_spawn:
+		global_position = CheckpointData.spawn_position
+
 	health_component.init_health(health_bar)
 	has_dash_skill = starts_with_dash_skill
 	if not has_dash_skill:
@@ -43,7 +47,8 @@ func _ready() -> void:
 	else:
 		flashlight_bar_ui.set_locked()
 
-	_setup_ambient_light()
+	if use_darkness_mechanics:
+		_setup_ambient_light()
 
 
 func _physics_process(delta: float) -> void:
@@ -217,9 +222,10 @@ func _setup_flashlight() -> void:
 	_ensure_flashlight_light()
 	flashlight_component.init_flashlight(_flashlight_light, null)
 	flashlight_component.battery_changed.connect(_on_flashlight_battery_changed)
-	flashlight_component.flashlight_toggled.connect(_on_flashlight_toggled)
 	flashlight_bar_ui.update_battery(1.0, false)
-	_setup_lantern_glow()
+	if use_darkness_mechanics:
+		flashlight_component.flashlight_toggled.connect(_on_flashlight_toggled)
+		_setup_lantern_glow()
 
 
 func _on_flashlight_battery_changed(percent: float) -> void:
@@ -251,13 +257,15 @@ func _ensure_flashlight_light() -> void:
 	_flashlight_light.name = "PointLight2D"
 	_flashlight_light.position = Vector2(0, 0)
 	_flashlight_light.energy = 1.5
-	_flashlight_light.texture_scale = 1.5
+	_flashlight_light.texture_scale = 3.3
 	_flashlight_light.range_z_min = -4096
 	_flashlight_light.range_z_max = 4096
 	_flashlight_light.range_layer_min = -128
 	_flashlight_light.range_layer_max = 128
 	_flashlight_light.color = Color(0.75, 0.5, 1.0)
 	_flashlight_light.enabled = false
+	_flashlight_light.shadow_enabled = true
+	_flashlight_light.shadow_color = Color(0.0, 0.0, 0.0, 1.0)
 	_flashlight_light.texture = _create_cone_texture()
 
 	pivot.add_child(_flashlight_light)
@@ -267,14 +275,16 @@ func _setup_ambient_light() -> void:
 	var light := PointLight2D.new()
 	light.name = "AmbientLight"
 	light.position = Vector2(0, -28.5)
-	light.color = Color(0.82, 0.65, 1.0)
-	light.energy = 2.2
-	light.texture_scale = 0.38
+	light.color = Color(1.0, 1.0, 1.0)
+	light.energy = 3.2
+	light.texture_scale = 0.45
 	light.range_z_min = -4096
 	light.range_z_max = 4096
 	light.range_layer_min = -128
 	light.range_layer_max = 128
 	light.texture = _create_radial_texture(128)
+	light.shadow_enabled = true
+	light.shadow_color = Color(0.0, 0.0, 0.0, 1.0)
 	_ambient_light = light
 	add_child(light)
 
@@ -313,7 +323,7 @@ func _create_radial_texture(size: int) -> ImageTexture:
 			var dist := Vector2(float(x) - center, float(y) - center).length()
 			if dist < max_dist:
 				var t := 1.0 - dist / max_dist
-				img.set_pixel(x, y, Color(1.0, 1.0, 1.0, t * t))
+				img.set_pixel(x, y, Color(1.0, 1.0, 1.0, t))
 	return ImageTexture.create_from_image(img)
 
 

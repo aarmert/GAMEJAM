@@ -17,7 +17,9 @@ var occupied_blocks = {}
 var directions = [Vector2.UP, Vector2.DOWN, Vector2.LEFT, Vector2.RIGHT]
 
 func _ready() -> void:
-	# Başlangıç noktasını listelere ekle
+	if CheckpointData.has_darkness_origin:
+		global_position = CheckpointData.darkness_origin_pos
+
 	frontier_blocks.append(global_position)
 	occupied_blocks[global_position] = true
 
