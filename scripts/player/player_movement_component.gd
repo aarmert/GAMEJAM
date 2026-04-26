@@ -2,7 +2,7 @@ extends Node
 class_name PlayerMovementComponent
 
 
-@export var speed := 130.0
+@export var speed := 180
 
 
 func apply_horizontal_movement(player: CharacterBody2D, direction: float) -> void:

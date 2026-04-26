@@ -2,7 +2,7 @@ extends Node
 class_name PlayerDashComponent
 
 
-@export var dash_speed := 300.0
+@export var dash_speed := 400.0
 @export var dash_duration := 0.26
 @export var recovery_time := 0.14
 @export var recovery_acceleration := 1800.0
