@@ -41,6 +41,9 @@ func _ready() -> void:
 	else:
 		flashlight_bar_ui.set_locked()
 
+	if CheckpointData.spawn_position != Vector2.INF:
+		global_position = CheckpointData.spawn_position
+
 
 func _physics_process(delta: float) -> void:
 	if not health_component.can_receive_actions():

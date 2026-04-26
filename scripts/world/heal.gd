@@ -26,6 +26,8 @@ func _on_body_entered(body: Node2D) -> void:
 		heal_timer.start()
 		print("girilen area index: ", checkpoint_index)
 
+		CheckpointData.spawn_position = global_position
+
 		if not notified:
 			notified = true
 			var manager = get_tree().current_scene
