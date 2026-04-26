@@ -18,6 +18,7 @@
 [ext_resource type="Texture2D" uid="uid://ldy22qobkb6y" path="res://assets/DeepCaveBG-Layer2.png" id="16_gvm5i"]
 [ext_resource type="Texture2D" uid="uid://su5il0fk476b" path="res://assets/DeepCaveBG-Layer3.png" id="17_jrfo0"]
 [ext_resource type="PackedScene" uid="uid://bbbcr3ehux0yj" path="res://scenes/canavar.tscn" id="18_db1r7"]
+[ext_resource type="Script" uid="uid://cj6k0xewqaqe1" path="res://scripts/area_2d.gd" id="19_4fww7"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nfihu"]
 texture = ExtResource("3_jprdt")
@@ -139,12 +140,15 @@ sources/2 = SubResource("TileSetAtlasSource_lgguw")
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jprdt"]
 size = Vector2(32, 32)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gvm5i"]
+size = Vector2(229.5, 20)
+
 [node name="Level1" type="Node2D" unique_id=2080830563]
 script = ExtResource("1_dywbp")
 
 [node name="asil_karakter" parent="." unique_id=102941817 instance=ExtResource("6_1seuy")]
 z_index = 1
-position = Vector2(-552, 378)
+position = Vector2(599, 273)
 collision_layer = 3
 
 [node name="Camera2D" type="Camera2D" parent="asil_karakter" unique_id=1333722321]
@@ -412,11 +416,16 @@ position = Vector2(1180, -335)
 
 [node name="Node2D" type="Node2D" parent="." unique_id=1318747758]
 
-[node name="Spike" parent="Node2D" unique_id=926290190 instance=ExtResource("18_db1r7")]
-position = Vector2(661, 408)
+[node name="Killzone" type="Area2D" parent="Node2D" unique_id=618813223]
+position = Vector2(785, 374)
+script = ExtResource("19_4fww7")
 
-[node name="Spike2" parent="Node2D" unique_id=1658096203 instance=ExtResource("18_db1r7")]
-position = Vector2(661, 408)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D/Killzone" unique_id=2012666273]
+position = Vector2(-34, 36)
+shape = SubResource("RectangleShape2D_gvm5i")
+
+[node name="damage_timer" type="Timer" parent="Node2D/Killzone" unique_id=1595827131]
+wait_time = 0.05
 
 [connection signal="body_entered" from="Darkness_Bullshit/slow_down" to="Darkness_Bullshit/slow_down" method="_on_body_entered"]
 [connection signal="body_entered" from="Darkness_Bullshit/slow_down2" to="Darkness_Bullshit/slow_down2" method="_on_body_entered"]
@@ -435,3 +444,6 @@ position = Vector2(661, 408)
 [connection signal="body_exited" from="sarmasiklar/sarmasik6" to="sarmasiklar/sarmasik6" method="_on_body_exited"]
 [connection signal="body_entered" from="sarmasiklar/sarmasik7" to="sarmasiklar/sarmasik7" method="_on_body_entered"]
 [connection signal="body_exited" from="sarmasiklar/sarmasik7" to="sarmasiklar/sarmasik7" method="_on_body_exited"]
+[connection signal="body_entered" from="Node2D/Killzone" to="Node2D/Killzone" method="_on_body_entered"]
+[connection signal="body_exited" from="Node2D/Killzone" to="Node2D/Killzone" method="_on_body_exited"]
+[connection signal="timeout" from="Node2D/Killzone/damage_timer" to="Node2D/Killzone" method="_on_damage_timer_timeout"]
