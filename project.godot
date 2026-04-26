@@ -15,9 +15,9 @@ run/main_scene="uid://bt1g0l0t5uwcc"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
-[global_group]
+[autoload]
 
-player=""
+SceneTransition="*res://scripts/world/scene_transition.gd"
 
 [input]
 

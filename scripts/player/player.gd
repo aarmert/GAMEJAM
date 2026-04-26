@@ -16,6 +16,7 @@ extends CharacterBody2D
 
 @export var starts_with_dash_skill := false
 @export var starts_with_flashlight_skill := false
+@export var darkness_damage_enabled := false
 
 var safe_zones := 0
 var double_jump_orbit_overlap_count := 0
@@ -23,6 +24,7 @@ var dash_orbit_overlap_count := 0
 var has_dash_skill := false
 var has_flashlight_skill := false
 var _flashlight_light: PointLight2D = null
+var sarmasikta_mi: bool = false
 
 
 func _ready() -> void:
@@ -86,7 +88,11 @@ func _physics_process(delta: float) -> void:
 		elif touching_wall:
 			animated_sprite.play("wall_slide")
 		else:
-			animated_sprite.play("jump")
+			# Havada: yatay hareket varsa kosma-zipla, yoksa yerinde-zipla
+			if direction == 0:
+				animated_sprite.play("idle_jump")
+			else:
+				animated_sprite.play("jump")
 
 	dash_component.update_cooldown_display(delta)
 	move_and_slide()
@@ -116,7 +122,6 @@ func _update_dash_cooldown_ui() -> void:
 
 func take_damage(amount: int) -> void:
 	if health_component.apply_damage(health_bar, amount):
-		Engine.time_scale = 0.5
 		die()
 
 
@@ -126,10 +131,24 @@ func heal(amount: int) -> void:
 
 func die() -> void:
 	health_component.mark_dead()
+
+	# 1) Slow motion → düsüsü dramatik göster
+	Engine.time_scale = 0.4
+
+	# 2) Yukari zipla yok — direkt yerçekimiyle asagi düssün
 	velocity = Vector2.ZERO
+
+	# 3) Tüm çarpısmayi kapat → yerden gecip asagi düssün
 	collision_layer = 0
 	collision_mask = 0
-	await get_tree().create_timer(0.7, true, false, true).timeout
+
+	# 4) Düsme pozu (renk degismez)
+	animated_sprite.play("idle_jump")
+
+	# 5) Gercek 3 saniye bekle → yavas çekimde düstügü görünür
+	await get_tree().create_timer(3.0, true, false, true).timeout
+
+	# 6) Reset ve sahneyi yenile
 	Engine.time_scale = 1.0
 	get_tree().reload_current_scene()
 
@@ -157,6 +176,8 @@ func _on_orbit_detector_area_exited(area: Area2D) -> void:
 
 
 func _on_darkness_damage_timer_timeout() -> void:
+	if not darkness_damage_enabled:
+		return
 	if safe_zones == 0 and health_component.can_receive_actions():
 		take_damage(5)
 

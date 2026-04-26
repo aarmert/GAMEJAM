@@ -12,8 +12,8 @@
 [ext_resource type="Script" uid="uid://kkqauuhsk22w" path="res://scripts/player/player_jump_wall_component.gd" id="6_qhn6r"]
 [ext_resource type="Script" uid="uid://bbmkrbh7klrwl" path="res://scripts/player/player_dash_component.gd" id="7_bvqhj"]
 [ext_resource type="Script" uid="uid://8n78egk216uk" path="res://scripts/player/player_health_component.gd" id="8_lqk5f"]
-[ext_resource type="PackedScene" path="res://scenes/dashbar.tscn" id="9_f5x6t"]
-[ext_resource type="Script" path="res://scripts/player/player_flashlight_component.gd" id="10_flcomp"]
+[ext_resource type="PackedScene" uid="uid://b0ncmp111fhpm" path="res://scenes/dashbar.tscn" id="9_f5x6t"]
+[ext_resource type="Script" uid="uid://ceyag1o7j1vnu" path="res://scripts/player/player_flashlight_component.gd" id="10_flcomp"]
 [ext_resource type="PackedScene" path="res://scenes/flashlightbar.tscn" id="11_flbar"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qhn6r"]
@@ -428,12 +428,12 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gs77c"]
-size = Vector2(16, 25)
+size = Vector2(16, 29)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aubyo"]
 size = Vector2(48, 40)
 
-[node name="MayaChar2" type="CharacterBody2D" unique_id=102941817]
+[node name="MayaChar2" type="CharacterBody2D" unique_id=102941817 groups=["player"]]
 script = ExtResource("1_88i03")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=522489782]
@@ -444,7 +444,7 @@ autoplay = "idle"
 frame_progress = 0.115199745
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=811189942]
-position = Vector2(0, -30.5)
+position = Vector2(0, -28.5)
 shape = SubResource("RectangleShape2D_gs77c")
 
 [node name="DarknessDamageTimer" type="Timer" parent="." unique_id=271407978]
@@ -489,23 +489,22 @@ script = ExtResource("7_bvqhj")
 [node name="HealthComponent" type="Node" parent="Components" unique_id=1652147034]
 script = ExtResource("8_lqk5f")
 
-[node name="FlashlightComponent" type="Node" parent="Components"]
+[node name="FlashlightComponent" type="Node" parent="Components" unique_id=769241185]
 script = ExtResource("10_flcomp")
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1938775163]
 
 [node name="DashBar" parent="UI" unique_id=1422109252 instance=ExtResource("9_f5x6t")]
 
-[node name="FlashlightBar" parent="UI" instance=ExtResource("11_flbar")]
+[node name="FlashlightBar" parent="UI" unique_id=1496457680 instance=ExtResource("11_flbar")]
 anchors_preset = 2
 anchor_left = 0.0
-anchor_top = 1.0
 anchor_right = 0.0
-anchor_bottom = 1.0
 offset_left = 2.0
 offset_top = -124.0
 offset_right = 356.0
 offset_bottom = -64.0
+grow_horizontal = 1
 
 [connection signal="timeout" from="DarknessDamageTimer" to="." method="_on_darkness_damage_timer_timeout"]
 [connection signal="timeout" from="dash_stop_timer" to="." method="_on_dash_stop_timer_timeout"]
