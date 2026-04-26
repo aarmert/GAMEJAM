@@ -1,7 +1,7 @@
 extends Node2D
 
 @onready var canvas_modulate: CanvasModulate = $CanvasModulate
-@onready var background_modulate: CanvasModulate = $ParallaxBackground/BackgroundModulate
+@onready var background_modulate: CanvasModulate = get_node_or_null("ParallaxBackground/BackgroundModulate")
 @onready var flashlight: PointLight2D = $MayaChar2/FlashlightPivot/PointLight2D
 
 @export var checkpoints: Array[Area2D] = []
@@ -15,8 +15,9 @@ var is_previewing: bool = false
 
 
 func _ready() -> void:
-	canvas_modulate.color = Color.BLACK
-	background_modulate.color = Color(0.15, 0.15, 0.2)
+	# Cok hafif aydinlatma: sadece siluetler zar zor seçilir
+	canvas_modulate.color = Color(0.08, 0.08, 0.11)
+	#background_modulate.color = Color(0.14, 0.14, 0.18)
 	flashlight.enabled = true
 
 	visited.resize(checkpoints.size())
