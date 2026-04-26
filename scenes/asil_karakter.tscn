@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://cm0udogbmydbq"]
 
 [ext_resource type="Script" uid="uid://3gxegeuay424" path="res://scripts/player/player.gd" id="1_88i03"]
-[ext_resource type="Texture2D" uid="uid://dcscgkimhesqf" path="res://assets/player_idle.png" id="2_d78kl"]
 [ext_resource type="PackedScene" uid="uid://cim6738qbdawp" path="res://scenes/healthbar.tscn" id="3_d78kl"]
 [ext_resource type="Texture2D" uid="uid://wfyobojddxdg" path="res://assets/player_idle-Sheet.png" id="3_fmnic"]
 [ext_resource type="Texture2D" uid="uid://h3qcdgs0ilfi" path="res://assets/player_front_jump-Sheet.png" id="4_0aq5l"]
@@ -14,11 +13,47 @@
 [ext_resource type="Script" uid="uid://8n78egk216uk" path="res://scripts/player/player_health_component.gd" id="8_lqk5f"]
 [ext_resource type="PackedScene" uid="uid://b0ncmp111fhpm" path="res://scenes/dashbar.tscn" id="9_f5x6t"]
 [ext_resource type="Script" path="res://scripts/player/player_flashlight_component.gd" id="10_flcomp"]
-[ext_resource type="PackedScene" path="res://scenes/flashlightbar.tscn" id="11_flbar"]
+[ext_resource type="PackedScene" uid="uid://cgupljpb4j820" path="res://scenes/flashlightbar.tscn" id="11_flbar"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_qhn6r"]
-atlas = ExtResource("2_d78kl")
-region = Rect2(0, 0, 32, 64)
+[sub_resource type="AtlasTexture" id="AtlasTexture_vqp1m"]
+atlas = ExtResource("4_qhn6r")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i18ov"]
+atlas = ExtResource("4_qhn6r")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_28orm"]
+atlas = ExtResource("4_qhn6r")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gnckw"]
+atlas = ExtResource("4_qhn6r")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3ca3w"]
+atlas = ExtResource("4_qhn6r")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v6m8x"]
+atlas = ExtResource("4_qhn6r")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hvlin"]
+atlas = ExtResource("4_qhn6r")
+region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2rnl7"]
+atlas = ExtResource("4_qhn6r")
+region = Rect2(224, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jweyy"]
+atlas = ExtResource("4_qhn6r")
+region = Rect2(256, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qrwcw"]
+atlas = ExtResource("4_qhn6r")
+region = Rect2(288, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bvqhj"]
 atlas = ExtResource("3_fmnic")
@@ -236,7 +271,34 @@ region = Rect2(32, 0, 32, 32)
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_qhn6r")
+"texture": SubResource("AtlasTexture_vqp1m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i18ov")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_28orm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gnckw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3ca3w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v6m8x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hvlin")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2rnl7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jweyy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qrwcw")
 }],
 "loop": true,
 "name": &"dash",
@@ -437,14 +499,13 @@ size = Vector2(48, 40)
 script = ExtResource("1_88i03")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=522489782]
-position = Vector2(0, -32)
+position = Vector2(1, -33)
 sprite_frames = SubResource("SpriteFrames_bdpy2")
-animation = &"jump"
+animation = &"dash"
 autoplay = "idle"
-frame_progress = 0.115199745
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=811189942]
-position = Vector2(0, -28.5)
+position = Vector2(0, -32)
 shape = SubResource("RectangleShape2D_gs77c")
 
 [node name="DarknessDamageTimer" type="Timer" parent="." unique_id=271407978]
