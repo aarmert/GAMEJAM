@@ -24,10 +24,16 @@ var dash_orbit_overlap_count := 0
 var has_dash_skill := false
 var has_flashlight_skill := false
 var _flashlight_light: PointLight2D = null
+var _respawn_position: Vector2
+var _initial_collision_layer: int
+var _initial_collision_mask: int
 var sarmasikta_mi: bool = false
 
 
 func _ready() -> void:
+	_respawn_position = global_position
+	_initial_collision_layer = collision_layer
+	_initial_collision_mask = collision_mask
 	health_component.init_health(health_bar)
 	has_dash_skill = starts_with_dash_skill
 	if not has_dash_skill:
@@ -130,7 +136,13 @@ func heal(amount: int) -> void:
 	health_component.apply_heal(health_bar, amount)
 
 
+func set_respawn_point(point: Vector2) -> void:
+	_respawn_position = point
+
+
 func die() -> void:
+	if not health_component.can_receive_actions():
+		return
 	health_component.mark_dead()
 
 	# 1) Slow motion → düsüsü dramatik göster
@@ -149,9 +161,22 @@ func die() -> void:
 	# 5) Gercek 3 saniye bekle → yavas çekimde düstügü görünür
 	await get_tree().create_timer(3.0, true, false, true).timeout
 
-	# 6) Reset ve sahneyi yenile
+	# 6) Son checkpoint'e dön
 	Engine.time_scale = 1.0
-	get_tree().reload_current_scene()
+	_respawn()
+
+
+func _respawn() -> void:
+	global_position = _respawn_position
+	velocity = Vector2.ZERO
+	collision_layer = _initial_collision_layer
+	collision_mask = _initial_collision_mask
+	safe_zones = 0
+	double_jump_orbit_overlap_count = 0
+	dash_orbit_overlap_count = 0
+	health_component.revive()
+	health_component.init_health(health_bar)
+	animated_sprite.play("idle")
 
 
 func _on_dash_stop_timer_timeout() -> void:

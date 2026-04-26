@@ -18,6 +18,8 @@ func _on_body_entered(body: Node2D) -> void:
 		player_in_area = body
 		if "safe_zones" in body:
 			body.safe_zones += 1
+		if body.has_method("set_respawn_point"):
+			body.set_respawn_point(global_position)
 		body.heal(20)
 		heal_timer.start()
 		print("girilen area index: ", checkpoint_index)
