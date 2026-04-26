@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 @export var speed: float = 90.0
 @export var patrol_speed: float = 50.0
-@export var jump_velocity: float = -250.0
+@export var jump_velocity: float = -380.0
 @export var vision_range: float = 150.0
 @export var vision_angle_degrees: float = 30.0
 @export var stop_chase_range: float = 400.0
@@ -20,12 +20,25 @@ var facing_direction: int = 1
 
 
 func _ready() -> void:
-	var players = get_tree().get_nodes_in_group("player")
-	if players.size() > 0:
-		player = players[0]
+	# Sadece CharacterBody2D olan player'i kabul et (yanlislikla group'a
+	# baska bir Sprite/Node eklenirse onu yok say)
+	for n in get_tree().get_nodes_in_group("player"):
+		if n is CharacterBody2D:
+			player = n
+			break
+	if player == null:
+		push_warning("[Enemy] 'player' group'unda CharacterBody2D yok — kovalama çalismaz!")
 	raycast.add_exception(self)
 	raycast.collide_with_areas = false
 	raycast.collide_with_bodies = true
+
+	# Wall/ledge raycast'leri kendini ve player'i engel olarak gormesin
+	# (yoksa kovalarken player'in üstünden ziplar, hasar veremez)
+	for rc in [wall_check_low, wall_check_high, ledge_check]:
+		rc.add_exception(self)
+		if player:
+			rc.add_exception(player)
+
 	build_vision_cone()
 
 
@@ -44,14 +57,20 @@ func _physics_process(delta: float) -> void:
 		is_chasing = false
 
 	if is_chasing and player:
-		# KOVALAMA
+		# KOVALAMA → saldiri animasyonu
 		var dir: float = sign(player.global_position.x - global_position.x)
 		if dir != 0:
 			facing_direction = int(dir)
+
+		# Önündeki 1 blok engeli zipla (2 blok varsa zaten gecemez ama dönmeyiz,
+		# yine de duvara dayanip ittirmeye devam eder; player asilinda inebilir)
+		if wall_check_low.is_colliding() and is_on_floor():
+			velocity.y = jump_velocity
+
 		velocity.x = facing_direction * speed
-		animated_sprite.play("run")
+		animated_sprite.play("attack")
 	else:
-		# DEVRİYE
+		# DEVRİYE → normal yürüme animasyonu
 		var low_blocked: bool = wall_check_low.is_colliding()
 		var high_blocked: bool = wall_check_high.is_colliding()
 		var ledge: bool = not ledge_check.is_colliding()
@@ -67,7 +86,7 @@ func _physics_process(delta: float) -> void:
 			facing_direction *= -1
 
 		velocity.x = facing_direction * patrol_speed
-		animated_sprite.play("run")
+		animated_sprite.play("default")
 
 	# Sprite ve raycast yönlerini güncelle
 	animated_sprite.flip_h = facing_direction < 0

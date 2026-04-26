@@ -144,6 +144,7 @@ layer_0/tile_data = PackedInt32Array(0, 65536, 0, 1, 65536, 0, 2, 65536, 0, 3, 6
 
 [node name="MayaChar2" parent="." unique_id=102941817 instance=ExtResource("2_hfrku")]
 position = Vector2(0, 6)
+darkness_damage_enabled = true
 
 [node name="FlashlightPivot" type="Node2D" parent="MayaChar2" unique_id=790746724]
 
