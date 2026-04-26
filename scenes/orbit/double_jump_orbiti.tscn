@@ -12,7 +12,7 @@ collision_mask = 0
 script = ExtResource("1_orbit")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1044003432]
-scale = Vector2(2, 2)
+scale = Vector2(1.5, 1.5)
 shape = SubResource("CircleShape2D_orbit")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1702657162]
