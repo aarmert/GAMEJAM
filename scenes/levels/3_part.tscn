@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://0ohkx73tsntx"]
 
-[ext_resource type="PackedScene" uid="uid://bxwiy1x2a35gc" path="res://scenes/enemy.tscn" id="2_672k7"]
+[ext_resource type="PackedScene" uid="uid://d2du15ano2qh7" path="res://scenes/enemy.tscn" id="2_672k7"]
 [ext_resource type="PackedScene" uid="uid://bbbcr3ehux0yj" path="res://scenes/canavar.tscn" id="3_81rl0"]
 [ext_resource type="Texture2D" uid="uid://btls0ltayq6y3" path="res://assets/tileset-Sheet.png" id="4_cpls8"]
 [ext_resource type="PackedScene" uid="uid://cm0udogbmydbq" path="res://scenes/asil_karakter.tscn" id="4_e311u"]
@@ -86,6 +86,7 @@ layer_0/tile_data = PackedInt32Array(65527, 65536, 0, 65528, 65536, 0, 65529, 65
 [node name="LevelExit" parent="." unique_id=1072028092 groups=["player"] instance=ExtResource("5_672k7")]
 position = Vector2(169, -30)
 next_scene_path = "uid://bt1g0l0t5uwcc"
+story_image_paths = PackedStringArray("res://assets/cutscene2.png")
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="." unique_id=1282402626]
 

@@ -2,9 +2,9 @@ extends CharacterBody2D
 
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
-@onready var health_bar: ProgressBar = $HealthBar
-@onready var dash_bar_ui: DashBarUI = $UI/DashBar
-@onready var flashlight_bar_ui: Control = $UI/FlashlightBar
+@onready var health_bar: ProgressBar = $UI/HealthBar
+@onready var dash_bar_ui: DashBarUI = get_node_or_null("UI/DashBar") as DashBarUI
+@onready var flashlight_bar_ui: FlashlightBarUI = get_node_or_null("UI/FlashlightBar") as FlashlightBarUI
 @onready var dash_stop_timer: Timer = $dash_stop_timer
 @onready var dash_cooldown_timer: Timer = $dash_cooldown_timer
 @onready var movement_component: Node = $Components/MovementComponent
@@ -32,13 +32,14 @@ func _ready() -> void:
 	has_dash_skill = starts_with_dash_skill
 	if not has_dash_skill:
 		dash_component.can_dash = false
-	dash_bar_ui.init_dash(dash_cooldown_timer.wait_time)
+	if dash_bar_ui != null:
+		dash_bar_ui.init_dash(dash_cooldown_timer.wait_time)
 	_update_dash_cooldown_ui()
 
 	has_flashlight_skill = starts_with_flashlight_skill
 	if has_flashlight_skill:
 		_setup_flashlight()
-	else:
+	elif flashlight_bar_ui != null:
 		flashlight_bar_ui.set_locked()
 
 
@@ -214,11 +215,13 @@ func _setup_flashlight() -> void:
 	_ensure_flashlight_light()
 	flashlight_component.init_flashlight(_flashlight_light, null)
 	flashlight_component.battery_changed.connect(_on_flashlight_battery_changed)
-	flashlight_bar_ui.update_battery(1.0, false)
+	if flashlight_bar_ui != null:
+		flashlight_bar_ui.update_battery(1.0, false)
 
 
 func _on_flashlight_battery_changed(percent: float) -> void:
-	flashlight_bar_ui.update_battery(percent, flashlight_component.is_on)
+	if flashlight_bar_ui != null:
+		flashlight_bar_ui.update_battery(percent, flashlight_component.is_on)
 
 
 func _update_flashlight_direction() -> void:

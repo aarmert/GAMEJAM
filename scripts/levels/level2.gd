@@ -9,15 +9,15 @@ extends Node2D
 @export var preview_camera: Camera2D
 @export var player_camera: Camera2D
 @export var preview_duration: float = 1.5
+@export var preview_enabled: bool = false
 
 var visited: Array[bool] = []
 var is_previewing: bool = false
 
 
 func _ready() -> void:
-	# Cok hafif aydinlatma: sadece siluetler zar zor seçilir
-	canvas_modulate.color = Color(0.08, 0.08, 0.11)
-	background_modulate.color = Color(0.14, 0.14, 0.18)
+	canvas_modulate.color = Color(0.34, 0.32, 0.42)
+	background_modulate.color = Color(0.55, 0.52, 0.64)
 	flashlight.enabled = true
 
 	visited.resize(checkpoints.size())
@@ -27,12 +27,14 @@ func _ready() -> void:
 	if preview_camera and player_camera:
 		preview_camera.zoom = player_camera.zoom
 
-	if checkpoints.size() > 0:
+	if preview_enabled and checkpoints.size() > 0:
 		await get_tree().process_frame
 		play_preview_to(0)
 
 
 func play_preview_to(index: int) -> void:
+	if not preview_enabled:
+		return
 	if is_previewing or index < 0 or index >= checkpoints.size():
 		return
 	is_previewing = true
@@ -62,5 +64,5 @@ func checkpoint_reached(index: int) -> void:
 		return
 	visited[index] = true
 	var next_index = index + 1
-	if next_index < checkpoints.size():
+	if preview_enabled and next_index < checkpoints.size():
 		play_preview_to(next_index)

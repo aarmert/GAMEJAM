@@ -1,69 +1,20 @@
 [gd_scene format=3 uid="uid://cembhkjqm4imv"]
 
 [ext_resource type="Script" uid="uid://bayvnps15y5lg" path="res://scripts/world/heal.gd" id="1_8vb04"]
-[ext_resource type="Texture2D" uid="uid://dibk8vysfok13" path="res://assets/coin-Sheet.png" id="2_8vb04"]
+[ext_resource type="Texture2D" uid="uid://dlls762c45ew1" path="res://assets/Streetlamp.png" id="2_8vb04"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_8vb04"]
 light_mode = 1
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5fh3v"]
 atlas = ExtResource("2_8vb04")
-region = Rect2(0, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_edr2v"]
-atlas = ExtResource("2_8vb04")
-region = Rect2(16, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_jb2xe"]
-atlas = ExtResource("2_8vb04")
-region = Rect2(32, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_b5rdj"]
-atlas = ExtResource("2_8vb04")
-region = Rect2(48, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_bggqg"]
-atlas = ExtResource("2_8vb04")
-region = Rect2(64, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_5t0c5"]
-atlas = ExtResource("2_8vb04")
-region = Rect2(80, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_s4t68"]
-atlas = ExtResource("2_8vb04")
-region = Rect2(96, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_4x2sg"]
-atlas = ExtResource("2_8vb04")
-region = Rect2(112, 0, 16, 16)
+region = Rect2(0, 0, 32, 64)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ks0tl"]
 animations = [{
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_5fh3v")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_edr2v")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_jb2xe")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_b5rdj")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_bggqg")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_5t0c5")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_s4t68")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_4x2sg")
 }],
 "loop": true,
 "name": &"default",
@@ -71,7 +22,7 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_jle0f"]
-radius = 30.016663
+radius = 52.23983
 
 [sub_resource type="Gradient" id="Gradient_531e2"]
 offsets = PackedFloat32Array(0, 0.9819277)
@@ -79,7 +30,7 @@ colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_8vb04"]
 gradient = SubResource("Gradient_531e2")
-width = 256
+width = 63
 height = 256
 fill = 1
 fill_from = Vector2(0.5, 0.5)
@@ -101,8 +52,8 @@ shape = SubResource("CircleShape2D_jle0f")
 wait_time = 0.5
 
 [node name="PointLight2D" type="PointLight2D" parent="." unique_id=1850437032]
-position = Vector2(0, 1.0000019)
-scale = Vector2(2.3359375, 2.140625)
+position = Vector2(3.5527137e-15, 0.99999994)
+scale = Vector2(12.301586, 2.5976563)
 color = Color(0.60784316, 0.54509807, 0.90588236, 0.89411765)
 energy = 3.0
 texture = SubResource("GradientTexture2D_8vb04")
