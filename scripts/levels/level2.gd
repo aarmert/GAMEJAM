@@ -16,8 +16,8 @@ var is_previewing: bool = false
 
 func _ready() -> void:
 	# Cok hafif aydinlatma: sadece siluetler zar zor seçilir
-	canvas_modulate.color = Color(0.08, 0.08, 0.11)
-	background_modulate.color = Color(0.14, 0.14, 0.18)
+	#canvas_modulate.color = Color(0.08, 0.08, 0.11)
+	#background_modulate.color = Color(0.14, 0.14, 0.18)
 	flashlight.enabled = true
 
 	visited.resize(checkpoints.size())

@@ -14,9 +14,9 @@ extends CharacterBody2D
 @onready var health_component: Node = $Components/HealthComponent
 @onready var flashlight_component: PlayerFlashlightComponent = $Components/FlashlightComponent
 
-@export var starts_with_dash_skill := false
+@export var starts_with_dash_skill := true
 @export var starts_with_flashlight_skill := false
-@export var darkness_damage_enabled := false
+@export var darkness_damage_enabled := true
 
 var safe_zones := 0
 var double_jump_orbit_overlap_count := 0
