@@ -5,7 +5,7 @@ extends Node2D
 @export var tile_map: TileMap
 @export var speed: float = 0.18 # Selin hızı
 @export var spawn_count: int = 5 # Tek seferde eklenecek blok sayısı
-
+@export var light_beam: Node2D
 
 const TILE_SIZE = 32
 
@@ -64,8 +64,7 @@ func _process(delta: float) -> void:
 						# Duvar var! Burayı da dolu işaretle ve atla
 						occupied_blocks[target_pos] = true 
 						continue
-
-				# HİLELİ ZAR: Hedef oyuncuya daha mı yakın?
+				
 				var new_distance = target_pos.distance_to(player.global_position)
 				
 				if new_distance < current_distance:
