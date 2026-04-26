@@ -161,11 +161,9 @@ func die() -> void:
 	velocity = Vector2.ZERO
 	collision_layer = 0
 	collision_mask = 0
-	Engine.time_scale = 0.4
 	animated_sprite.play("death")
 	await animated_sprite.animation_finished
-	await get_tree().create_timer(0.8, true, false, true).timeout
-	Engine.time_scale = 1.0
+	await get_tree().create_timer(0.3, true, false, true).timeout
 	get_tree().reload_current_scene()
 
 
