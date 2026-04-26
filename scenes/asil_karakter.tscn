@@ -12,9 +12,7 @@
 [ext_resource type="Script" uid="uid://kkqauuhsk22w" path="res://scripts/player/player_jump_wall_component.gd" id="6_qhn6r"]
 [ext_resource type="Script" uid="uid://bbmkrbh7klrwl" path="res://scripts/player/player_dash_component.gd" id="7_bvqhj"]
 [ext_resource type="Script" uid="uid://8n78egk216uk" path="res://scripts/player/player_health_component.gd" id="8_lqk5f"]
-[ext_resource type="PackedScene" uid="uid://b0ncmp111fhpm" path="res://scenes/dashbar.tscn" id="9_f5x6t"]
-[ext_resource type="Script" uid="uid://ceyag1o7j1vnu" path="res://scripts/player/player_flashlight_component.gd" id="10_flcomp"]
-[ext_resource type="PackedScene" path="res://scenes/flashlightbar.tscn" id="11_flbar"]
+[ext_resource type="Script" path="res://scripts/player/player_flashlight_component.gd" id="10_flcomp"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qhn6r"]
 atlas = ExtResource("2_d78kl")
@@ -450,12 +448,6 @@ shape = SubResource("RectangleShape2D_gs77c")
 [node name="DarknessDamageTimer" type="Timer" parent="." unique_id=271407978]
 autostart = true
 
-[node name="HealthBar" parent="." unique_id=1521640008 instance=ExtResource("3_d78kl")]
-offset_left = -29.0
-offset_top = -50.0
-offset_right = 30.0
-offset_bottom = -46.0
-
 [node name="dash_stop_timer" type="Timer" parent="." unique_id=1589807526]
 wait_time = 0.2
 one_shot = true
@@ -494,17 +486,11 @@ script = ExtResource("10_flcomp")
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1938775163]
 
-[node name="DashBar" parent="UI" unique_id=1422109252 instance=ExtResource("9_f5x6t")]
-
-[node name="FlashlightBar" parent="UI" unique_id=1496457680 instance=ExtResource("11_flbar")]
-anchors_preset = 2
-anchor_left = 0.0
-anchor_right = 0.0
-offset_left = 2.0
-offset_top = -124.0
-offset_right = 356.0
-offset_bottom = -64.0
-grow_horizontal = 1
+[node name="HealthBar" parent="UI" unique_id=1521640008 instance=ExtResource("3_d78kl")]
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 204.0
+offset_bottom = 34.0
 
 [connection signal="timeout" from="DarknessDamageTimer" to="." method="_on_darkness_damage_timer_timeout"]
 [connection signal="timeout" from="dash_stop_timer" to="." method="_on_dash_stop_timer_timeout"]

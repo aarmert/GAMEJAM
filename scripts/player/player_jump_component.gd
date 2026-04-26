@@ -2,7 +2,7 @@ extends Node
 class_name PlayerJumpComponent
 
 
-@export var jump_velocity := -300.0
+@export var jump_velocity := -325.0
 @export var max_extra_jumps := 1
 var extra_jumps_left := 1
 
