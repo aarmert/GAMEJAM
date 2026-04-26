@@ -1,30 +1,57 @@
 [gd_scene format=3 uid="uid://b0ncmp111fhpm"]
 
 [ext_resource type="Script" uid="uid://fg6xwbcbuuj8" path="res://scripts/ui/dashbar.gd" id="1_dashbar"]
-[ext_resource type="Shader" uid="uid://bphr0e1r3rf21" path="res://scenes/dashbar.gdshader" id="2_x4k6f"]
-[ext_resource type="Texture2D" uid="uid://cnrcfj8dr2f6t" path="res://assets/Gemini_Generated_Image_hejk5bhejk5bhejk-removebg-preview.png" id="3_x4k6f"]
+[ext_resource type="Texture2D" uid="uid://b434dvusfqo3g" path="res://assets/cooldown-Sheet.png" id="2_rsina"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_fkpgt"]
-shader = ExtResource("2_x4k6f")
+[sub_resource type="AtlasTexture" id="AtlasTexture_x4k6f"]
+atlas = ExtResource("2_rsina")
+region = Rect2(0, 0, 32, 32)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dashbar_bg"]
-bg_color = Color(0.12, 0.14, 0.18, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.22, 0.28, 0.34, 0.85)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+[sub_resource type="AtlasTexture" id="AtlasTexture_pi6qs"]
+atlas = ExtResource("2_rsina")
+region = Rect2(32, 0, 32, 32)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dashbar_fill"]
-bg_color = Color(0.4, 0.85, 1, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+[sub_resource type="AtlasTexture" id="AtlasTexture_fkpgt"]
+atlas = ExtResource("2_rsina")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qiwng"]
+atlas = ExtResource("2_rsina")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_smra6"]
+atlas = ExtResource("2_rsina")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hwxb5"]
+atlas = ExtResource("2_rsina")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ydpr2"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x4k6f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pi6qs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fkpgt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qiwng")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_smra6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hwxb5")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [node name="DashBar" type="Control" unique_id=1277620402]
 layout_mode = 3
@@ -41,38 +68,8 @@ grow_horizontal = 0
 grow_vertical = 0
 script = ExtResource("1_dashbar")
 
-[node name="DashIcon" type="TextureRect" parent="." unique_id=1705754452]
-material = SubResource("ShaderMaterial_fkpgt")
-custom_minimum_size = Vector2(15, 15)
-layout_mode = 0
-offset_left = -120.0
-offset_top = -12.0
-offset_right = 8.0
-offset_bottom = 116.0
-texture = ExtResource("3_x4k6f")
-expand_mode = 2
-stretch_mode = 4
-
-[node name="DashTextColumn" type="VBoxContainer" parent="." unique_id=1141178263]
-layout_mode = 0
-offset_left = 8.0
-offset_top = 19.0
-offset_right = 349.0
-offset_bottom = 77.0
-size_flags_horizontal = 3
-theme_override_constants/separation = 4
-
-[node name="DashLabel" type="Label" parent="DashTextColumn" unique_id=1522233181]
-layout_mode = 2
-theme_override_font_sizes/font_size = 16
-text = "Dash: Ready"
-vertical_alignment = 1
-
-[node name="DashBar" type="ProgressBar" parent="DashTextColumn" unique_id=270271968]
-custom_minimum_size = Vector2(0, 14)
-layout_mode = 2
-size_flags_vertical = 1
-theme_override_styles/background = SubResource("StyleBoxFlat_dashbar_bg")
-theme_override_styles/fill = SubResource("StyleBoxFlat_dashbar_fill")
-value = 100.0
-show_percentage = false
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=82110408]
+position = Vector2(173.75002, 45.24999)
+scale = Vector2(2.3593762, 2.2656257)
+sprite_frames = SubResource("SpriteFrames_ydpr2")
+autoplay = "default"
