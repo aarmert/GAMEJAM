@@ -24,6 +24,8 @@ var dash_orbit_overlap_count := 0
 var has_dash_skill := false
 var has_flashlight_skill := false
 var _flashlight_light: PointLight2D = null
+var _ambient_light: PointLight2D = null
+var _lantern_light: PointLight2D = null
 var sarmasikta_mi: bool = false
 
 
@@ -40,6 +42,8 @@ func _ready() -> void:
 		_setup_flashlight()
 	else:
 		flashlight_bar_ui.set_locked()
+
+	_setup_ambient_light()
 
 
 func _physics_process(delta: float) -> void:
@@ -82,13 +86,12 @@ func _physics_process(delta: float) -> void:
 
 		if is_on_floor():
 			if direction == 0:
-				animated_sprite.play("idle")
+				animated_sprite.play("idle_torch" if has_flashlight_skill else "idle")
 			else:
-				animated_sprite.play("run")
+				animated_sprite.play("run_torch" if has_flashlight_skill else "run")
 		elif touching_wall:
 			animated_sprite.play("wall_slide")
 		else:
-			# Havada: yatay hareket varsa kosma-zipla, yoksa yerinde-zipla
 			if direction == 0:
 				animated_sprite.play("idle_jump")
 			else:
@@ -214,7 +217,9 @@ func _setup_flashlight() -> void:
 	_ensure_flashlight_light()
 	flashlight_component.init_flashlight(_flashlight_light, null)
 	flashlight_component.battery_changed.connect(_on_flashlight_battery_changed)
+	flashlight_component.flashlight_toggled.connect(_on_flashlight_toggled)
 	flashlight_bar_ui.update_battery(1.0, false)
+	_setup_lantern_glow()
 
 
 func _on_flashlight_battery_changed(percent: float) -> void:
@@ -225,7 +230,10 @@ func _update_flashlight_direction() -> void:
 	var pivot := get_node_or_null("FlashlightPivot") as Node2D
 	if pivot == null:
 		return
-	pivot.scale.x = -1.0 if animated_sprite.flip_h else 1.0
+	var facing_left := animated_sprite.flip_h
+	pivot.scale.x = -1.0 if facing_left else 1.0
+	if _lantern_light and is_instance_valid(_lantern_light):
+		_lantern_light.position.x = -10.0 if facing_left else 10.0
 
 
 func _ensure_flashlight_light() -> void:
@@ -248,10 +256,65 @@ func _ensure_flashlight_light() -> void:
 	_flashlight_light.range_z_max = 4096
 	_flashlight_light.range_layer_min = -128
 	_flashlight_light.range_layer_max = 128
+	_flashlight_light.color = Color(0.75, 0.5, 1.0)
 	_flashlight_light.enabled = false
 	_flashlight_light.texture = _create_cone_texture()
 
 	pivot.add_child(_flashlight_light)
+
+
+func _setup_ambient_light() -> void:
+	var light := PointLight2D.new()
+	light.name = "AmbientLight"
+	light.position = Vector2(0, -28.5)
+	light.color = Color(0.82, 0.65, 1.0)
+	light.energy = 2.2
+	light.texture_scale = 0.38
+	light.range_z_min = -4096
+	light.range_z_max = 4096
+	light.range_layer_min = -128
+	light.range_layer_max = 128
+	light.texture = _create_radial_texture(128)
+	_ambient_light = light
+	add_child(light)
+
+
+func _setup_lantern_glow() -> void:
+	_lantern_light = PointLight2D.new()
+	_lantern_light.name = "LanternGlow"
+	_lantern_light.position = Vector2(10.0, -40.0)
+	_lantern_light.color = Color(1.0, 0.72, 0.2)
+	_lantern_light.energy = 1.4
+	_lantern_light.texture_scale = 0.22
+	_lantern_light.range_z_min = -4096
+	_lantern_light.range_z_max = 4096
+	_lantern_light.range_layer_min = -128
+	_lantern_light.range_layer_max = 128
+	_lantern_light.enabled = false
+	_lantern_light.texture = _create_radial_texture(128)
+	add_child(_lantern_light)
+
+
+func _on_flashlight_toggled(is_on: bool) -> void:
+	if _lantern_light and is_instance_valid(_lantern_light):
+		_lantern_light.enabled = is_on
+
+
+
+
+
+func _create_radial_texture(size: int) -> ImageTexture:
+	var img := Image.create(size, size, false, Image.FORMAT_RGBA8)
+	img.fill(Color(0, 0, 0, 0))
+	var center := size / 2.0
+	var max_dist := center
+	for y in range(size):
+		for x in range(size):
+			var dist := Vector2(float(x) - center, float(y) - center).length()
+			if dist < max_dist:
+				var t := 1.0 - dist / max_dist
+				img.set_pixel(x, y, Color(1.0, 1.0, 1.0, t * t))
+	return ImageTexture.create_from_image(img)
 
 
 func _create_cone_texture() -> ImageTexture:
