@@ -17,15 +17,22 @@ var occupied_blocks = {}
 var directions = [Vector2.UP, Vector2.DOWN, Vector2.LEFT, Vector2.RIGHT]
 
 @onready var muzik = $Muzik
-
+var loop_baslangic: float = 0.0
+var loop_bitis: float = 14.35
 # durum içine "yavas", "normal" veya "hizli" yazarak çağıracağız
-func muzik_degistir( ):
+func muzik_degistir():
 	if speed == 0.11:
-		muzik.play(0) # Hızlı müziğin başladığı saniye
+		loop_baslangic = 9.5
+		loop_bitis = 14.35 # Hızlı kısmın bittiği saniye
+		muzik.play(loop_baslangic)
 	elif speed == 0.12:
-		muzik.play(6) # Orta müziğin başladığı saniye
+		loop_baslangic = 4.5
+		loop_bitis = 9.5 # Orta kısmın bittiği saniye
+		muzik.play(loop_baslangic)
 	elif speed == 0.2:
-		muzik.play(3) # Yavaş müziğin başladığı saniye
+		loop_baslangic = 0.0
+		loop_bitis = 4.5 # Yavaş kısmın bittiği saniye
+		muzik.play(loop_baslangic)
 
 func _ready() -> void:
 	if CheckpointData.has_darkness_origin:
@@ -35,7 +42,16 @@ func _ready() -> void:
 	occupied_blocks[global_position] = true
 
 func _process(delta: float) -> void:
-	
+	# 1. KONTROL: Eğer Godot şarkının sonuna geldiği için müziği tamamen durdurduysa...
+	if not muzik.playing:
+		muzik.play(loop_baslangic) # ...kaldığımız bölümün başından zorla tekrar başlat!
+		
+	# 2. KONTROL: Müzik çalıyor ama bizim belirlediğimiz sınıra milimetrik olarak yaklaştıysa...
+	elif muzik.get_playback_position() >= (loop_bitis - 0.05):
+		muzik.seek(loop_baslangic) # ...hiç durmasını beklemeden anında başa sar!
+	if muzik.playing and muzik.get_playback_position() >= loop_bitis:
+		# ...şarkıyı durdurmadan anında o bölümün başına geri ışınla!
+		muzik.seek(loop_baslangic)
 
 	if not player or frontier_blocks.is_empty():
 		return
