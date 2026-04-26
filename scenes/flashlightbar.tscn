@@ -69,7 +69,7 @@ grow_vertical = 0
 script = ExtResource("1_flbar")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=913174008]
-position = Vector2(53, 54)
-scale = Vector2(1.6875, 1.59375)
+position = Vector2(210.0, 40.0)
+scale = Vector2(3.5, 3.5)
 sprite_frames = SubResource("SpriteFrames_omavb")
 autoplay = "default"

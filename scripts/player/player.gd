@@ -157,24 +157,14 @@ func heal(amount: int) -> void:
 
 func die() -> void:
 	health_component.mark_dead()
-
-	# 1) Slow motion → düsüsü dramatik göster
-	Engine.time_scale = 0.4
-
-	# 2) Yukari zipla yok — direkt yerçekimiyle asagi düssün
+	set_physics_process(false)
 	velocity = Vector2.ZERO
-
-	# 3) Tüm çarpısmayi kapat → yerden gecip asagi düssün
 	collision_layer = 0
 	collision_mask = 0
-
-	# 4) Düsme pozu (renk degismez)
-	animated_sprite.play("idle_jump")
-
-	# 5) Gercek 3 saniye bekle → yavas çekimde düstügü görünür
-	await get_tree().create_timer(3.0, true, false, true).timeout
-
-	# 6) Reset ve sahneyi yenile
+	Engine.time_scale = 0.4
+	animated_sprite.play("death")
+	await animated_sprite.animation_finished
+	await get_tree().create_timer(0.8, true, false, true).timeout
 	Engine.time_scale = 1.0
 	get_tree().reload_current_scene()
 
