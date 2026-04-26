@@ -133,7 +133,7 @@ script = ExtResource("1_dywbp")
 
 [node name="AsılKarakter" parent="." unique_id=102941817 instance=ExtResource("6_1seuy")]
 z_index = 1
-position = Vector2(916, -108)
+position = Vector2(-131, 238)
 collision_layer = 3
 
 [node name="Camera2D" type="Camera2D" parent="AsılKarakter" unique_id=1333722321]
