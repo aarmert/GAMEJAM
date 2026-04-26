@@ -5,11 +5,11 @@ var player_in_area: Node2D = null
 @onready var damage_timer: Timer = $damage_timer
 
 func _on_body_entered(body: Node2D) -> void:
-	if body.has_method("take_damage"):
+	if body.has_method("die"):
 		player_in_area = body
-		body.take_damage(20)
-		damage_timer.start()
-		print("-20 Health")
+		body.die()
+		damage_timer.stop()
+		print("Canavar tek atti")
 
 
 func _on_damage_timer_timeout() -> void:
