@@ -62,8 +62,13 @@ func _process(delta: float) -> void:
 					# 0. katmanda (layer) duvar var mı bak (-1 boş demektir)
 					if tile_map.get_cell_source_id(0, map_pos) != -1:
 						# Duvar var! Burayı da dolu işaretle ve atla
-						occupied_blocks[target_pos] = true 
+						occupied_blocks[target_pos] = true
 						continue
+
+				# 3. KONTROL: Heal zone içinde mi?
+				if _is_in_heal_zone(target_pos):
+					occupied_blocks[target_pos] = true
+					continue
 
 				# HİLELİ ZAR: Hedef oyuncuya daha mı yakın?
 				var new_distance = target_pos.distance_to(player.global_position)
@@ -93,3 +98,15 @@ func _process(delta: float) -> void:
 			# Yeni noktayı listelere kaydet
 			frontier_blocks.append(chosen_pos)
 			occupied_blocks[chosen_pos] = true
+
+
+func _is_in_heal_zone(pos: Vector2) -> bool:
+	for zone in get_tree().get_nodes_in_group("heal_zone"):
+		var zone_radius := 64.0
+		for child in zone.get_children():
+			if child is CollisionShape2D and child.shape is CircleShape2D:
+				zone_radius = child.shape.radius
+				break
+		if pos.distance_to(zone.global_position) <= zone_radius + TILE_SIZE:
+			return true
+	return false

@@ -133,7 +133,7 @@ script = ExtResource("1_dywbp")
 
 [node name="AsılKarakter" parent="." unique_id=102941817 instance=ExtResource("6_1seuy")]
 z_index = 1
-position = Vector2(918, -103)
+position = Vector2(916, -108)
 collision_layer = 3
 
 [node name="Camera2D" type="Camera2D" parent="AsılKarakter" unique_id=1333722321]
@@ -169,6 +169,7 @@ player = NodePath("../../AsılKarakter")
 tile_map = NodePath("../../TileMap")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Darkness_Bullshit/Manager_Darkness" unique_id=1639006573]
+position = Vector2(1564, -383)
 shape = SubResource("RectangleShape2D_jprdt")
 
 [node name="slow_down" parent="Darkness_Bullshit" unique_id=1054231048 node_paths=PackedStringArray("manager_darkness") instance=ExtResource("6_8a7m2")]
