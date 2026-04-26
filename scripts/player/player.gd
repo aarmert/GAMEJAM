@@ -23,6 +23,7 @@ var dash_orbit_overlap_count := 0
 var has_dash_skill := false
 var has_flashlight_skill := false
 var _flashlight_light: PointLight2D = null
+var _flashlight_cone: Area2D = null
 
 
 func _ready() -> void:
@@ -191,7 +192,7 @@ func unlock_flashlight_skill() -> bool:
 
 func _setup_flashlight() -> void:
 	_ensure_flashlight_light()
-	flashlight_component.init_flashlight(_flashlight_light, null)
+	flashlight_component.init_flashlight(_flashlight_light, _flashlight_cone)
 	flashlight_component.battery_changed.connect(_on_flashlight_battery_changed)
 	flashlight_bar_ui.update_battery(1.0, false)
 
@@ -221,16 +222,17 @@ func _ensure_flashlight_light() -> void:
 	_flashlight_light = PointLight2D.new()
 	_flashlight_light.name = "PointLight2D"
 	_flashlight_light.position = Vector2(0, 0)
-	_flashlight_light.energy = 1.5
-	_flashlight_light.texture_scale = 1.5
+	_flashlight_light.energy = 2.0
+	_flashlight_light.texture_scale = 5.0
 	_flashlight_light.range_z_min = -4096
 	_flashlight_light.range_z_max = 4096
 	_flashlight_light.range_layer_min = -128
 	_flashlight_light.range_layer_max = 128
 	_flashlight_light.enabled = false
 	_flashlight_light.texture = _create_cone_texture()
-
 	pivot.add_child(_flashlight_light)
+
+	_flashlight_cone = _create_cone_area(pivot)
 
 
 func _create_cone_texture() -> ImageTexture:
@@ -241,7 +243,7 @@ func _create_cone_texture() -> ImageTexture:
 	var cx: float = float(half)
 	var cy: float = float(half)
 	var max_dist: float = float(half)
-	var half_angle: float = deg_to_rad(35.0)
+	var half_angle: float = deg_to_rad(50.0)
 	for y in range(size):
 		for x in range(size):
 			var dx: float = float(x) - cx
@@ -258,3 +260,25 @@ func _create_cone_texture() -> ImageTexture:
 			var angle_falloff: float = 1.0 - angle / half_angle
 			img.set_pixel(x, y, Color(1.0, 1.0, 1.0, clampf(dist_falloff * sqrt(angle_falloff), 0.0, 1.0)))
 	return ImageTexture.create_from_image(img)
+
+
+func _create_cone_area(pivot: Node2D) -> Area2D:
+	var area := Area2D.new()
+	area.name = "FlashlightCone"
+	area.collision_layer = 0
+	area.collision_mask = 0xFFFFFFFF
+	area.monitorable = false
+	var poly := CollisionPolygon2D.new()
+	var points := PackedVector2Array()
+	points.append(Vector2.ZERO)
+	var cone_range := 320.0
+	var half_angle := deg_to_rad(50.0)
+	var segments := 16
+	for i in range(segments + 1):
+		var t := float(i) / float(segments)
+		var angle := -half_angle + t * (2.0 * half_angle)
+		points.append(Vector2(cos(angle), sin(angle)) * cone_range)
+	poly.polygon = points
+	area.add_child(poly)
+	pivot.add_child(area)
+	return area
