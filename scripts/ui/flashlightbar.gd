@@ -11,6 +11,7 @@ var locked_color := Color(0.8, 0.35, 0.35, 1.0)
 
 
 func update_battery(percent: float, is_on: bool) -> void:
+	show()
 	fl_bar.value = percent * 100.0
 	if percent <= 0.0:
 		fl_label.text = "Fener: Boş"
@@ -24,6 +25,4 @@ func update_battery(percent: float, is_on: bool) -> void:
 
 
 func set_locked() -> void:
-	fl_label.text = "Fener: Kilitli"
-	fl_label.modulate = locked_color
-	fl_bar.value = 0.0
+	hide()

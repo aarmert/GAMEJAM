@@ -11,13 +11,17 @@ config_version=5
 [application]
 
 config/name="gamejam"
-run/main_scene="uid://bt1g0l0t5uwcc"
+run/main_scene="uid://d1buep7rqwlbl"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
 SceneTransition="*res://scripts/world/scene_transition.gd"
+
+[global_group]
+
+player=""
 
 [input]
 

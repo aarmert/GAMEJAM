@@ -14,6 +14,7 @@
 [ext_resource type="Script" path="res://scenes/levels/level1_Scene/sarmasik.gd" id="11_nkeig"]
 [ext_resource type="PackedScene" path="res://scenes/orbit/dash_orbiti.tscn" id="13_lgguw"]
 [ext_resource type="PackedScene" path="res://scenes/levels/level1_Scene/heal_zone.tscn" id="14_jprdt"]
+[ext_resource type="PackedScene" path="res://scenes/items/flashlight_pickup.tscn" id="15_ps2vj"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nfihu"]
 texture = ExtResource("3_jprdt")
@@ -223,6 +224,9 @@ position = Vector2(1081, -346)
 
 [node name="DoubleJumpOrbiti4" parent="." unique_id=646216165 instance=ExtResource("6_2r1tl")]
 position = Vector2(964, -288)
+
+[node name="FlashlightPickup" parent="." unique_id=982291186 instance=ExtResource("15_ps2vj")]
+position = Vector2(1045, -160)
 
 [connection signal="body_entered" from="Darkness_Bullshit/slow_down" to="Darkness_Bullshit/slow_down" method="_on_body_entered"]
 [connection signal="body_entered" from="Darkness_Bullshit/slow_down2" to="Darkness_Bullshit/slow_down2" method="_on_body_entered"]
