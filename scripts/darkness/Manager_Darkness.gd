@@ -19,10 +19,13 @@ var directions = [Vector2.UP, Vector2.DOWN, Vector2.LEFT, Vector2.RIGHT]
 @onready var muzik = $Muzik
 
 # durum içine "yavas", "normal" veya "hizli" yazarak çağıracağız
-func muzik_degistir(durum: ):
+func muzik_degistir( ):
 	if speed == 0.11:
-		muzik.play(0.0) # Yavaş kısmın başladığı saniye
-	
+		muzik.play(0) # Hızlı müziğin başladığı saniye
+	elif speed == 0.12:
+		muzik.play(6) # Orta müziğin başladığı saniye
+	elif speed == 0.2:
+		muzik.play(3) # Yavaş müziğin başladığı saniye
 
 func _ready() -> void:
 	if CheckpointData.has_darkness_origin:
