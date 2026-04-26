@@ -18,6 +18,7 @@
 [ext_resource type="Texture2D" uid="uid://ldy22qobkb6y" path="res://assets/DeepCaveBG-Layer2.png" id="16_gvm5i"]
 [ext_resource type="Texture2D" uid="uid://su5il0fk476b" path="res://assets/DeepCaveBG-Layer3.png" id="17_jrfo0"]
 [ext_resource type="PackedScene" uid="uid://bbbcr3ehux0yj" path="res://scenes/canavar.tscn" id="18_db1r7"]
+[ext_resource type="PackedScene" path="res://scenes/darkness_checkpoint.tscn" id="19_4fww7"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nfihu"]
 texture = ExtResource("3_jprdt")
@@ -144,7 +145,7 @@ script = ExtResource("1_dywbp")
 
 [node name="asil_karakter" parent="." unique_id=102941817 instance=ExtResource("6_1seuy")]
 z_index = 1
-position = Vector2(3044, -176)
+position = Vector2(938, -241)
 collision_layer = 3
 
 [node name="Camera2D" type="Camera2D" parent="asil_karakter" unique_id=1333722321]
@@ -347,6 +348,9 @@ position = Vector2(1222, -367)
 position = Vector2(1180, -335)
 
 [node name="BackgroundModulate" type="CanvasModulate" parent="ParallaxBackground" unique_id=1844436781]
+
+[node name="DarknessCheckpoint" parent="." unique_id=1443746543 instance=ExtResource("19_4fww7")]
+position = Vector2(1164, -337)
 
 [connection signal="body_entered" from="Darkness_Bullshit/slow_down" to="Darkness_Bullshit/slow_down" method="_on_body_entered"]
 [connection signal="body_entered" from="Darkness_Bullshit/slow_down2" to="Darkness_Bullshit/slow_down2" method="_on_body_entered"]
