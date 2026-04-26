@@ -4,10 +4,10 @@
 [ext_resource type="PackedScene" uid="uid://cm0udogbmydbq" path="res://scenes/asil_karakter.tscn" id="2_hfrku"]
 [ext_resource type="Texture2D" uid="uid://btls0ltayq6y3" path="res://assets/tileset-Sheet.png" id="6_oyk6k"]
 [ext_resource type="PackedScene" uid="uid://cembhkjqm4imv" path="res://scenes/heal.tscn" id="8_531e2"]
-[ext_resource type="PackedScene" path="res://scenes/orbit/dash_orbiti.tscn" id="9_vbh53"]
-[ext_resource type="PackedScene" path="res://scenes/orbit/double_jump_orbiti.tscn" id="10_8diah"]
+[ext_resource type="PackedScene" uid="uid://ef13r7dcuoxl" path="res://scenes/orbit/dash_orbiti.tscn" id="9_vbh53"]
+[ext_resource type="PackedScene" uid="uid://deidwufxa4q07" path="res://scenes/orbit/double_jump_orbiti.tscn" id="10_8diah"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gycjm"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ok6xr"]
 texture = ExtResource("6_oyk6k")
 texture_region_size = Vector2i(32, 32)
 1:0/0 = 0
@@ -60,7 +60,7 @@ texture_region_size = Vector2i(32, 32)
 [sub_resource type="TileSet" id="TileSet_b0vvs"]
 tile_size = Vector2i(32, 32)
 physics_layer_0/collision_layer = 1
-sources/0 = SubResource("TileSetAtlasSource_gycjm")
+sources/0 = SubResource("TileSetAtlasSource_ok6xr")
 
 [sub_resource type="Gradient" id="Gradient_531e2"]
 offsets = PackedFloat32Array(0, 0.9819277)
@@ -92,13 +92,13 @@ layer_0/tile_data = PackedInt32Array(-1376256, 0, 3, -1376255, 0, 3, -1376254, 0
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=987529634]
 
 [node name="MayaChar2" parent="." unique_id=102941817 instance=ExtResource("2_hfrku")]
-position = Vector2(136, -390)
+position = Vector2(167, -495)
 darkness_damage_enabled = true
 
 [node name="FlashlightPivot" type="Node2D" parent="MayaChar2" unique_id=790746724]
 
 [node name="PointLight2D" type="PointLight2D" parent="MayaChar2/FlashlightPivot" unique_id=225290390]
-position = Vector2(0, -22.999996)
+position = Vector2(177, -108)
 rotation = -1.5667393
 scale = Vector2(1.9875875, 2.1494877)
 energy = 1.5

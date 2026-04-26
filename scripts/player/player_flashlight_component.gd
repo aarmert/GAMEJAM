@@ -6,7 +6,7 @@ signal flashlight_toggled(is_on: bool)
 signal battery_empty
 
 @export var max_battery: float = 100.0
-@export var drain_rate: float = 10.0
+@export var drain_rate: float = 22.0
 @export var charge_rate: float = 5.0
 @export var flicker_intensity: float = 0.05
 @export var stun_interval: float = 0.5
