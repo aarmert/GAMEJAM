@@ -29,3 +29,7 @@ func apply_heal(health_bar: ProgressBar, amount: int) -> void:
 
 func mark_dead() -> void:
 	is_dead = true
+
+
+func revive() -> void:
+	is_dead = false
