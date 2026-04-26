@@ -1,0 +1,8 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/heal.tscn" id="1_base"]
+
+[node name="DarknessCheckpoint" instance=ExtResource("1_base")]
+save_player_checkpoint = false
+save_darkness_checkpoint = true
+sync_darkness_with_player_checkpoint = false
