@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://b74k46pst250e" path="res://scripts/levels/activation_point_slow.gd" id="8_8a7m2"]
 [ext_resource type="PackedScene" uid="uid://bhf74tnovdeaa" path="res://scenes/levels/level1_Scene/schneller.tscn" id="9_plydf"]
 [ext_resource type="PackedScene" uid="uid://dqqsb320dgdhl" path="res://scenes/levels/level1_Scene/sarmasik.tscn" id="10_5ntmo"]
+[ext_resource type="PackedScene" path="res://scenes/darkness_checkpoint.tscn" id="11_gvm5i"]
 [ext_resource type="PackedScene" uid="uid://ef13r7dcuoxl" path="res://scenes/orbit/dash_orbiti.tscn" id="13_lgguw"]
 [ext_resource type="Texture2D" uid="uid://46j0ahygiw47" path="res://assets/DeepCaveBG-Base.png" id="14_g7tkf"]
 [ext_resource type="PackedScene" uid="uid://dcbt670k47f4e" path="res://scenes/levels/level1_Scene/heal_zone.tscn" id="14_jprdt"]
@@ -148,7 +149,7 @@ script = ExtResource("1_dywbp")
 
 [node name="asil_karakter" parent="." unique_id=102941817 instance=ExtResource("6_1seuy")]
 z_index = 1
-position = Vector2(599, 273)
+position = Vector2(-565, 350)
 collision_layer = 3
 
 [node name="Camera2D" type="Camera2D" parent="asil_karakter" unique_id=1333722321]
@@ -190,7 +191,7 @@ position = Vector2(4434, -251)
 [node name="Darkness_Bullshit" type="Node2D" parent="." unique_id=779993344]
 
 [node name="Manager_Darkness" type="Node2D" parent="Darkness_Bullshit" unique_id=319837021 node_paths=PackedStringArray("player", "tile_map")]
-position = Vector2(-782, 398)
+position = Vector2(-783, 400)
 script = ExtResource("5_dywbp")
 block_scene = ExtResource("4_bfxgj")
 player = NodePath("../../asil_karakter")
@@ -234,6 +235,12 @@ collision_layer = 0
 collision_mask = 2
 script = ExtResource("8_8a7m2")
 manager_darkness = NodePath("../Manager_Darkness")
+
+[node name="DarknessCheckpoint" parent="Darkness_Bullshit" unique_id=2139445298 instance=ExtResource("11_gvm5i")]
+position = Vector2(1072, -335)
+
+[node name="DarknessCheckpoint2" parent="Darkness_Bullshit" unique_id=402203706 instance=ExtResource("11_gvm5i")]
+position = Vector2(4662, -335)
 
 [node name="sarmasiklar" type="Node2D" parent="." unique_id=1073335057]
 
@@ -414,17 +421,127 @@ position = Vector2(1180, -335)
 
 [node name="BackgroundModulate" type="CanvasModulate" parent="ParallaxBackground2" unique_id=1395985997]
 
-[node name="Node2D" type="Node2D" parent="." unique_id=1318747758]
+[node name="Killzone" type="Node2D" parent="." unique_id=1318747758]
 
-[node name="Killzone" type="Area2D" parent="Node2D" unique_id=618813223]
+[node name="Killzone" type="Area2D" parent="Killzone" unique_id=618813223]
 position = Vector2(785, 374)
 script = ExtResource("19_4fww7")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D/Killzone" unique_id=2012666273]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Killzone/Killzone" unique_id=2012666273]
 position = Vector2(-34, 36)
 shape = SubResource("RectangleShape2D_gvm5i")
 
-[node name="damage_timer" type="Timer" parent="Node2D/Killzone" unique_id=1595827131]
+[node name="damage_timer" type="Timer" parent="Killzone/Killzone" unique_id=1595827131]
+wait_time = 0.05
+
+[node name="Killzone2" type="Area2D" parent="Killzone" unique_id=1875624170]
+position = Vector2(2829, -48)
+script = ExtResource("19_4fww7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Killzone/Killzone2" unique_id=1564096039]
+position = Vector2(-34, 36)
+shape = SubResource("RectangleShape2D_gvm5i")
+
+[node name="damage_timer" type="Timer" parent="Killzone/Killzone2" unique_id=1065608784]
+wait_time = 0.05
+
+[node name="Killzone3" type="Area2D" parent="Killzone" unique_id=1385029835]
+position = Vector2(3056, -47)
+script = ExtResource("19_4fww7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Killzone/Killzone3" unique_id=2089591465]
+position = Vector2(-34, 36)
+shape = SubResource("RectangleShape2D_gvm5i")
+
+[node name="damage_timer" type="Timer" parent="Killzone/Killzone3" unique_id=1385834909]
+wait_time = 0.05
+
+[node name="Killzone4" type="Area2D" parent="Killzone" unique_id=305804861]
+position = Vector2(3610, -12)
+script = ExtResource("19_4fww7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Killzone/Killzone4" unique_id=429413273]
+position = Vector2(-34, 36)
+shape = SubResource("RectangleShape2D_gvm5i")
+
+[node name="damage_timer" type="Timer" parent="Killzone/Killzone4" unique_id=623775959]
+wait_time = 0.05
+
+[node name="Killzone5" type="Area2D" parent="Killzone" unique_id=1401183673]
+position = Vector2(3839, -10)
+script = ExtResource("19_4fww7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Killzone/Killzone5" unique_id=1932992805]
+position = Vector2(-34, 36)
+shape = SubResource("RectangleShape2D_gvm5i")
+
+[node name="damage_timer" type="Timer" parent="Killzone/Killzone5" unique_id=1215966012]
+wait_time = 0.05
+
+[node name="Killzone6" type="Area2D" parent="Killzone" unique_id=1633649530]
+position = Vector2(4065, -7)
+script = ExtResource("19_4fww7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Killzone/Killzone6" unique_id=2106609479]
+position = Vector2(-34, 36)
+shape = SubResource("RectangleShape2D_gvm5i")
+
+[node name="damage_timer" type="Timer" parent="Killzone/Killzone6" unique_id=1058733105]
+wait_time = 0.05
+
+[node name="Killzone7" type="Area2D" parent="Killzone" unique_id=981896826]
+position = Vector2(4269, -12)
+script = ExtResource("19_4fww7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Killzone/Killzone7" unique_id=1889326022]
+position = Vector2(-34, 36)
+shape = SubResource("RectangleShape2D_gvm5i")
+
+[node name="damage_timer" type="Timer" parent="Killzone/Killzone7" unique_id=1623251652]
+wait_time = 0.05
+
+[node name="Killzone8" type="Area2D" parent="Killzone" unique_id=997712410]
+position = Vector2(4493, -7)
+script = ExtResource("19_4fww7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Killzone/Killzone8" unique_id=712511745]
+position = Vector2(-34, 36)
+shape = SubResource("RectangleShape2D_gvm5i")
+
+[node name="damage_timer" type="Timer" parent="Killzone/Killzone8" unique_id=1992110614]
+wait_time = 0.05
+
+[node name="Killzone9" type="Area2D" parent="Killzone" unique_id=300004680]
+position = Vector2(4553, -9)
+script = ExtResource("19_4fww7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Killzone/Killzone9" unique_id=2012350199]
+position = Vector2(-34, 36)
+shape = SubResource("RectangleShape2D_gvm5i")
+
+[node name="damage_timer" type="Timer" parent="Killzone/Killzone9" unique_id=819364605]
+wait_time = 0.05
+
+[node name="Killzone10" type="Area2D" parent="Killzone" unique_id=556984257]
+position = Vector2(1646, -265)
+script = ExtResource("19_4fww7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Killzone/Killzone10" unique_id=980998]
+position = Vector2(-34, 36)
+shape = SubResource("RectangleShape2D_gvm5i")
+
+[node name="damage_timer" type="Timer" parent="Killzone/Killzone10" unique_id=1726848696]
+wait_time = 0.05
+
+[node name="Killzone11" type="Area2D" parent="Killzone" unique_id=719794299]
+position = Vector2(1749, -260)
+script = ExtResource("19_4fww7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Killzone/Killzone11" unique_id=1730493172]
+position = Vector2(-34, 36)
+shape = SubResource("RectangleShape2D_gvm5i")
+
+[node name="damage_timer" type="Timer" parent="Killzone/Killzone11" unique_id=498410435]
 wait_time = 0.05
 
 [connection signal="body_entered" from="Darkness_Bullshit/slow_down" to="Darkness_Bullshit/slow_down" method="_on_body_entered"]
@@ -444,6 +561,36 @@ wait_time = 0.05
 [connection signal="body_exited" from="sarmasiklar/sarmasik6" to="sarmasiklar/sarmasik6" method="_on_body_exited"]
 [connection signal="body_entered" from="sarmasiklar/sarmasik7" to="sarmasiklar/sarmasik7" method="_on_body_entered"]
 [connection signal="body_exited" from="sarmasiklar/sarmasik7" to="sarmasiklar/sarmasik7" method="_on_body_exited"]
-[connection signal="body_entered" from="Node2D/Killzone" to="Node2D/Killzone" method="_on_body_entered"]
-[connection signal="body_exited" from="Node2D/Killzone" to="Node2D/Killzone" method="_on_body_exited"]
-[connection signal="timeout" from="Node2D/Killzone/damage_timer" to="Node2D/Killzone" method="_on_damage_timer_timeout"]
+[connection signal="body_entered" from="Killzone/Killzone" to="Killzone/Killzone" method="_on_body_entered"]
+[connection signal="body_exited" from="Killzone/Killzone" to="Killzone/Killzone" method="_on_body_exited"]
+[connection signal="timeout" from="Killzone/Killzone/damage_timer" to="Killzone/Killzone" method="_on_damage_timer_timeout"]
+[connection signal="body_entered" from="Killzone/Killzone2" to="Killzone/Killzone2" method="_on_body_entered"]
+[connection signal="body_exited" from="Killzone/Killzone2" to="Killzone/Killzone2" method="_on_body_exited"]
+[connection signal="timeout" from="Killzone/Killzone2/damage_timer" to="Killzone/Killzone2" method="_on_damage_timer_timeout"]
+[connection signal="body_entered" from="Killzone/Killzone3" to="Killzone/Killzone3" method="_on_body_entered"]
+[connection signal="body_exited" from="Killzone/Killzone3" to="Killzone/Killzone3" method="_on_body_exited"]
+[connection signal="timeout" from="Killzone/Killzone3/damage_timer" to="Killzone/Killzone3" method="_on_damage_timer_timeout"]
+[connection signal="body_entered" from="Killzone/Killzone4" to="Killzone/Killzone4" method="_on_body_entered"]
+[connection signal="body_exited" from="Killzone/Killzone4" to="Killzone/Killzone4" method="_on_body_exited"]
+[connection signal="timeout" from="Killzone/Killzone4/damage_timer" to="Killzone/Killzone4" method="_on_damage_timer_timeout"]
+[connection signal="body_entered" from="Killzone/Killzone5" to="Killzone/Killzone5" method="_on_body_entered"]
+[connection signal="body_exited" from="Killzone/Killzone5" to="Killzone/Killzone5" method="_on_body_exited"]
+[connection signal="timeout" from="Killzone/Killzone5/damage_timer" to="Killzone/Killzone5" method="_on_damage_timer_timeout"]
+[connection signal="body_entered" from="Killzone/Killzone6" to="Killzone/Killzone6" method="_on_body_entered"]
+[connection signal="body_exited" from="Killzone/Killzone6" to="Killzone/Killzone6" method="_on_body_exited"]
+[connection signal="timeout" from="Killzone/Killzone6/damage_timer" to="Killzone/Killzone6" method="_on_damage_timer_timeout"]
+[connection signal="body_entered" from="Killzone/Killzone7" to="Killzone/Killzone7" method="_on_body_entered"]
+[connection signal="body_exited" from="Killzone/Killzone7" to="Killzone/Killzone7" method="_on_body_exited"]
+[connection signal="timeout" from="Killzone/Killzone7/damage_timer" to="Killzone/Killzone7" method="_on_damage_timer_timeout"]
+[connection signal="body_entered" from="Killzone/Killzone8" to="Killzone/Killzone8" method="_on_body_entered"]
+[connection signal="body_exited" from="Killzone/Killzone8" to="Killzone/Killzone8" method="_on_body_exited"]
+[connection signal="timeout" from="Killzone/Killzone8/damage_timer" to="Killzone/Killzone8" method="_on_damage_timer_timeout"]
+[connection signal="body_entered" from="Killzone/Killzone9" to="Killzone/Killzone9" method="_on_body_entered"]
+[connection signal="body_exited" from="Killzone/Killzone9" to="Killzone/Killzone9" method="_on_body_exited"]
+[connection signal="timeout" from="Killzone/Killzone9/damage_timer" to="Killzone/Killzone9" method="_on_damage_timer_timeout"]
+[connection signal="body_entered" from="Killzone/Killzone10" to="Killzone/Killzone10" method="_on_body_entered"]
+[connection signal="body_exited" from="Killzone/Killzone10" to="Killzone/Killzone10" method="_on_body_exited"]
+[connection signal="timeout" from="Killzone/Killzone10/damage_timer" to="Killzone/Killzone10" method="_on_damage_timer_timeout"]
+[connection signal="body_entered" from="Killzone/Killzone11" to="Killzone/Killzone11" method="_on_body_entered"]
+[connection signal="body_exited" from="Killzone/Killzone11" to="Killzone/Killzone11" method="_on_body_exited"]
+[connection signal="timeout" from="Killzone/Killzone11/damage_timer" to="Killzone/Killzone11" method="_on_damage_timer_timeout"]
