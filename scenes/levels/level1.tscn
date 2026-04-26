@@ -9,7 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://deidwufxa4q07" path="res://scenes/orbit/double_jump_orbiti.tscn" id="6_2r1tl"]
 [ext_resource type="PackedScene" uid="uid://bu7q1xng6etri" path="res://scenes/levels/level1_Scene/activation_point_slow.tscn" id="6_8a7m2"]
 [ext_resource type="Script" uid="uid://b74k46pst250e" path="res://scripts/levels/activation_point_slow.gd" id="8_8a7m2"]
-[ext_resource type="PackedScene" uid="uid://bhf74tnovdeaa" path="res://scenes/levels/level1_Scene/schneller.tscn" id="9_plydf"]
+[ext_resource type="PackedScene" path="res://scenes/levels/level1_Scene/schneller.tscn" id="9_plydf"]
 [ext_resource type="PackedScene" uid="uid://dqqsb320dgdhl" path="res://scenes/levels/level1_Scene/sarmasik.tscn" id="10_5ntmo"]
 [ext_resource type="PackedScene" uid="uid://ef13r7dcuoxl" path="res://scenes/orbit/dash_orbiti.tscn" id="13_lgguw"]
 [ext_resource type="Texture2D" uid="uid://46j0ahygiw47" path="res://assets/DeepCaveBG-Base.png" id="14_g7tkf"]

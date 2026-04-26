@@ -34,11 +34,11 @@ func _on_body_entered(body: Node2D) -> void:
 	body.heal(20)
 	heal_timer.start()
 
-		if not notified:
-			notified = true
-			var manager = get_tree().current_scene
-			if manager and manager.has_method("checkpoint_reached"):
-				manager.checkpoint_reached(checkpoint_index)
+	if not notified:
+		notified = true
+		var manager = get_tree().current_scene
+		if manager and manager.has_method("checkpoint_reached"):
+			manager.checkpoint_reached(checkpoint_index)
 
 
 func _on_body_exited(body: Node2D) -> void:
