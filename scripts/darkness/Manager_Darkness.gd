@@ -16,6 +16,14 @@ var occupied_blocks = {}
 # Sadece 4 ana yöne yayıl (Çaprazları es geç ki boşluk kalmasın)
 var directions = [Vector2.UP, Vector2.DOWN, Vector2.LEFT, Vector2.RIGHT]
 
+@onready var muzik = $Muzik
+
+# durum içine "yavas", "normal" veya "hizli" yazarak çağıracağız
+func muzik_degistir(durum: ):
+	if speed == 0.11:
+		muzik.play(0.0) # Yavaş kısmın başladığı saniye
+	
+
 func _ready() -> void:
 	if CheckpointData.has_darkness_origin:
 		global_position = CheckpointData.darkness_origin_pos

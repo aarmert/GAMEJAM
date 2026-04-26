@@ -20,6 +20,7 @@
 [ext_resource type="Texture2D" uid="uid://su5il0fk476b" path="res://assets/DeepCaveBG-Layer3.png" id="17_jrfo0"]
 [ext_resource type="PackedScene" uid="uid://bbbcr3ehux0yj" path="res://scenes/canavar.tscn" id="18_db1r7"]
 [ext_resource type="Script" uid="uid://cj6k0xewqaqe1" path="res://scripts/area_2d.gd" id="19_4fww7"]
+[ext_resource type="AudioStream" uid="uid://de5xprbci7g1v" path="res://music_sound_gamejam/music/canavar_escape.wav" id="21_jrfo0"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nfihu"]
 texture = ExtResource("3_jprdt")
@@ -149,7 +150,7 @@ script = ExtResource("1_dywbp")
 
 [node name="asil_karakter" parent="." unique_id=102941817 instance=ExtResource("6_1seuy")]
 z_index = 1
-position = Vector2(-565, 350)
+position = Vector2(-554, 392)
 collision_layer = 3
 
 [node name="Camera2D" type="Camera2D" parent="asil_karakter" unique_id=1333722321]
@@ -199,6 +200,11 @@ tile_map = NodePath("../../TileMap")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Darkness_Bullshit/Manager_Darkness" unique_id=1639006573]
 shape = SubResource("RectangleShape2D_jprdt")
+
+[node name="Muzik" type="AudioStreamPlayer2D" parent="Darkness_Bullshit/Manager_Darkness" unique_id=1343691552]
+position = Vector2(783, -400)
+stream = ExtResource("21_jrfo0")
+autoplay = true
 
 [node name="slow_down" parent="Darkness_Bullshit" unique_id=1054231048 node_paths=PackedStringArray("manager_darkness") instance=ExtResource("6_8a7m2")]
 position = Vector2(177, 272)
