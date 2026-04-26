@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" path="res://scenes/orbit/dash_orbiti.tscn" id="13_lgguw"]
 [ext_resource type="PackedScene" path="res://scenes/levels/level1_Scene/heal_zone.tscn" id="14_jprdt"]
 [ext_resource type="PackedScene" path="res://scenes/items/flashlight_pickup.tscn" id="15_ps2vj"]
+[ext_resource type="PackedScene" path="res://scenes/items/dash_pickup.tscn" id="16_sbmf2"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nfihu"]
 texture = ExtResource("3_jprdt")
@@ -227,6 +228,9 @@ position = Vector2(964, -288)
 
 [node name="FlashlightPickup" parent="." unique_id=982291186 instance=ExtResource("15_ps2vj")]
 position = Vector2(1045, -160)
+
+[node name="DashPickup" parent="." unique_id=10066976 instance=ExtResource("16_sbmf2")]
+position = Vector2(1068, -142)
 
 [connection signal="body_entered" from="Darkness_Bullshit/slow_down" to="Darkness_Bullshit/slow_down" method="_on_body_entered"]
 [connection signal="body_entered" from="Darkness_Bullshit/slow_down2" to="Darkness_Bullshit/slow_down2" method="_on_body_entered"]
