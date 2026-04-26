@@ -1,7 +1,7 @@
 extends Area2D
 
 @export var checkpoint_index: int = 0
-@export var darkness_origin: Node2D = null
+
 
 var player_in_area: Node2D = null
 var notified: bool = false
@@ -9,31 +9,26 @@ var notified: bool = false
 @onready var heal_timer: Timer = $HealTimer
 
 
-func _ready() -> void:
-	add_to_group("heal_zone")
-
-
 func _on_body_entered(body: Node2D) -> void:
+	# Aynı body zaten içerdeyse tekrar artırma
 	if player_in_area == body:
 		return
 
-	if not body.has_method("heal"):
-		return
+	if body.has_method("heal"):
+		player_in_area = body
+		if "safe_zones" in body:
+			body.safe_zones += 1
+		if body.has_method("set_respawn_point"):
+			body.set_respawn_point(global_position)
+		body.heal(20)
+		heal_timer.start()
+		print("girilen area index: ", checkpoint_index)
 
-	player_in_area = body
-
-	CheckpointData.save_checkpoint(body.global_position, darkness_origin)
-
-	if "safe_zones" in body:
-		body.safe_zones += 1
-	body.heal(20)
-	heal_timer.start()
-
-	if not notified:
-		notified = true
-		var manager = get_tree().current_scene
-		if manager and manager.has_method("checkpoint_reached"):
-			manager.checkpoint_reached(checkpoint_index)
+		if not notified:
+			notified = true
+			var manager = get_tree().current_scene
+			if manager and manager.has_method("checkpoint_reached"):
+				manager.checkpoint_reached(checkpoint_index)
 
 
 func _on_body_exited(body: Node2D) -> void:
