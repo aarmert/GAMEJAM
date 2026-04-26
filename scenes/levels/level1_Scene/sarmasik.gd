@@ -1,5 +1,5 @@
 extends Area2D
-@onready var asil_karakter: CharacterBody2D = $"../../AsılKarakter"
+@onready var asil_karakter: CharacterBody2D = $"../../AslKarakter"
 
 
 
