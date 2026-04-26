@@ -3,7 +3,7 @@ extends Node2D
 @export var block_scene: PackedScene
 @export var player: Node2D
 @export var tile_map: TileMap
-@export var speed: float = 0.2 # Selin hızı
+@export var speed: float = 0.12 # Selin hızı
 @export var spawn_count: int = 5 # Tek seferde eklenecek blok sayısı
 
 

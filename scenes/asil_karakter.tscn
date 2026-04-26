@@ -13,7 +13,7 @@
 [ext_resource type="Script" uid="uid://bbmkrbh7klrwl" path="res://scripts/player/player_dash_component.gd" id="7_bvqhj"]
 [ext_resource type="Script" uid="uid://8n78egk216uk" path="res://scripts/player/player_health_component.gd" id="8_lqk5f"]
 [ext_resource type="PackedScene" uid="uid://b0ncmp111fhpm" path="res://scenes/dashbar.tscn" id="9_f5x6t"]
-[ext_resource type="Script" uid="uid://ceyag1o7j1vnu" path="res://scripts/player/player_flashlight_component.gd" id="10_flcomp"]
+[ext_resource type="Script" path="res://scripts/player/player_flashlight_component.gd" id="10_flcomp"]
 [ext_resource type="PackedScene" path="res://scenes/flashlightbar.tscn" id="11_flbar"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qhn6r"]

@@ -16,7 +16,7 @@ extends CharacterBody2D
 
 @export var starts_with_dash_skill := true
 @export var starts_with_flashlight_skill := false
-@export var darkness_damage_enabled := true
+@export var darkness_damage_enabled := false
 
 var safe_zones := 0
 var double_jump_orbit_overlap_count := 0
