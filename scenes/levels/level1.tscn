@@ -7,11 +7,10 @@
 [ext_resource type="Script" uid="uid://e51nuv1yjoit" path="res://scripts/darkness/Manager_Darkness.gd" id="5_dywbp"]
 [ext_resource type="PackedScene" uid="uid://cm0udogbmydbq" path="res://scenes/asil_karakter.tscn" id="6_1seuy"]
 [ext_resource type="PackedScene" uid="uid://deidwufxa4q07" path="res://scenes/orbit/double_jump_orbiti.tscn" id="6_2r1tl"]
-[ext_resource type="PackedScene" path="res://scenes/levels/level1_Scene/activation_point_slow.tscn" id="6_8a7m2"]
+[ext_resource type="PackedScene" uid="uid://bu7q1xng6etri" path="res://scenes/levels/level1_Scene/activation_point_slow.tscn" id="6_8a7m2"]
 [ext_resource type="Script" uid="uid://b74k46pst250e" path="res://scripts/levels/activation_point_slow.gd" id="8_8a7m2"]
 [ext_resource type="PackedScene" path="res://scenes/levels/level1_Scene/schneller.tscn" id="9_plydf"]
-[ext_resource type="PackedScene" path="res://scenes/levels/level1_Scene/sarmasik.tscn" id="10_5ntmo"]
-[ext_resource type="Script" path="res://scenes/levels/level1_Scene/sarmasik.gd" id="11_nkeig"]
+[ext_resource type="PackedScene" uid="uid://dqqsb320dgdhl" path="res://scenes/levels/level1_Scene/sarmasik.tscn" id="10_5ntmo"]
 [ext_resource type="PackedScene" uid="uid://ef13r7dcuoxl" path="res://scenes/orbit/dash_orbiti.tscn" id="13_lgguw"]
 [ext_resource type="PackedScene" uid="uid://dcbt670k47f4e" path="res://scenes/levels/level1_Scene/heal_zone.tscn" id="14_jprdt"]
 
@@ -232,37 +231,30 @@ manager_darkness = NodePath("../Manager_Darkness")
 [node name="sarmasik3" parent="sarmasiklar" unique_id=1950956920 instance=ExtResource("10_5ntmo")]
 position = Vector2(927, -171)
 collision_mask = 3
-script = ExtResource("11_nkeig")
 
 [node name="sarmasik" parent="sarmasiklar" unique_id=55350944 instance=ExtResource("10_5ntmo")]
 position = Vector2(868, -131)
 collision_mask = 3
-script = ExtResource("11_nkeig")
 
 [node name="sarmasik4" parent="sarmasiklar" unique_id=1844076 instance=ExtResource("10_5ntmo")]
 position = Vector2(3132, -172)
 collision_mask = 3
-script = ExtResource("11_nkeig")
 
 [node name="sarmasik2" parent="sarmasiklar" unique_id=1839668356 instance=ExtResource("10_5ntmo")]
 position = Vector2(3132, -208)
 collision_mask = 3
-script = ExtResource("11_nkeig")
 
 [node name="sarmasik5" parent="sarmasiklar" unique_id=587593010 instance=ExtResource("10_5ntmo")]
 position = Vector2(3131, -252)
 collision_mask = 3
-script = ExtResource("11_nkeig")
 
 [node name="sarmasik6" parent="sarmasiklar" unique_id=377155167 instance=ExtResource("10_5ntmo")]
 position = Vector2(1087, 27)
 collision_mask = 3
-script = ExtResource("11_nkeig")
 
 [node name="sarmasik7" parent="sarmasiklar" unique_id=1351980780 instance=ExtResource("10_5ntmo")]
 position = Vector2(1087, 50)
 collision_mask = 3
-script = ExtResource("11_nkeig")
 
 [node name="Orb_Dash" type="Node2D" parent="." unique_id=296873986]
 

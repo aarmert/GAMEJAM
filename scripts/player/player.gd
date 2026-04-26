@@ -2,22 +2,26 @@ extends CharacterBody2D
 
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
-@onready var health_bar: ProgressBar = $HealthBar
+@onready var health_bar: ProgressBar = _resolve_health_bar()
 @onready var dash_bar_ui: DashBarUI = $UI/DashBar
-@onready var flashlight_bar_ui: Control = $UI/FlashlightBar
+@onready var flashlight_bar_ui: FlashlightBarUI = $UI/FlashlightBar
 @onready var dash_stop_timer: Timer = $dash_stop_timer
 @onready var dash_cooldown_timer: Timer = $dash_cooldown_timer
 @onready var movement_component: Node = $Components/MovementComponent
 @onready var jump_component: Node = $Components/JumpComponent
 @onready var jump_wall_component: Node = $Components/JumpWallComponent
 @onready var dash_component: Node = $Components/DashComponent
-@onready var health_component: Node = $Components/HealthComponent
+@onready var health_component: PlayerHealthComponent = $Components/HealthComponent
 @onready var flashlight_component: PlayerFlashlightComponent = $Components/FlashlightComponent
 
 @export var starts_with_dash_skill := true
 @export var starts_with_flashlight_skill := false
 @export var darkness_damage_enabled := false
 @export var use_darkness_mechanics := false
+
+const FLASHLIGHT_ENERGY := 1.35
+const FLASHLIGHT_TEXTURE_SCALE := 2.45
+const FLASHLIGHT_CONE_HALF_ANGLE_DEG := 28.0
 
 var safe_zones := 0
 var double_jump_orbit_overlap_count := 0
@@ -30,9 +34,23 @@ var _lantern_light: PointLight2D = null
 var sarmasikta_mi: bool = false
 
 
+func _resolve_health_bar() -> ProgressBar:
+	var direct := get_node_or_null("HealthBar") as ProgressBar
+	if direct != null:
+		return direct
+	return get_node_or_null("UI/HealthBar") as ProgressBar
+
+
 func _ready() -> void:
 	if CheckpointData.has_spawn:
 		global_position = CheckpointData.spawn_position
+
+	if health_component == null:
+		push_error("HealthComponent bulunamadı: Components/HealthComponent")
+		return
+	if health_bar == null:
+		push_error("HealthBar bulunamadı: HealthBar veya UI/HealthBar")
+		return
 
 	health_component.init_health(health_bar)
 	has_dash_skill = starts_with_dash_skill
@@ -256,8 +274,8 @@ func _ensure_flashlight_light() -> void:
 	_flashlight_light = PointLight2D.new()
 	_flashlight_light.name = "PointLight2D"
 	_flashlight_light.position = Vector2(0, 0)
-	_flashlight_light.energy = 1.5
-	_flashlight_light.texture_scale = 3.3
+	_flashlight_light.energy = FLASHLIGHT_ENERGY
+	_flashlight_light.texture_scale = FLASHLIGHT_TEXTURE_SCALE
 	_flashlight_light.range_z_min = -4096
 	_flashlight_light.range_z_max = 4096
 	_flashlight_light.range_layer_min = -128
@@ -335,7 +353,7 @@ func _create_cone_texture() -> ImageTexture:
 	var cx: float = float(half)
 	var cy: float = float(half)
 	var max_dist: float = float(half)
-	var half_angle: float = deg_to_rad(35.0)
+	var half_angle: float = deg_to_rad(FLASHLIGHT_CONE_HALF_ANGLE_DEG)
 	for y in range(size):
 		for x in range(size):
 			var dx: float = float(x) - cx

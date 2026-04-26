@@ -2,6 +2,9 @@ extends Area2D
 
 @export var checkpoint_index: int = 0
 @export var darkness_origin: Node2D = null
+@export var save_player_checkpoint: bool = true
+@export var save_darkness_checkpoint: bool = false
+@export var sync_darkness_with_player_checkpoint: bool = true
 
 var player_in_area: Node2D = null
 var notified: bool = false
@@ -22,7 +25,12 @@ func _on_body_entered(body: Node2D) -> void:
 
 	player_in_area = body
 
-	CheckpointData.save_checkpoint(body.global_position, darkness_origin)
+	if save_player_checkpoint:
+		CheckpointData.save_player_checkpoint(body.global_position)
+
+	var should_save_darkness := save_darkness_checkpoint or (save_player_checkpoint and sync_darkness_with_player_checkpoint)
+	if should_save_darkness:
+		CheckpointData.save_darkness_checkpoint(darkness_origin)
 
 	if "safe_zones" in body:
 		body.safe_zones += 1
