@@ -329,19 +329,19 @@ position = Vector2(4260, -372)
 position = Vector2(1220, -352)
 
 [node name="DarknessOrigin" type="Marker2D" parent="heal/Heal_Zone"]
-position = Vector2(-148, 17)
+position = Vector2(-52, 80)
 
 [node name="Heal_Zone2" parent="heal" unique_id=316855338 instance=ExtResource("14_jprdt")]
 position = Vector2(4845, -353)
 
 [node name="DarknessOrigin" type="Marker2D" parent="heal/Heal_Zone2"]
-position = Vector2(-125, 17)
+position = Vector2(-93, 81)
 
 [node name="Heal_Zone3" parent="heal" instance=ExtResource("14_jprdt")]
 position = Vector2(3312, -320)
 
 [node name="DarknessOrigin" type="Marker2D" parent="heal/Heal_Zone3"]
-position = Vector2(-128, 15)
+position = Vector2(-96, 144)
 
 [node name="LevelExit" parent="." instance=ExtResource("22_exit")]
 position = Vector2(5040, -352)
