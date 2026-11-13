@@ -244,10 +244,39 @@ manager_darkness = NodePath("../Manager_Darkness")
 
 [node name="slow_down3" parent="Darkness_Bullshit" unique_id=809555587 node_paths=PackedStringArray("manager_darkness") instance=ExtResource("6_8a7m2")]
 position = Vector2(4628, -338)
+scale = Vector2(1, 1.6)
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("8_8a7m2")
 manager_darkness = NodePath("../Manager_Darkness")
+
+[node name="schneller_hizli" parent="Darkness_Bullshit" node_paths=PackedStringArray("manager_darkness") instance=ExtResource("9_plydf")]
+position = Vector2(1936, -335)
+scale = Vector2(1, 2)
+collision_mask = 2
+manager_darkness = NodePath("../Manager_Darkness")
+hiz = 0.11
+
+[node name="slow_down4" parent="Darkness_Bullshit" node_paths=PackedStringArray("manager_darkness") instance=ExtResource("6_8a7m2")]
+position = Vector2(2656, -338)
+scale = Vector2(1, 1.6)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("8_8a7m2")
+manager_darkness = NodePath("../Manager_Darkness")
+
+[node name="schneller4" parent="Darkness_Bullshit" node_paths=PackedStringArray("manager_darkness") instance=ExtResource("9_plydf")]
+position = Vector2(3440, -300)
+scale = Vector2(1, 2)
+collision_mask = 2
+manager_darkness = NodePath("../Manager_Darkness")
+
+[node name="schneller_hizli2" parent="Darkness_Bullshit" node_paths=PackedStringArray("manager_darkness") instance=ExtResource("9_plydf")]
+position = Vector2(4048, -335)
+scale = Vector2(1, 2.2)
+collision_mask = 2
+manager_darkness = NodePath("../Manager_Darkness")
+hiz = 0.11
 
 [node name="DarknessCheckpoint" parent="Darkness_Bullshit" unique_id=2139445298 instance=ExtResource("11_gvm5i")]
 position = Vector2(1072, -335)
@@ -498,6 +527,7 @@ wait_time = 0.05
 [connection signal="body_entered" from="Darkness_Bullshit/slow_down" to="Darkness_Bullshit/slow_down" method="_on_body_entered"]
 [connection signal="body_entered" from="Darkness_Bullshit/slow_down2" to="Darkness_Bullshit/slow_down2" method="_on_body_entered"]
 [connection signal="body_entered" from="Darkness_Bullshit/slow_down3" to="Darkness_Bullshit/slow_down3" method="_on_body_entered"]
+[connection signal="body_entered" from="Darkness_Bullshit/slow_down4" to="Darkness_Bullshit/slow_down4" method="_on_body_entered"]
 [connection signal="body_entered" from="Killzone/Killzone" to="Killzone/Killzone" method="_on_body_entered"]
 [connection signal="body_exited" from="Killzone/Killzone" to="Killzone/Killzone" method="_on_body_exited"]
 [connection signal="timeout" from="Killzone/Killzone/damage_timer" to="Killzone/Killzone" method="_on_damage_timer_timeout"]
