@@ -204,7 +204,9 @@ shape = SubResource("RectangleShape2D_jprdt")
 [node name="Muzik" type="AudioStreamPlayer2D" parent="Darkness_Bullshit/Manager_Darkness" unique_id=1343691552]
 position = Vector2(783, -400)
 stream = ExtResource("21_jrfo0")
-autoplay = true
+autoplay = false
+max_distance = 100000.0
+attenuation = 0.0
 
 [node name="slow_down" parent="Darkness_Bullshit" unique_id=1054231048 node_paths=PackedStringArray("manager_darkness") instance=ExtResource("6_8a7m2")]
 position = Vector2(177, 272)

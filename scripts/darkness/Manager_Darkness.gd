@@ -3,7 +3,13 @@ extends Node2D
 @export var block_scene: PackedScene
 @export var player: Node2D
 @export var tile_map: TileMap
-@export var speed: float = 0.11 # Selin hızı
+# Selin hızı: kaç saniyede bir yeni blok dalgası eklenir (küçük = hızlı).
+# Değiştiği anda müzik de o hıza uygun bölüme geçer.
+@export var speed: float = 0.12:
+	set(value):
+		speed = value
+		if is_node_ready():
+			muzik_degistir()
 @export var spawn_count: int = 5 # Tek seferde eklenecek blok sayısı
 
 
@@ -17,22 +23,36 @@ var occupied_blocks = {}
 var directions = [Vector2.UP, Vector2.DOWN, Vector2.LEFT, Vector2.RIGHT]
 
 @onready var muzik = $Muzik
-var loop_baslangic: float = 0.0
-var loop_bitis: float = 14.35
-# durum içine "yavas", "normal" veya "hizli" yazarak çağıracağız
-func muzik_degistir():
-	if speed == 0.11:
-		loop_baslangic = 9.5
-		loop_bitis = 14.35 # Hızlı kısmın bittiği saniye
+
+# canavar_escape.wav içindeki hazır bölümler: [başlangıç, bitiş] saniye
+const MUZIK_YAVAS := Vector2(0.0, 4.5)
+const MUZIK_ORTA := Vector2(4.5, 9.5)
+const MUZIK_HIZLI := Vector2(9.5, 14.35)
+
+var loop_baslangic: float = MUZIK_ORTA.x
+var loop_bitis: float = MUZIK_ORTA.y
+var _aktif_bolum := Vector2(-1, -1)
+
+
+func _muzik_bolumu_sec() -> Vector2:
+	# speed aralıkla değerlendirilir (float eşitliği güvenilmez)
+	if speed <= 0.115:
+		return MUZIK_HIZLI
+	elif speed < 0.16:
+		return MUZIK_ORTA
+	return MUZIK_YAVAS
+
+
+func muzik_degistir() -> void:
+	var bolum := _muzik_bolumu_sec()
+	if bolum == _aktif_bolum:
+		return
+	_aktif_bolum = bolum
+	loop_baslangic = bolum.x
+	loop_bitis = bolum.y
+	if muzik:
 		muzik.play(loop_baslangic)
-	elif speed == 0.12:
-		loop_baslangic = 4.5
-		loop_bitis = 9.5 # Orta kısmın bittiği saniye
-		muzik.play(loop_baslangic)
-	elif speed == 0.2:
-		loop_baslangic = 0.0
-		loop_bitis = 4.5 # Yavaş kısmın bittiği saniye
-		muzik.play(loop_baslangic)
+
 
 func _ready() -> void:
 	if CheckpointData.has_darkness_origin:
@@ -40,17 +60,14 @@ func _ready() -> void:
 
 	frontier_blocks.append(global_position)
 	occupied_blocks[global_position] = true
+	muzik_degistir()
+
 
 func _process(delta: float) -> void:
-	# 1. KONTROL: Eğer Godot şarkının sonuna geldiği için müziği tamamen durdurduysa...
+	# Müzik bittiyse ya da bölüm sonuna geldiyse aktif bölümün başına sar
 	if not muzik.playing:
-		muzik.play(loop_baslangic) # ...kaldığımız bölümün başından zorla tekrar başlat!
-		
-	# 2. KONTROL: Müzik çalıyor ama bizim belirlediğimiz sınıra milimetrik olarak yaklaştıysa...
+		muzik.play(loop_baslangic)
 	elif muzik.get_playback_position() >= (loop_bitis - 0.05):
-		muzik.seek(loop_baslangic) # ...hiç durmasını beklemeden anında başa sar!
-	if muzik.playing and muzik.get_playback_position() >= loop_bitis:
-		# ...şarkıyı durdurmadan anında o bölümün başına geri ışınla!
 		muzik.seek(loop_baslangic)
 
 	if not player or frontier_blocks.is_empty():
