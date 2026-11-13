@@ -585,12 +585,6 @@ scale = Vector2(5, 5)
 texture = ExtResource("10_hgky1")
 centered = false
 
-[node name="Area2D" parent="ParallaxBackground/ParallaxLayer4" unique_id=481011045 instance=ExtResource("11_gycjm")]
-position = Vector2(1222, -367)
-
-[node name="Area2D2" parent="ParallaxBackground/ParallaxLayer4" unique_id=1007695357 instance=ExtResource("11_gycjm")]
-position = Vector2(1180, -335)
-
 [node name="BackgroundModulate" type="CanvasModulate" parent="ParallaxBackground" unique_id=2042205453]
 
 [node name="Area2D" parent="." unique_id=30958206 instance=ExtResource("11_gycjm")]
