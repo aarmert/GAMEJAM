@@ -31,6 +31,7 @@ func _on_body_entered(body: Node2D) -> void:
 
 	if "safe_zones" in body:
 		body.safe_zones += 1
+	_play_sound("heal" if notified else "checkpoint")
 	body.heal(20)
 	heal_timer.start()
 
@@ -51,4 +52,17 @@ func _on_body_exited(body: Node2D) -> void:
 
 func _on_heal_timer_timeout() -> void:
 	if player_in_area and player_in_area.has_method("heal"):
+		if _needs_heal(player_in_area):
+			_play_sound("heal")
 		player_in_area.heal(20)
+
+
+func _needs_heal(body: Node) -> bool:
+	var bar = body.get("health_bar")
+	return bar == null or not ("health" in bar) or bar.health < bar.max_value
+
+
+func _play_sound(sfx_name: String) -> void:
+	var am := get_node_or_null("/root/AudioManager")
+	if am != null:
+		am.play_sfx(sfx_name, 0.03)

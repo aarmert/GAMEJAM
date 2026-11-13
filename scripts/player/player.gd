@@ -85,17 +85,22 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("jump"):
 		if is_on_floor():
 			jump_component.jump_from_floor(self)
+			_sfx("jump")
 		elif touching_wall and sarmasikta_mi:			
 			jump_wall_component.wall_jump(self, jump_component.jump_velocity)
 			jump_component.restore_extra_jumps()
+			_sfx("jump")
 		else:
-			jump_component.try_extra_jump(self, double_jump_orbit_overlap_count > 0)
+			if jump_component.try_extra_jump(self, double_jump_orbit_overlap_count > 0):
+				_sfx("orb_jump", 0.02)
 
 	if has_dash_skill and Input.is_action_just_pressed("dash"):
 		if dash_orbit_overlap_count > 0:
-			dash_component.try_start_dash_forced(dash_stop_timer, dash_cooldown_timer)
+			if dash_component.try_start_dash_forced(dash_stop_timer, dash_cooldown_timer):
+				_sfx("orb_dash", 0.02)
 		else:
-			dash_component.try_start_dash(dash_stop_timer, dash_cooldown_timer)
+			if dash_component.try_start_dash(dash_stop_timer, dash_cooldown_timer):
+				_sfx("dash")
 
 	movement_component.apply_facing(animated_sprite, direction)
 
@@ -149,6 +154,8 @@ func _update_dash_cooldown_ui() -> void:
 func take_damage(amount: int) -> void:
 	if health_component.apply_damage(health_bar, amount):
 		die()
+	elif health_component.can_receive_actions():
+		_sfx("hurt", 0.08)
 
 
 func heal(amount: int) -> void:
@@ -157,6 +164,7 @@ func heal(amount: int) -> void:
 
 func die() -> void:
 	health_component.mark_dead()
+	_sfx("death", 0.0)
 	set_physics_process(false)
 	velocity = Vector2.ZERO
 	collision_layer = 0
@@ -167,6 +175,13 @@ func die() -> void:
 	await get_tree().create_timer(0.8, true, false, true).timeout
 	Engine.time_scale = 1.0
 	get_tree().reload_current_scene()
+
+
+# Ses kancası: AudioManager autoload'ı yoksa sessizce geçer.
+func _sfx(sfx_name: String, pitch_jitter: float = 0.05) -> void:
+	var am := get_node_or_null("/root/AudioManager")
+	if am != null:
+		am.play_sfx(sfx_name, pitch_jitter)
 
 
 func _on_dash_stop_timer_timeout() -> void:

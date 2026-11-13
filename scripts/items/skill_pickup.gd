@@ -30,4 +30,7 @@ func _on_body_entered(body: Node) -> void:
 		return
 
 	print(pickup_label)
+	var am := get_node_or_null("/root/AudioManager")
+	if am != null:
+		am.play_sfx("lantern_pickup" if skill_name == "flashlight" else "pickup", 0.0)
 	queue_free()
