@@ -1,9 +1,54 @@
 [gd_scene format=3 uid="uid://clvlexit2mno0"]
 
 [ext_resource type="Script" path="res://scripts/world/level_exit.gd" id="1_level_exit"]
+[ext_resource type="Texture2D" uid="uid://bi3n6e7uk6bcs" path="res://assets/portal-Sheet.png" id="2_portal"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
 size = Vector2(32, 64)
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_portal"]
+light_mode = 1
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_portal0"]
+atlas = ExtResource("2_portal")
+region = Rect2(0, 0, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_portal1"]
+atlas = ExtResource("2_portal")
+region = Rect2(32, 0, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_portal2"]
+atlas = ExtResource("2_portal")
+region = Rect2(64, 0, 32, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_portal"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_portal0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_portal1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_portal2")
+}],
+"loop": true,
+"name": &"default",
+"speed": 7.0
+}]
+
+[sub_resource type="Gradient" id="Gradient_portal_light"]
+offsets = PackedFloat32Array(0, 0.35, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.45, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_portal_light"]
+gradient = SubResource("Gradient_portal_light")
+width = 128
+height = 128
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
 
 [node name="LevelExit" type="Area2D"]
 collision_layer = 0
@@ -13,3 +58,16 @@ script = ExtResource("1_level_exit")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_exit")
 debug_color = Color(1, 0.85, 0.2, 0.42)
+
+[node name="PortalLight" type="PointLight2D" parent="."]
+position = Vector2(0, 8)
+color = Color(0.72, 0.66, 1, 1)
+energy = 1.3
+texture = SubResource("GradientTexture2D_portal_light")
+texture_scale = 1.6
+
+[node name="Portal" type="AnimatedSprite2D" parent="."]
+process_mode = 3
+material = SubResource("CanvasItemMaterial_portal")
+sprite_frames = SubResource("SpriteFrames_portal")
+autoplay = "default"
