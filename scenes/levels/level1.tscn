@@ -11,7 +11,6 @@
 [ext_resource type="Script" uid="uid://b74k46pst250e" path="res://scripts/levels/activation_point_slow.gd" id="8_8a7m2"]
 [ext_resource type="PackedScene" uid="uid://bhf74tnovdeaa" path="res://scenes/levels/level1_Scene/schneller.tscn" id="9_plydf"]
 [ext_resource type="PackedScene" uid="uid://dqqsb320dgdhl" path="res://scenes/levels/level1_Scene/sarmasik.tscn" id="10_5ntmo"]
-[ext_resource type="PackedScene" path="res://scenes/darkness_checkpoint.tscn" id="11_gvm5i"]
 [ext_resource type="PackedScene" uid="uid://ef13r7dcuoxl" path="res://scenes/orbit/dash_orbiti.tscn" id="13_lgguw"]
 [ext_resource type="Texture2D" uid="uid://46j0ahygiw47" path="res://assets/DeepCaveBG-Base.png" id="14_g7tkf"]
 [ext_resource type="PackedScene" uid="uid://dcbt670k47f4e" path="res://scenes/levels/level1_Scene/heal_zone.tscn" id="14_jprdt"]
@@ -278,12 +277,6 @@ collision_mask = 2
 manager_darkness = NodePath("../Manager_Darkness")
 hiz = 0.11
 
-[node name="DarknessCheckpoint" parent="Darkness_Bullshit" unique_id=2139445298 instance=ExtResource("11_gvm5i")]
-position = Vector2(1072, -335)
-
-[node name="DarknessCheckpoint2" parent="Darkness_Bullshit" unique_id=402203706 instance=ExtResource("11_gvm5i")]
-position = Vector2(4662, -335)
-
 [node name="sarmasiklar" type="Node2D" parent="." unique_id=1073335057]
 
 [node name="sarmasik3" parent="sarmasiklar" unique_id=1950956920 instance=ExtResource("10_5ntmo")]
@@ -344,14 +337,20 @@ position = Vector2(4058, -218)
 [node name="Heal_Zone" parent="heal" unique_id=1852679614 instance=ExtResource("14_jprdt")]
 position = Vector2(1220, -352)
 
+[node name="DarknessOrigin" type="Marker2D" parent="heal/Heal_Zone"]
+position = Vector2(-148, 17)
+
 [node name="Heal_Zone2" parent="heal" unique_id=316855338 instance=ExtResource("14_jprdt")]
 position = Vector2(4845, -353)
+
+[node name="DarknessOrigin" type="Marker2D" parent="heal/Heal_Zone2"]
+position = Vector2(-125, 17)
 
 [node name="Heal_Zone3" parent="heal" instance=ExtResource("14_jprdt")]
 position = Vector2(3312, -320)
 
-[node name="DarknessCheckpoint3" parent="Darkness_Bullshit" instance=ExtResource("11_gvm5i")]
-position = Vector2(3184, -305)
+[node name="DarknessOrigin" type="Marker2D" parent="heal/Heal_Zone3"]
+position = Vector2(-128, 15)
 
 [node name="LevelExit" parent="." instance=ExtResource("22_exit")]
 position = Vector2(5040, -352)

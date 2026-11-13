@@ -21,6 +21,7 @@ fill_to = Vector2(1, 0.5)
 [node name="Area2D" type="Area2D" unique_id=1852679614 groups=["heal_zone"]]
 collision_layer = 2
 script = ExtResource("1_7ps8k")
+spawn_at_zone_center = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=436948093]
 position = Vector2(0, -1)
