@@ -97,6 +97,9 @@ func _run_transition(
 	# 3) Sahneyi degistir
 	# Slow-motion'i sifirla (ölüm sirasinda kalmis olabilir)
 	Engine.time_scale = 1.0
+	# Checkpoint'ler bölüme özel: yeni bölüme geçerken sıfırla, yoksa oyuncu
+	# yeni bölümde bir önceki bölümün checkpoint koordinatında doğar
+	CheckpointData.clear()
 	var err := get_tree().change_scene_to_file(scene_path)
 	if err != OK:
 		push_error("[SceneTransition] Sahne yüklenemedi: %s (hata: %d)" % [scene_path, err])

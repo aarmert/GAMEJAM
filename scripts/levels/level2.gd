@@ -10,6 +10,7 @@ extends Node2D
 @export var player_camera: Camera2D
 @export var preview_duration: float = 1.5
 @export var preview_enabled: bool = false
+@export var preview_skip_distance: float = 360.0
 
 var visited: Array[bool] = []
 var is_previewing: bool = false
@@ -27,7 +28,8 @@ func _ready() -> void:
 	if preview_camera and player_camera:
 		preview_camera.zoom = player_camera.zoom
 
-	if preview_enabled and checkpoints.size() > 0:
+	# Checkpoint'ten yeniden doğunca baştaki önizlemeyi tekrar gösterme
+	if preview_enabled and checkpoints.size() > 0 and not CheckpointData.has_spawn:
 		await get_tree().process_frame
 		play_preview_to(0)
 
@@ -36,6 +38,9 @@ func play_preview_to(index: int) -> void:
 	if not preview_enabled:
 		return
 	if is_previewing or index < 0 or index >= checkpoints.size():
+		return
+	# Hedef zaten ekranda görünüyorsa kamerayı gezdirmeye gerek yok
+	if player.global_position.distance_to(checkpoints[index].global_position) < preview_skip_distance:
 		return
 	is_previewing = true
 	player.set_physics_process(false)

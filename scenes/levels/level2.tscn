@@ -473,7 +473,9 @@ _data = {
 
 [node name="Parts" type="Node2D" unique_id=2059998700 node_paths=PackedStringArray("checkpoints", "player", "preview_camera", "player_camera")]
 script = ExtResource("1_xma56")
-checkpoints = [NodePath("heal_area1"), NodePath("heal_area2"), NodePath("heal_area3"), NodePath("heal_area4")]
+checkpoints = [NodePath("heal_area1"), NodePath("heal_area2"), NodePath("heal_area3"), NodePath("LevelExit")]
+preview_duration = 0.9
+preview_enabled = true
 player = NodePath("MayaChar2")
 preview_camera = NodePath("PreviewCamera")
 player_camera = NodePath("MayaChar2/Camera2D")
@@ -483,7 +485,7 @@ player_camera = NodePath("MayaChar2/Camera2D")
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=987529634]
 
 [node name="MayaChar2" parent="." unique_id=102941817 instance=ExtResource("2_hfrku")]
-position = Vector2(4434, -556)
+position = Vector2(60, 340)
 darkness_damage_enabled = true
 
 [node name="FlashlightPivot" type="Node2D" parent="MayaChar2" unique_id=790746724]
@@ -702,7 +704,8 @@ position = Vector2(4390, -574)
 position = Vector2(5473, -1)
 
 [node name="LevelExit" parent="." unique_id=1254573344 instance=ExtResource("16_f3b2k")]
-position = Vector2(5779, 99)
+position = Vector2(2416, 96)
+next_scene_path = "uid://d1buep7rqwlbl"
 
 [node name="Area2D9" parent="." unique_id=2008082093 instance=ExtResource("11_gycjm")]
 position = Vector2(4914, 380)
