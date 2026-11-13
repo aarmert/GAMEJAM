@@ -12,6 +12,8 @@ from synth import SR, adsr, exp_decay, fft_filter, linear_reverb, note_to_midi, 
 
 OUT = os.path.join(repo_root(), "audio", "sfx")
 CRUSH = (2, 8)  # sample-hold x2 (22 kHz) + 8-bit -> light pixel-art grit
+CRUSH_SOFT = (1, 8)  # 8-bit only (no sample-hold images) for the low-passed death / pickup sounds
+SOFT = {"death", "pickup"}
 
 
 def secs(s):
@@ -97,17 +99,29 @@ def hurt():
     return s
 
 
-def death():  # descending E-Phrygian run with tremolo, ends on the low E-F rub
-    names = ["E5", "D5", "C5", "B4", "A4", "G4", "F4", "E4"]
-    s = notes_seq(names, 0.09, duty=0.5, decay=0.06)
-    n = secs(1.0)
+def death():  # soft descending E-Phrygian run, ends on a low E-F rub (warm, not harsh)
+    # Softened after playtest ("olum sesi fazla"): an octave lower, triangle + narrow-band pulse instead of a
+    # bright square, 15 ms attacks, shorter (1.3 s), low-passed at 2.2 kHz, gentle tremolo.
+    names = ["E4", "D4", "C4", "B3", "A3", "G3"]
+    step = 0.085
+    s = np.zeros(secs(step * len(names) + 0.3))
+    for i, nm in enumerate(names):
+        n = secs(step + 0.18)
+        f = midi_hz(note_to_midi(nm))
+        env = adsr(n, 0.015, 0.08, 0.5, 0.15, gate=step)
+        v = (osc("tri", f, n) * 0.8 + osc("pulse", f, n, 0.5) * 0.2) * env
+        a = secs(i * step)
+        s[a:a + n] += v[: len(s) - a]
+    n = secs(0.75)
     t = np.arange(n) / SR
-    rub = (osc("pulse", midi_hz(note_to_midi("E3")), n, 0.25) + osc("pulse", midi_hz(note_to_midi("F3")), n, 0.25))
-    rub *= adsr(n, 0.01, 0.2, 0.6, 0.6, gate=0.4) * (0.6 + 0.4 * np.sin(2 * np.pi * 9 * t)) * 0.5
-    out = np.zeros(secs(0.09 * 8) + n)
-    out[: len(s)] += s
-    out[secs(0.09 * 8): secs(0.09 * 8) + n] += rub
-    return linear_reverb(out, 0.8, 0.25)
+    rub = osc("tri", midi_hz(note_to_midi("E2")), n) + osc("tri", midi_hz(note_to_midi("F2")), n) * 0.7
+    rub *= adsr(n, 0.04, 0.2, 0.55, 0.45, gate=0.3) * (0.8 + 0.2 * np.sin(2 * np.pi * 5 * t)) * 0.7
+    a = secs(step * len(names))
+    out = np.zeros(a + n)
+    out[: len(s)] += s[: len(out)]
+    out[a: a + n] += rub
+    out = fft_filter(np.pad(out, (0, 4096)), hi=2200)[: len(out)]
+    return linear_reverb(out, 0.6, 0.2, damp_hz=2500)
 
 
 def heal():  # small soft tick-up for each heal tick
@@ -129,7 +143,9 @@ def pickup():  # skill get fanfare
     out = np.zeros(len(s) + len(hold))
     out[: len(s)] += s * 0.8
     out[secs(0.055 * 6): secs(0.055 * 6) + len(hold)] += hold * 0.6
-    return linear_reverb(out, 0.9, 0.25)
+    out = linear_reverb(out, 0.9, 0.25)
+    # softened after playtest ("alma sesi cok fazla"): roll off the harsh square-wave top end
+    return fft_filter(np.pad(out, (0, 4096)), hi=3500)[: len(out)]
 
 
 def lantern_pickup():  # warmer, slower: lantern found
@@ -210,8 +226,11 @@ SFX = {
 }
 
 if __name__ == "__main__":
-    for name, (fn, pk) in SFX.items():
+    # python3 tools/audio/make_sfx.py [name ...]   (no names = render all)
+    names = sys.argv[1:] or list(SFX)
+    for name in names:
+        fn, pk = SFX[name]
         x = fn()
         path = os.path.join(OUT, name + ".wav")
-        save_sfx(path, x, peak_db=pk, crush=CRUSH)
+        save_sfx(path, x, peak_db=pk, crush=CRUSH_SOFT if name in SOFT else CRUSH)
         print(f"{name}: {len(x) / SR:.2f} s")

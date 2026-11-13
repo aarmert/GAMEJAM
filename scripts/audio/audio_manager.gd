@@ -12,6 +12,18 @@ extends Node
 #   AudioManager.play_sfx("jump")            # pitch_jitter varsayılan 0.05
 #   AudioManager.play_sfx("hurt", 0.1)
 #   AudioManager.play_footstep(AudioManager.get_surface_at(pos))
+#
+# Miks hiyerarşisi (efektif seviye = dosya loudness + ses başı dB + bus dB; tablo: audio/CREDITS.md):
+#   kovalamaca müziği (~-15 LUFS) > oyun SFX'i (zıplama/dash ~-18, hasar ~-15.5, ölüm ~-17 maxM)
+#   > alma/iyileşme/checkpoint (~-21..-23, tık ~-34) > orman/fener/menü müziği (~-22..-23 LUFS)
+#   > ambiyans (~-32..-42 LUFS). Ayak sesleri kısa ve hafif (~-40 maxM).
+
+# ---- Genel ses ayarları (ekip buradan ayarlar; _ready'de bus'lara uygulanır) ----
+const MASTER_VOLUME_DB := 0.0
+const MUSIC_VOLUME_DB := -3.0
+const SFX_VOLUME_DB := 0.0
+const AMBIENT_VOLUME_DB := -2.0
+const MASTER_LIMITER_CEILING_DB := -1.0  # Master'daki HardLimiter: üst üste binen sesler kırpılmasın
 
 const MUSIC_BUS := &"Music"
 const SFX_BUS := &"SFX"
@@ -23,6 +35,9 @@ const MUSIC := {
 	"lantern": "res://audio/music/lantern_cave.ogg",
 }
 const ENDING_STING := "res://audio/music/ending_sting.ogg"
+# Parça başına seviye (dB). Dosyalar ~-17 LUFS; orman/menü oyunun arkasında kalsın diye kısık.
+const MUSIC_DB := {"menu": -3.0, "forest": -3.0, "lantern": -1.0}
+const ENDING_STING_DB := -1.0
 
 const AMBIENT := {
 	"forest": "res://audio/ambient/forest_ambient.ogg",
@@ -32,18 +47,20 @@ const AMBIENT := {
 # Sahne -> ses ayarı. music/ambient boş string = o katman susar.
 # ambient_db: ambiyans seviyesi (dB), surface: karonun tanınamadığı durumda ayak sesi zemini.
 const SCENE_AUDIO := {
-	"res://scenes/main_menu.tscn": {"music": "menu", "ambient": "forest", "ambient_db": -12.0, "surface": "grass"},
-	"res://scenes/levels/3_part.tscn": {"music": "forest", "ambient": "forest", "ambient_db": 0.0, "surface": "grass"},
-	"res://scenes/levels/level2.tscn": {"music": "forest", "ambient": "forest", "ambient_db": 0.0, "surface": "grass"},
+	"res://scenes/main_menu.tscn": {"music": "menu", "ambient": "forest", "ambient_db": -13.0, "surface": "grass"},
+	"res://scenes/levels/3_part.tscn": {"music": "forest", "ambient": "forest", "ambient_db": -3.0, "surface": "grass"},
+	"res://scenes/levels/level2.tscn": {"music": "forest", "ambient": "forest", "ambient_db": -3.0, "surface": "grass"},
 	# Kovalamaca bölümü: kendi müziği var (canavar_escape) -> sadece sessiz mağara ambiyansı
-	"res://scenes/levels/level1.tscn": {"music": "", "ambient": "cave", "ambient_db": -4.0, "surface": "stone"},
-	"res://scenes/levels/level1_2.tscn": {"music": "lantern", "ambient": "cave", "ambient_db": 0.0, "surface": "stone"},
+	"res://scenes/levels/level1.tscn": {"music": "", "ambient": "cave", "ambient_db": -5.0, "surface": "stone"},
+	"res://scenes/levels/level1_2.tscn": {"music": "lantern", "ambient": "cave", "ambient_db": -3.0, "surface": "stone"},
 }
 const ENDING_FROM_SCENE := "res://scenes/levels/level1_2.tscn"
 
 # Sahnede bulunup Music bus'ına taşınacak hazır müzik düğümleri (level1 kovalamaca müziği)
 const SCENE_MUSIC_NODE_NAMES := ["Muzik"]
-const SCENE_MUSIC_NODE_DB := -5.0  # canavar_escape.wav ~ -12 LUFS, bizim parçalar ~ -17 LUFS
+# canavar_escape.wav ~ -12.4 LUFS -> 0 dB + Music bus -3 = ~-15.4 LUFS: oyunun en yüksek müziği
+# (orman ~-23, fener mağarası ~-22). Dosyanın tepe değeri ~+0.3 dBTP; Master limiter korur.
+const SCENE_MUSIC_NODE_DB := 0.0
 
 const SFX := {
 	"jump": "res://audio/sfx/jump.wav",
@@ -65,9 +82,36 @@ const SFX := {
 	"ui_start": "res://audio/sfx/ui_start.wav",
 	"whoosh": "res://audio/sfx/whoosh.wav",
 }
-# Ses başına ek seviye (dB) ve aynı sesin en sık tekrar aralığı (s)
-const SFX_DB := {"land": -4.0, "heal": -6.0, "whoosh": -6.0, "ui_hover": -4.0, "lantern_off": -2.0}
-const SFX_MIN_INTERVAL := {"hurt": 0.25, "land": 0.08, "heal": 0.3, "ui_hover": 0.05}
+# Ses başına ek seviye (dB). Yorum: dosyanın max-momentary loudness'ı -> hedef efektif seviye.
+const SFX_DB := {
+	"jump": -3.5,            # -14.4 -> -17.9
+	"orb_jump": -1.5,        # -17.5 -> -19.0
+	"dash": -2.5,            # -15.6 -> -18.1
+	"orb_dash": -1.5,        # -17.4 -> -18.9
+	"land": -2.0,            # -26.2 -> -28.2 (kısa darbe)
+	"hurt": -3.0,            # -12.5 -> -15.5
+	"death": -3.0,           # -14.1 -> -17.1 (yumuşatılmış yeni ses, üstüne müzik kısılır)
+	"pickup": -9.0,          # -12.8 -> -21.8
+	"lantern_pickup": -8.0,  # -12.8 -> -20.8
+	"checkpoint": -7.0,      # -15.9 -> -22.9 (her checkpoint'te sadece ilk sefer)
+	"heal": -10.0,           # -23.6 -> -33.6 (iyileşme alanında 0.5 s'de bir tık: çok hafif)
+	"lantern_on": -2.0,      # -19.8 -> -21.8
+	"lantern_off": 0.0,      # -26.7
+	"lantern_empty": 0.0,    # -22.9
+	"ui_hover": -4.0,        # -29.3 -> -33.3
+	"ui_click": -1.0,        # -21.0 -> -22.0
+	"ui_start": -4.0,        # -14.7 -> -18.7
+	"whoosh": -8.0,          # -15.2 -> -23.2
+}
+# Aynı sesin en sık tekrar aralığı (s). Listede olmayanlar SFX_DEFAULT_COOLDOWN kullanır:
+# aynı karede/peş peşe gelen çağrılar (ör. birden çok tehlike aynı anda öldürürse) tek sese iner.
+const SFX_DEFAULT_COOLDOWN := 0.05
+const SFX_MIN_INTERVAL := {
+	"hurt": 0.25, "land": 0.08, "heal": 0.45, "ui_hover": 0.05, "death": 1.0,
+	"pickup": 0.3, "lantern_pickup": 0.3, "checkpoint": 0.5, "whoosh": 0.3,
+}
+# Aynı ses dosyasından aynı anda çalabilecek en fazla kopya (ayak sesleri dahil)
+const MAX_VOICES_PER_SOUND := 2
 
 const FOOTSTEPS := {
 	"grass": ["res://audio/footsteps/grass_0.wav", "res://audio/footsteps/grass_1.wav",
@@ -77,7 +121,7 @@ const FOOTSTEPS := {
 		"res://audio/footsteps/stone_2.wav", "res://audio/footsteps/stone_3.wav",
 		"res://audio/footsteps/stone_4.wav"],
 }
-const FOOTSTEP_DB := {"grass": -9.0, "stone": -10.0}
+const FOOTSTEP_DB := {"grass": -7.0, "stone": -8.0}  # dosyalar ~-32.5 / -33 maxM
 
 # Tileset texture yolu içindeki anahtar kelime -> zemin
 const SURFACE_KEYWORDS := [
@@ -108,6 +152,9 @@ var _tilemaps: Array[Node] = []
 var _last_scene: Node = null
 var _scene_surface := "grass"
 var _music_tweens := {}
+var _music_base_db := {}        # müzik oynatıcısı -> o parçanın normal seviyesi (duck sonrası dönülecek)
+var _chimed_checkpoints := {}   # checkpoint sesi çalmış alanlar (yeniden doğunca tekrar çalmasın)
+var _chime_scene_path := ""
 
 
 func _ready() -> void:
@@ -146,8 +193,10 @@ func play_sfx(sfx_name: String, pitch_jitter: float = 0.05, volume_db: float = 0
 		push_warning("[AudioManager] bilinmeyen sfx: %s" % sfx_name)
 		return
 	var now := Time.get_ticks_msec() / 1000.0
-	var min_gap: float = SFX_MIN_INTERVAL.get(sfx_name, 0.0)
+	var min_gap: float = SFX_MIN_INTERVAL.get(sfx_name, SFX_DEFAULT_COOLDOWN)
 	if min_gap > 0.0 and now - float(_last_played.get(sfx_name, -100.0)) < min_gap:
+		return
+	if sfx_name == "checkpoint" and not _claim_checkpoint_chime():
 		return
 	_last_played[sfx_name] = now
 	_play_stream(_get_stream(SFX[sfx_name]), volume_db + float(SFX_DB.get(sfx_name, 0.0)), pitch_jitter)
@@ -191,7 +240,7 @@ func play_music(key: String, fade: float = CROSSFADE_TIME) -> void:
 	if key == current_music_key:
 		return
 	current_music_key = key
-	_crossfade(_music_players, true, MUSIC.get(key, ""), 0.0, fade)
+	_crossfade(_music_players, true, MUSIC.get(key, ""), float(MUSIC_DB.get(key, 0.0)), fade)
 
 
 func play_ambient(key: String, volume_db: float = 0.0, fade: float = CROSSFADE_TIME) -> void:
@@ -206,22 +255,34 @@ func play_ambient(key: String, volume_db: float = 0.0, fade: float = CROSSFADE_T
 func play_ending_sting() -> void:
 	play_music("", 0.8)
 	_sting_player.stream = _get_stream(ENDING_STING)
-	_sting_player.volume_db = 0.0
+	_sting_player.volume_db = ENDING_STING_DB
 	_sting_player.play()
 
 
+## Müziği geçici olarak amount_db kadar kısar (ölüm sesi duyulsun), sonra parçanın normal seviyesine döner.
+## level1'deki sahne müziği (Muzik) de kısılır.
 func duck_music(amount_db: float, duration: float) -> void:
 	var p := _music_players[_music_idx]
-	if not p.playing:
-		return
-	if _music_tweens.has(p) and _music_tweens[p] is Tween and _music_tweens[p].is_valid():
-		_music_tweens[p].kill()
-	var tw := create_tween()
-	tw.set_ignore_time_scale(true)
-	tw.tween_property(p, "volume_db", amount_db, 0.15)
-	tw.tween_interval(duration)
-	tw.tween_property(p, "volume_db", 0.0, 1.0)
-	_music_tweens[p] = tw
+	if p.playing:
+		if _music_tweens.has(p) and _music_tweens[p] is Tween and _music_tweens[p].is_valid():
+			_music_tweens[p].kill()
+		var base: float = _music_base_db.get(p, 0.0)
+		var tw := create_tween()
+		tw.set_ignore_time_scale(true)
+		tw.tween_property(p, "volume_db", base + amount_db, 0.15)
+		tw.tween_interval(duration)
+		tw.tween_property(p, "volume_db", base, 1.0)
+		_music_tweens[p] = tw
+	if is_instance_valid(_last_scene):
+		for n in _scene_music_nodes(_last_scene):
+			if not n.playing:
+				continue
+			# tween düğümün kendisine bağlı: sahne yeniden yüklenince onunla birlikte biter
+			var tw2: Tween = n.create_tween()
+			tw2.set_ignore_time_scale(true)
+			tw2.tween_property(n, "volume_db", SCENE_MUSIC_NODE_DB + amount_db, 0.15)
+			tw2.tween_interval(duration)
+			tw2.tween_property(n, "volume_db", SCENE_MUSIC_NODE_DB, 1.0)
 
 
 ## Test/teşhis için: şu an çalan müzik ve ambiyans dosyaları.
@@ -242,6 +303,9 @@ func get_debug_state() -> Dictionary:
 
 func _on_scene_changed(scene: Node) -> void:
 	var path := scene.scene_file_path
+	if path != _chime_scene_path:  # başka bölüme geçildi -> checkpoint sesleri yeniden çalabilir
+		_chime_scene_path = path
+		_chimed_checkpoints.clear()
 	var cfg: Dictionary = SCENE_AUDIO.get(path, {})
 	if cfg.is_empty():
 		push_warning("[AudioManager] %s için ses ayarı yok, mevcut müzik devam ediyor" % path)
@@ -261,11 +325,38 @@ func _on_transition_started() -> void:
 
 
 func _route_scene_music(scene: Node) -> void:
+	for n in _scene_music_nodes(scene):
+		n.bus = MUSIC_BUS
+		n.volume_db = SCENE_MUSIC_NODE_DB
+
+
+func _scene_music_nodes(scene: Node) -> Array[Node]:
+	var out: Array[Node] = []
 	for node_name in SCENE_MUSIC_NODE_NAMES:
 		for n in scene.find_children(node_name, "", true, false):
 			if n is AudioStreamPlayer or n is AudioStreamPlayer2D:
-				n.bus = MUSIC_BUS
-				n.volume_db = SCENE_MUSIC_NODE_DB
+				out.append(n)
+	return out
+
+
+## Checkpoint sesi her alan için yalnızca ilk aktivasyonda çalar. Ölüp sahne yeniden yüklenince heal.gd'nin
+## 'notified' bayrağı sıfırlanır ve oyuncu alanın içinde doğar; bu yüzden hangi alanların çaldığını burada
+## (sahne yolu + düğüm yolu ile) tutuyoruz. Oyuncuyu içeren alan bulunamazsa ses çalar.
+func _claim_checkpoint_chime() -> bool:
+	if not is_instance_valid(_last_scene):
+		return true
+	var keys: Array[String] = []
+	for area in _last_scene.find_children("*", "Area2D", true, false):
+		if "player_in_area" in area and "checkpoint_index" in area and area.get("player_in_area") != null:
+			keys.append(String(_last_scene.get_path_to(area)))
+	if keys.is_empty():
+		return true
+	var is_new := false
+	for k in keys:
+		if not _chimed_checkpoints.has(k):
+			is_new = true
+			_chimed_checkpoints[k] = true
+	return is_new
 
 
 func _collect_tilemaps(scene: Node) -> void:
@@ -326,6 +417,20 @@ func _ensure_buses() -> void:
 			var idx := AudioServer.bus_count - 1
 			AudioServer.set_bus_name(idx, bus_name)
 			AudioServer.set_bus_send(idx, &"Master")
+	AudioServer.set_bus_volume_db(0, MASTER_VOLUME_DB)
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index(MUSIC_BUS), MUSIC_VOLUME_DB)
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index(SFX_BUS), SFX_VOLUME_DB)
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index(AMBIENT_BUS), AMBIENT_VOLUME_DB)
+	# Master limiter (default_bus_layout.tres'te de var; yoksa burada eklenir)
+	var limiter: AudioEffectHardLimiter = null
+	for i in AudioServer.get_bus_effect_count(0):
+		var fx := AudioServer.get_bus_effect(0, i)
+		if fx is AudioEffectHardLimiter:
+			limiter = fx
+	if limiter == null:
+		limiter = AudioEffectHardLimiter.new()
+		AudioServer.add_bus_effect(0, limiter)
+	limiter.ceiling_db = MASTER_LIMITER_CEILING_DB
 
 
 func _make_player(node_name: String, bus: StringName) -> AudioStreamPlayer:
@@ -348,7 +453,21 @@ func _get_stream(path: String) -> AudioStream:
 func _play_stream(stream: AudioStream, volume_db: float, pitch_jitter: float) -> void:
 	if stream == null:
 		return
+	# aynı dosyadan zaten MAX_VOICES_PER_SOUND kopya çalıyorsa yenisini ekleme (üst üste binip patlamasın)
+	var same := 0
+	for q in _sfx_pool:
+		if q.playing and q.stream == stream:
+			same += 1
+	if same >= MAX_VOICES_PER_SOUND:
+		return
+	# boş bir oynatıcı seç; hepsi doluysa sıradakini (en eskiyi) kes
 	var p := _sfx_pool[_sfx_next]
+	for i in _sfx_pool.size():
+		var cand := _sfx_pool[(_sfx_next + i) % _sfx_pool.size()]
+		if not cand.playing:
+			p = cand
+			_sfx_next = (_sfx_next + i) % _sfx_pool.size()
+			break
 	_sfx_next = (_sfx_next + 1) % _sfx_pool.size()
 	p.stream = stream
 	p.volume_db = volume_db
@@ -372,6 +491,8 @@ func _crossfade(players: Array[AudioStreamPlayer], is_music: bool, path: String,
 	nxt.stream = stream
 	nxt.volume_db = -40.0
 	nxt.play()
+	if is_music:
+		_music_base_db[nxt] = target_db
 	_tween_db(nxt, target_db, fade)
 	if is_music:
 		_music_idx = 1 - idx
