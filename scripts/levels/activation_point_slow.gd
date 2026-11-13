@@ -4,6 +4,6 @@ extends Area2D
 
 
 func _on_body_entered(body: Node2D) -> void:
+	if not body.is_in_group("player") or manager_darkness == null:
+		return
 	manager_darkness.speed = 0.2
-	print("sikik1")
-	

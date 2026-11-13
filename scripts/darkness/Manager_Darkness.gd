@@ -11,11 +11,21 @@ extends Node2D
 		if is_node_ready():
 			muzik_degistir()
 @export var spawn_count: int = 5 # Tek seferde eklenecek blok sayısı
+# Bölüm başında / checkpoint'te yeniden doğunca karanlık bu kadar saniye bekler
+# (sahne geçiş fade'i sürerken geçen süre sayılmaz).
+@export var start_delay: float = 4.0
+# Güvenlik sınırı: blok sayısı bunu aşarsa yayılma durur.
+@export var max_blocks: int = 3000
 
 
 const TILE_SIZE = 32
+# Blok merkezinin heal zone kenarından en az bu kadar uzak olması gerekir (blok yarı boyu ~10 px)
+const HEAL_MARGIN = 12.0
 
 var time_passed: float = 0.0
+var _delay_left: float = 0.0
+var _block_count: int = 0
+var _bounds := Rect2()
 var frontier_blocks = []
 var occupied_blocks = {}
 
@@ -57,6 +67,17 @@ func muzik_degistir() -> void:
 func _ready() -> void:
 	if CheckpointData.has_darkness_origin:
 		global_position = CheckpointData.darkness_origin_pos
+	_delay_left = start_delay
+
+	if tile_map:
+		# Başlangıcı karo merkezine hizala: bloklar (20x21) hücre ortasında durur ve
+		# duvar karolarına hiç değmez.
+		var cell := tile_map.local_to_map(tile_map.to_local(global_position))
+		global_position = tile_map.to_global(tile_map.map_to_local(cell))
+		# Bölüm sınırı: karoların kapladığı alanın dışına (boşluğa) yayılma
+		var used := tile_map.get_used_rect()
+		var tl := tile_map.to_global(tile_map.map_to_local(used.position)) - Vector2(TILE_SIZE, TILE_SIZE) * 0.5
+		_bounds = Rect2(tl, Vector2(used.size) * TILE_SIZE).grow(-1.0)
 
 	frontier_blocks.append(global_position)
 	occupied_blocks[global_position] = true
@@ -70,7 +91,16 @@ func _process(delta: float) -> void:
 	elif muzik.get_playback_position() >= (loop_bitis - 0.05):
 		muzik.seek(loop_baslangic)
 
-	if not player or frontier_blocks.is_empty():
+	if not is_instance_valid(player) or frontier_blocks.is_empty():
+		return
+	# Oyuncu öldüyse yayılmaya gerek yok (yeniden yükleme sırasında boşuna blok üretme)
+	if "health_component" in player and player.health_component and not player.health_component.can_receive_actions():
+		return
+	if _block_count >= max_blocks:
+		return
+	if _delay_left > 0.0:
+		if not _is_transitioning():
+			_delay_left -= delta
 		return
 
 	time_passed += delta 
@@ -99,6 +129,11 @@ func _process(delta: float) -> void:
 				
 				# 1. KONTROL: Kendi bloklarımızla zaten dolu mu?
 				if occupied_blocks.has(target_pos):
+					continue
+
+				# Bölüm sınırları dışı: boşluğa sonsuza dek yayılmasın
+				if _bounds.has_area() and not _bounds.has_point(target_pos):
+					occupied_blocks[target_pos] = true
 					continue
 					
 				# 2. KONTROL: TileMap üzerinde burada bir duvar var mı?
@@ -140,19 +175,31 @@ func _process(delta: float) -> void:
 			var new_block = block_scene.instantiate()
 			new_block.global_position = chosen_pos
 			add_sibling(new_block)
+			_block_count += 1
 			
 			# Yeni noktayı listelere kaydet
 			frontier_blocks.append(chosen_pos)
 			occupied_blocks[chosen_pos] = true
 
 
+func _is_transitioning() -> bool:
+	var st := get_node_or_null("/root/SceneTransition")
+	return st != null and st.has_method("is_transitioning") and st.is_transitioning()
+
+
 func _is_in_heal_zone(pos: Vector2) -> bool:
+	# Heal zone (checkpoint) içine karanlık girmez: içinde duran oyuncu güvende.
+	# Dikdörtgen alanda tam şeklini, daire alanda yarıçapı kullan.
 	for zone in get_tree().get_nodes_in_group("heal_zone"):
-		var zone_radius := 64.0
 		for child in zone.get_children():
-			if child is CollisionShape2D and child.shape is CircleShape2D:
-				zone_radius = child.shape.radius
-				break
-		if pos.distance_to(zone.global_position) <= zone_radius + TILE_SIZE:
-			return true
+			if not child is CollisionShape2D or child.shape == null:
+				continue
+			var local: Vector2 = (child as CollisionShape2D).global_transform.affine_inverse() * pos
+			if child.shape is RectangleShape2D:
+				var half: Vector2 = child.shape.size * 0.5 + Vector2(HEAL_MARGIN, HEAL_MARGIN)
+				if abs(local.x) <= half.x and abs(local.y) <= half.y:
+					return true
+			elif child.shape is CircleShape2D:
+				if local.length() <= child.shape.radius + HEAL_MARGIN:
+					return true
 	return false

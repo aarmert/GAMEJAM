@@ -20,5 +20,6 @@ func _on_body_entered(body: Node) -> void:
 		return
 
 	var origin: Node2D = darkness_origin if darkness_origin != null else self
-	CheckpointData.save_darkness_checkpoint(origin)
+	# Karanlık başlangıcı bir sonraki oyuncu checkpoint'iyle (heal zone) birlikte kesinleşir
+	CheckpointData.set_pending_darkness_origin(origin.global_position)
 	_triggered = true

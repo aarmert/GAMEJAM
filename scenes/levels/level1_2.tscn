@@ -163,6 +163,10 @@ use_darkness_mechanics = true
 [node name="Camera2D" type="Camera2D" parent="AsılKarakter" unique_id=994130846]
 position = Vector2(26, -18)
 zoom = Vector2(2.5, 2.5)
+limit_left = -1822
+limit_top = -672
+limit_right = 1922
+limit_bottom = 1408
 
 [node name="FlashlightPickup" parent="." unique_id=1080717045 instance=ExtResource("4_58uct")]
 position = Vector2(226, -486)
@@ -180,126 +184,46 @@ script = ExtResource("6_occluder")
 [node name="ParallaxBackground" type="ParallaxBackground" parent="." unique_id=1919317896]
 
 [node name="ParallaxLayer1" type="ParallaxLayer" parent="ParallaxBackground" unique_id=1556391010]
-position = Vector2(47, -324)
-scale = Vector2(0.5, 0.5)
-motion_scale = Vector2(0.2, 1)
-motion_mirroring = Vector2(640, 0)
+motion_scale = Vector2(0.1, 0)
+motion_mirroring = Vector2(1600, 0)
 
 [node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer1" unique_id=1256278279]
-texture_repeat = 2
-position = Vector2(-464, -1082)
-scale = Vector2(5, 5)
+position = Vector2(0, -80)
+scale = Vector2(2.5, 2.5)
 texture = ExtResource("7_vqwv5")
 centered = false
 
 [node name="ParallaxLayer2" type="ParallaxLayer" parent="ParallaxBackground" unique_id=769968225]
-position = Vector2(47, -324)
-scale = Vector2(0.5, 0.5)
-motion_scale = Vector2(0.4, 1)
-motion_mirroring = Vector2(640, 0)
+motion_scale = Vector2(0.25, 0)
+motion_mirroring = Vector2(1600, 0)
 
 [node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer2" unique_id=1304996325]
-texture_repeat = 2
-position = Vector2(0, -680)
-scale = Vector2(5, 5)
+position = Vector2(0, -80)
+scale = Vector2(2.5, 2.5)
 texture = ExtResource("8_aemem")
 centered = false
 
 [node name="ParallaxLayer3" type="ParallaxLayer" parent="ParallaxBackground" unique_id=556483528]
-position = Vector2(47, -324)
-scale = Vector2(0.5, 0.5)
-motion_scale = Vector2(0.6, 1)
-motion_mirroring = Vector2(640, 0)
+motion_scale = Vector2(0.45, 0)
+motion_mirroring = Vector2(1600, 0)
 
 [node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer3" unique_id=1206729335]
-texture_repeat = 2
-position = Vector2(0, -680)
-scale = Vector2(5, 5)
+position = Vector2(0, -80)
+scale = Vector2(2.5, 2.5)
 texture = ExtResource("9_grlau")
 centered = false
 
 [node name="ParallaxLayer4" type="ParallaxLayer" parent="ParallaxBackground" unique_id=1660655644]
-position = Vector2(47, -324)
-scale = Vector2(0.5, 0.5)
-motion_scale = Vector2(0.8, 1)
-motion_mirroring = Vector2(640, 0)
+motion_scale = Vector2(0.65, 0)
+motion_mirroring = Vector2(1600, 0)
 
 [node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer4" unique_id=1125733490]
-texture_repeat = 2
-position = Vector2(0, -680)
-scale = Vector2(5, 5)
+position = Vector2(0, -80)
+scale = Vector2(2.5, 2.5)
 texture = ExtResource("10_i5ldy")
 centered = false
-
-[node name="Area2D" parent="ParallaxBackground/ParallaxLayer4" unique_id=481011045 instance=ExtResource("11_ko1rt")]
-position = Vector2(1222, -367)
-
-[node name="Area2D2" parent="ParallaxBackground/ParallaxLayer4" unique_id=1948168362 instance=ExtResource("11_ko1rt")]
-position = Vector2(1180, -335)
 
 [node name="BackgroundModulate" type="CanvasModulate" parent="ParallaxBackground" unique_id=813631512]
-
-[node name="ParallaxBackground2" type="ParallaxBackground" parent="." unique_id=660399139]
-
-[node name="ParallaxLayer1" type="ParallaxLayer" parent="ParallaxBackground2" unique_id=1063966729]
-position = Vector2(47, 313)
-scale = Vector2(0.5, 0.5)
-motion_scale = Vector2(0.2, 1)
-motion_mirroring = Vector2(640, 0)
-
-[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground2/ParallaxLayer1" unique_id=505720178]
-texture_repeat = 2
-position = Vector2(46.999996, -682)
-scale = Vector2(5, 5)
-texture = ExtResource("7_vqwv5")
-centered = false
-
-[node name="ParallaxLayer2" type="ParallaxLayer" parent="ParallaxBackground2" unique_id=1245314331]
-position = Vector2(47, 313)
-scale = Vector2(0.5, 0.5)
-motion_scale = Vector2(0.4, 1)
-motion_mirroring = Vector2(640, 0)
-
-[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground2/ParallaxLayer2" unique_id=1601882856]
-texture_repeat = 2
-position = Vector2(0, -680)
-scale = Vector2(5, 5)
-texture = ExtResource("8_aemem")
-centered = false
-
-[node name="ParallaxLayer3" type="ParallaxLayer" parent="ParallaxBackground2" unique_id=1715120229]
-position = Vector2(47, 313)
-scale = Vector2(0.5, 0.5)
-motion_scale = Vector2(0.6, 1)
-motion_mirroring = Vector2(640, 0)
-
-[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground2/ParallaxLayer3" unique_id=1320212360]
-texture_repeat = 2
-position = Vector2(0, -680)
-scale = Vector2(5, 5)
-texture = ExtResource("9_grlau")
-centered = false
-
-[node name="ParallaxLayer4" type="ParallaxLayer" parent="ParallaxBackground2" unique_id=496865785]
-position = Vector2(47, 313)
-scale = Vector2(0.5, 0.5)
-motion_scale = Vector2(0.8, 1)
-motion_mirroring = Vector2(640, 0)
-
-[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground2/ParallaxLayer4" unique_id=549663668]
-texture_repeat = 2
-position = Vector2(0, -680)
-scale = Vector2(5, 5)
-texture = ExtResource("10_i5ldy")
-centered = false
-
-[node name="Area2D" parent="ParallaxBackground2/ParallaxLayer4" unique_id=1052692504 instance=ExtResource("11_ko1rt")]
-position = Vector2(1222, -367)
-
-[node name="Area2D2" parent="ParallaxBackground2/ParallaxLayer4" unique_id=299053291 instance=ExtResource("11_ko1rt")]
-position = Vector2(1180, -335)
-
-[node name="BackgroundModulate" type="CanvasModulate" parent="ParallaxBackground2" unique_id=487799602]
 
 [node name="Node" type="Node" parent="." unique_id=1378779658]
 

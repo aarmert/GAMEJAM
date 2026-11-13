@@ -32,6 +32,7 @@ var _flashlight_light: PointLight2D = null
 var _ambient_light: PointLight2D = null
 var _lantern_light: PointLight2D = null
 var sarmasikta_mi: bool = false
+var _dying := false
 
 
 func _resolve_health_bar() -> ProgressBar:
@@ -163,18 +164,43 @@ func heal(amount: int) -> void:
 
 
 func die() -> void:
+	# Aynı anda birden fazla kaynak (onlarca karanlık bloğu, killzone, diken) die()
+	# çağırabilir; ölüm dizisi yalnızca bir kez çalışmalı.
+	if _dying:
+		return
+	_dying = true
 	health_component.mark_dead()
 	_sfx("death", 0.0)
 	set_physics_process(false)
 	velocity = Vector2.ZERO
-	collision_layer = 0
-	collision_mask = 0
+	# Fizik sinyali (body_entered) içinden çağrılabilir: çarpışma ayarlarını ertele
+	set_deferred("collision_layer", 0)
+	set_deferred("collision_mask", 0)
+	var tree := get_tree()
 	Engine.time_scale = 0.4
 	animated_sprite.play("death")
-	await animated_sprite.animation_finished
-	await get_tree().create_timer(0.8, true, false, true).timeout
+	# animation_finished hiç gelmezse (animasyon değişti vb.) en fazla 4 sn bekle
+	var finished := [false]
+	animated_sprite.animation_finished.connect(func(): finished[0] = true, CONNECT_ONE_SHOT)
+	var start_ms := Time.get_ticks_msec()
+	while not finished[0] and Time.get_ticks_msec() - start_ms < 4000:
+		await tree.process_frame
+		if not is_instance_valid(self) or not is_inside_tree():
+			Engine.time_scale = 1.0
+			return
+	await tree.create_timer(0.8, true, false, true).timeout
 	Engine.time_scale = 1.0
-	get_tree().reload_current_scene()
+	_reload_after_death(tree)
+
+
+func _reload_after_death(tree: SceneTree) -> void:
+	# Sahne bu arada değiştiyse (bölüm çıkışı geçişi vb.) yeniden yükleme yapma
+	if not is_inside_tree() or tree.current_scene == null or not tree.current_scene.is_ancestor_of(self):
+		return
+	var st := tree.root.get_node_or_null("SceneTransition")
+	if st != null and st.has_method("is_transitioning") and st.is_transitioning():
+		return
+	tree.reload_current_scene()
 
 
 # Ses kancası: AudioManager autoload'ı yoksa sessizce geçer.

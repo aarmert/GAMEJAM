@@ -1,13 +1,26 @@
 [gd_scene format=3 uid="uid://dqqsb320dgdhl"]
 
 [ext_resource type="Script" uid="uid://cu0ucmtau0pl3" path="res://scenes/levels/level1_Scene/sarmasik.gd" id="1_21uia"]
+[ext_resource type="Texture2D" path="res://scenes/levels/level1_Scene/sarmasik.png" id="2_vine"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rjvrp"]
 size = Vector2(34, 43)
 
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_vine"]
+light_mode = 1
+
 [node name="sarmasik" type="Area2D" unique_id=1950956920]
+collision_mask = 3
 script = ExtResource("1_21uia")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=80369547]
 position = Vector2(0, -6.5)
 shape = SubResource("RectangleShape2D_rjvrp")
+
+[node name="Vine" type="Sprite2D" parent="." unique_id=1702338821]
+texture_repeat = 2
+material = SubResource("CanvasItemMaterial_vine")
+position = Vector2(0, -6.5)
+texture = ExtResource("2_vine")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 43)
