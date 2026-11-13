@@ -19,10 +19,23 @@ config/icon="res://icon.svg"
 
 SceneTransition="*res://scripts/world/scene_transition.gd"
 AudioManager="*res://scripts/audio/audio_manager.gd"
+DisplayToggle="*res://scripts/ui/display_toggle.gd"
+
+[display]
+
+window/size/viewport_width=1152
+window/size/viewport_height=648
+window/size/mode=2
+window/stretch/mode="canvas_items"
+window/stretch/aspect="keep"
 
 [global_group]
 
 player=""
+
+[gui]
+
+theme/custom="res://ui/game_theme.tres"
 
 [input]
 
