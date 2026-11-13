@@ -60,7 +60,7 @@ const ENDING_FROM_SCENE := "res://scenes/levels/level1_2.tscn"
 const SCENE_MUSIC_NODE_NAMES := ["Muzik"]
 # canavar_escape.wav ~ -12.4 LUFS -> 0 dB + Music bus -3 = ~-15.4 LUFS: oyunun en yüksek müziği
 # (orman ~-23, fener mağarası ~-22). Dosyanın tepe değeri ~+0.3 dBTP; Master limiter korur.
-const SCENE_MUSIC_NODE_DB := 0.0
+const SCENE_MUSIC_NODE_DB := 3.0
 
 const SFX := {
 	"jump": "res://audio/sfx/jump.wav",
@@ -84,10 +84,10 @@ const SFX := {
 }
 # Ses başına ek seviye (dB). Yorum: dosyanın max-momentary loudness'ı -> hedef efektif seviye.
 const SFX_DB := {
-	"jump": -3.5,            # -14.4 -> -17.9
-	"orb_jump": -1.5,        # -17.5 -> -19.0
-	"dash": -2.5,            # -15.6 -> -18.1
-	"orb_dash": -1.5,        # -17.4 -> -18.9
+	"jump": -8.5,            # -14.4 -> -17.9
+	"orb_jump": -6.5,        # -17.5 -> -19.0
+	"dash": -7.0,            # -15.6 -> -18.1
+	"orb_dash": -6.0,        # -17.4 -> -18.9
 	"land": -2.0,            # -26.2 -> -28.2 (kısa darbe)
 	"hurt": -3.0,            # -12.5 -> -15.5
 	"death": -3.0,           # -14.1 -> -17.1 (yumuşatılmış yeni ses, üstüne müzik kısılır)
