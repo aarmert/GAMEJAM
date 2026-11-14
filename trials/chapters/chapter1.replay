@@ -1,0 +1,45 @@
+// Replay proof for chapter1.gd (tools/trials/replay.sh trials/chapters/chapter1.gd)
+// Each [room id] section starts with the player standing on that room's entry spawn.
+
+[room start]
+hold right
+until x >= 180
+jump 20                 // over the two spikes
+wait_floor
+until col >= 13
+release right
+wait 3
+jump 20
+wait_fall
+dash up                 // apex dash up through the one-way platform -> collectible
+wait_floor
+hold right
+wait_air                // walk off the platform
+wait_floor
+jump 20                 // hop into the opening (rows 6-7)
+wait_room
+
+[room climb]
+hold right
+until col >= 4
+jump 20                 // onto the moving platform
+wait_floor
+release right
+wait 110                // ride up (1.6 s)
+hold right
+jump 20
+wait_fall
+dash right              // to the upper ledge
+wait_floor
+wait_room 200
+
+[room gate]
+hold right
+until x >= 186
+jump 20                 // off the ledge towards the green orb
+until x >= 296
+jump 20                 // orb jump
+wait_fall
+dash right
+wait_floor
+wait 200                // walk into the exit portal

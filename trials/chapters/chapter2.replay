@@ -1,0 +1,25 @@
+// Replay proof for chapter2.gd (tools/trials/replay.sh trials/chapters/chapter2.gd)
+
+[room hollow]
+hold right
+until x >= 118
+jump 20                 // over the two floor spikes
+wait_floor
+until col >= 10
+jump 30                 // jump up along the vine wall
+repeat 4
+wait_wall 60
+jump 30                 // wall jump on the vine (holding right keeps us on the wall)
+endrepeat
+wait_floor 120          // top of the pillar, then drop down on the right
+wait_room 200
+
+[room run]
+hold right              // the darkness starts behind us after chase_delay
+until x >= 310
+jump 20
+wait_floor
+until x >= 694
+jump 20
+wait_floor
+wait 200                // into the exit portal

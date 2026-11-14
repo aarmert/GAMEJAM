@@ -53,6 +53,11 @@ const SCENE_AUDIO := {
 	# Kovalamaca bölümü: kendi müziği var (canavar_escape) -> sadece sessiz mağara ambiyansı
 	"res://scenes/levels/level1.tscn": {"music": "", "ambient": "cave", "ambient_db": -5.0, "surface": "stone"},
 	"res://scenes/levels/level1_2.tscn": {"music": "lantern", "ambient": "cave", "ambient_db": -3.0, "surface": "stone"},
+	# Trials bölümleri (tema varsayılanları; kovalamaca odalarında Trials sahnesi müziği susturur,
+	# tema farklıysa trials_game.gd temanın müziğine geçer)
+	"res://trials/scenes/trials_chapter1.tscn": {"music": "forest", "ambient": "forest", "ambient_db": -3.0, "surface": "grass"},
+	"res://trials/scenes/trials_chapter2.tscn": {"music": "lantern", "ambient": "cave", "ambient_db": -3.0, "surface": "stone"},
+	"res://trials/scenes/trials_chapter3.tscn": {"music": "lantern", "ambient": "cave", "ambient_db": -3.0, "surface": "stone"},
 }
 const ENDING_FROM_SCENE := "res://scenes/levels/level1_2.tscn"
 

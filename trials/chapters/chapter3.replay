@@ -1,0 +1,24 @@
+// Replay proof for chapter3.gd (tools/trials/replay.sh trials/chapters/chapter3.gd)
+
+[room dim]
+hold right
+until x >= 150
+jump 20
+wait_floor
+until x >= 470
+jump 20
+wait_floor
+until x >= 680
+jump 20                 // up the step into the opening
+wait_room
+
+[room drain]
+hold right
+until col >= 8
+jump 30
+repeat 3
+wait_wall 60
+jump 30
+endrepeat
+wait_floor 120
+wait 200                // past the second lamp into the exit
