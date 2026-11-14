@@ -2,37 +2,39 @@ extends Node2D
 
 # Orman bölümü (oyunun ilk gerçek bölümü).
 #
-# Önizleme kamerasi: bir checkpoint'e (heal lambasi) ulasinca kamera sakin bir sekilde
-# bir sonrakine kayar, kisa bir süre orada bekler ve oyuncuya geri döner.
-#  - Süre mesafeye göre hesaplanir (preview_pan_speed), [preview_min_time, preview_max_time] araliginda.
-#  - Önizleme boyunca oyun durdurulur (get_tree().paused): oyuncu hareket edemez,
-#    karanlik/düsman hasari islemez. Ziplama tusu önizlemeyi atlar.
-#  - Önizleme kamerasi oyuncu kamerasinin zoom ve limit degerlerini kullanir,
-#    böylece önizlemede de bölüm disi (bos alan) görünmez.
-#  - Hedef zaten ekrandaysa önizleme yapilmaz. Ölüp checkpoint'ten dogunca ayni
-#    önizleme tekrar gösterilmez.
+# Önizleme kamerasi: bir checkpoint'e (sokak lambasi) ulasinca kamera önümüzdeki bölümü
+# gösterir ve oyuncuya geri döner. Her bölümün önizlemesi PreviewPaths/Section<i> altindaki
+# Marker2D'leri sirayla gezer (her noktanin "hold" metadata'si o noktada bekleme süresi),
+# en sonda bir sonraki checkpoint'te (son bölümde portalda) durur.
+# Bölümlerde önizlemede görülen bir karar var (hangi delikten inilecegi vb.); bu yüzden
+# önizleme, oyuncu lambanin isiginda dururken W / yukari ok ile tekrar oynatilabilir.
+#  - Önizleme boyunca oyun durdurulur (get_tree().paused). Ziplama tusu önizlemeyi atlar.
+#  - Önizleme kamerasi oyuncu kamerasinin zoom ve limit degerlerini kullanir.
+#  - Ölüp checkpoint'ten dogunca ayni önizleme kendiliginden tekrar gösterilmez.
 
 @onready var canvas_modulate: CanvasModulate = $CanvasModulate
 @onready var background_modulate: CanvasModulate = get_node_or_null("ParallaxBackground/BackgroundModulate")
 @onready var flashlight: PointLight2D = $MayaChar2/FlashlightPivot/PointLight2D
 
+## checkpoints[i] ulasilinca Section<i> önizlemesi oynar ve checkpoints[i + 1]'de biter.
 @export var checkpoints: Array[Area2D] = []
 @export var player: CharacterBody2D
 @export var preview_camera: Camera2D
 @export var player_camera: Camera2D
+## Section0, Section1, ... adli çocuklari olan dügüm; her birinin altinda Marker2D yol noktalari.
+@export var preview_paths: Node2D
 @export var preview_enabled: bool = true
-## Kameranin hedefe kayma hizi (piksel/sn). Süre bununla hesaplanir ve asagidaki sinirlara kirpilir.
-@export var preview_pan_speed: float = 300.0
-@export var preview_min_time: float = 1.2
-@export var preview_max_time: float = 3.2
-## Hedefin üzerinde bekleme süresi (sn)
-@export var preview_hold_time: float = 1.1
-## Geri dönüs gidisten bu kat kadar hizli
-@export var preview_return_speedup: float = 1.6
+## Kameranin kayma hizi (piksel/sn)
+@export var preview_pan_speed: float = 460.0
+@export var preview_min_leg_time: float = 0.35
+@export var preview_max_leg_time: float = 2.4
+## Son hedefin (sonraki checkpoint) üzerinde bekleme süresi (sn)
+@export var preview_hold_time: float = 1.0
+@export var preview_return_time: float = 0.9
 ## Atlaninca oyuncuya geri dönüs süresi (sn)
 @export var preview_skip_return_time: float = 0.35
-## Hedef ekran kenarina bu kadar pikselden yakinsa "görünmüyor" sayilir
-@export var preview_visible_margin: float = 40.0
+## Ilk bölüm: karanlik daha yavas can eritir (5 can / bu kadar saniye)
+@export var darkness_tick_seconds: float = 2.0
 
 # Ölüp checkpoint'ten yeniden dogunca ayni önizlemeleri tekrar gösterme
 static var _shown_previews: Dictionary = {}
@@ -43,7 +45,9 @@ var is_previewing: bool = false
 var _tween: Tween
 var _ticker: _PreviewTicker
 var _skipping: bool = false
-var _pending_index: int = -1
+var _pending: Array[int] = []
+var _hint_layer: CanvasLayer
+var _hint_label: Label
 
 
 # Oyun durdurulmusken (paused) de çalisan küçük yardimci: atlama tusunu dinler.
@@ -64,6 +68,10 @@ func _ready() -> void:
 		background_modulate.color = Color(0.55, 0.52, 0.64)
 	flashlight.enabled = true
 
+	var dark_timer := player.get_node_or_null("DarknessDamageTimer") as Timer
+	if dark_timer:
+		dark_timer.wait_time = darkness_tick_seconds
+
 	visited.resize(checkpoints.size())
 	visited.fill(false)
 
@@ -73,6 +81,7 @@ func _ready() -> void:
 	_ticker = _PreviewTicker.new()
 	_ticker.on_tick = _preview_tick
 	add_child(_ticker)
+	_build_hint()
 
 	if preview_camera:
 		# Durdurulmus oyunda da kamera güncellensin
@@ -82,9 +91,30 @@ func _ready() -> void:
 
 	if player_camera:
 		player_camera.reset_smoothing()
+	# Ilk önizleme, oyuncu baslangiçtaki lambaya (checkpoint 0) degince oynar.
 
-	if preview_enabled and checkpoints.size() > 0 and not CheckpointData.has_spawn:
-		play_preview_to(0)
+
+func _build_hint() -> void:
+	_hint_layer = CanvasLayer.new()
+	_hint_layer.layer = 5
+	_hint_layer.process_mode = Node.PROCESS_MODE_ALWAYS
+	add_child(_hint_layer)
+	_hint_label = Label.new()
+	var ls := LabelSettings.new()
+	ls.font = load("res://blockholders/fonts/PixelOperator8.ttf")
+	ls.font_size = 16
+	ls.font_color = Color(0.9, 0.88, 1.0, 0.9)
+	ls.outline_size = 4
+	ls.outline_color = Color(0.08, 0.06, 0.14, 0.9)
+	_hint_label.label_settings = ls
+	_hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_hint_label.set_anchors_and_offsets_preset(Control.PRESET_CENTER_BOTTOM)
+	_hint_label.offset_left = -300
+	_hint_label.offset_right = 300
+	_hint_label.offset_top = -44
+	_hint_label.offset_bottom = -20
+	_hint_label.visible = false
+	_hint_layer.add_child(_hint_label)
 
 
 func _sync_preview_camera() -> void:
@@ -112,69 +142,105 @@ func _clamp_center(p: Vector2) -> Vector2:
 		clampf(p.y, lo.y, maxf(lo.y, hi.y)))
 
 
-func _is_on_screen(p: Vector2) -> bool:
-	var rect := Rect2(player_camera.get_screen_center_position() - _view_half_size(), _view_half_size() * 2.0)
-	return rect.grow(-preview_visible_margin).has_point(p)
-
-
 func _wait_for_scene_transition() -> void:
 	var st := get_node_or_null("/root/SceneTransition")
 	while st != null and st.has_method("is_transitioning") and st.is_transitioning():
 		await get_tree().process_frame
 
 
-func play_preview_to(index: int) -> void:
-	if not preview_enabled:
+# Section<index> yol noktalari + son hedef: [konum, bekleme]
+func _section_points(index: int) -> Array:
+	var pts: Array = []
+	var sec: Node = preview_paths.get_node_or_null("Section%d" % index) if preview_paths else null
+	if sec:
+		for m in sec.get_children():
+			if m is Node2D:
+				pts.append([(m as Node2D).global_position, float(m.get_meta("hold", 0.0))])
+	pts.append([checkpoints[index + 1].global_position, preview_hold_time])
+	return pts
+
+
+func has_preview(index: int) -> bool:
+	return index >= 0 and index + 1 < checkpoints.size() and checkpoints[index + 1] != null
+
+
+## index: ulasilan checkpoint. force: daha önce gösterildiyse de göster (tekrar izleme).
+func play_preview(index: int, force: bool = false) -> void:
+	if not preview_enabled or not has_preview(index):
+		return
+	if not force and _shown_previews.has(index):
 		return
 	if is_previewing:
-		# Su anki önizleme bitince göster
-		_pending_index = maxi(_pending_index, index)
-		return
-	if index < 0 or index >= checkpoints.size() or checkpoints[index] == null:
-		return
-	if _shown_previews.has(index):
+		if not _pending.has(index):
+			_pending.append(index)
 		return
 	is_previewing = true
+	_shown_previews[index] = true
 	# Fade/hikaye ekrani bitmeden önizleme baslamasin
 	await _wait_for_scene_transition()
 	await get_tree().process_frame
-	if not is_inside_tree() or not is_instance_valid(player):
+	if not is_inside_tree() or not is_instance_valid(player) or player.get("_dying"):
 		is_previewing = false
 		return
 
-	var target_world: Vector2 = checkpoints[index].global_position
-	if _is_on_screen(target_world):
-		_end_preview()
-		return
-	_shown_previews[index] = true
-
 	_sync_preview_camera()
 	var start := player_camera.get_screen_center_position()
-	var target := _clamp_center(target_world)
-	var dist := start.distance_to(target)
-	var go_time := clampf(dist / preview_pan_speed, preview_min_time, preview_max_time)
-	var back_time := clampf(go_time / preview_return_speedup, preview_min_time * 0.75, preview_max_time)
-
 	get_tree().paused = true
 	preview_camera.global_position = start
 	preview_camera.make_current()
 	_skipping = false
+	_show_hint("Space: geç")
 
 	_tween = create_tween()
 	_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	_tween.tween_interval(0.25)
-	_tween.tween_property(preview_camera, "global_position", target, go_time)
-	_tween.tween_interval(preview_hold_time)
-	_tween.tween_property(preview_camera, "global_position", start, back_time)
+	var cur := start
+	for p in _section_points(index):
+		var target := _clamp_center(p[0])
+		var t := clampf(cur.distance_to(target) / preview_pan_speed, preview_min_leg_time, preview_max_leg_time)
+		_tween.tween_property(preview_camera, "global_position", target, t)
+		if p[1] > 0.0:
+			_tween.tween_interval(p[1])
+		cur = target
+	_tween.tween_property(preview_camera, "global_position", start, preview_return_time)
 	_tween.tween_callback(_finish_preview)
 
 
 func _preview_tick() -> void:
-	if not is_previewing or _skipping or _tween == null:
+	if is_previewing:
+		if not _skipping and _tween != null and Input.is_action_just_pressed("jump"):
+			_skip_preview()
 		return
-	if Input.is_action_just_pressed("jump"):
-		_skip_preview()
+	# Lambanin isiginda: W / yukari ok ile önizlemeyi tekrar izle
+	var at := _lamp_player_is_in()
+	if at >= 0 and has_preview(at) and _shown_previews.has(at) and not get_tree().paused:
+		_show_hint("W / ↑ : yolu tekrar göster")
+		if Input.is_action_just_pressed("move_up"):
+			play_preview(at, true)
+	else:
+		_hide_hint()
+
+
+func _lamp_player_is_in() -> int:
+	if not is_instance_valid(player) or player.get("_dying"):
+		return -1
+	for i in checkpoints.size():
+		var cp := checkpoints[i]
+		if cp != null and cp.get("player_in_area") == player:
+			return i
+	return -1
+
+
+func _show_hint(text: String) -> void:
+	if _hint_label:
+		_hint_label.text = text
+		_hint_label.visible = true
+
+
+func _hide_hint() -> void:
+	if _hint_label:
+		_hint_label.visible = false
 
 
 func _skip_preview() -> void:
@@ -192,18 +258,13 @@ func _skip_preview() -> void:
 func _finish_preview() -> void:
 	_tween = null
 	_skipping = false
+	_hide_hint()
 	player_camera.make_current()
 	player_camera.reset_smoothing()
 	get_tree().paused = false
-	_end_preview()
-
-
-func _end_preview() -> void:
 	is_previewing = false
-	if _pending_index >= 0:
-		var next := _pending_index
-		_pending_index = -1
-		play_preview_to(next)
+	if not _pending.is_empty():
+		play_preview(_pending.pop_front())
 
 
 func _exit_tree() -> void:
@@ -216,6 +277,4 @@ func checkpoint_reached(index: int) -> void:
 	if index < 0 or index >= visited.size() or visited[index]:
 		return
 	visited[index] = true
-	var next_index := index + 1
-	if preview_enabled and next_index < checkpoints.size():
-		play_preview_to(next_index)
+	play_preview(index)
