@@ -18,6 +18,15 @@ extends CharacterBody2D
 @export var starts_with_flashlight_skill := false
 @export var darkness_damage_enabled := false
 @export var use_darkness_mechanics := false
+## Trials modu (opt-in). null = hikaye modu: aşağıdaki "Trials" kodlarının hiçbiri çalışmaz,
+## oyuncu eskisi gibi davranır. Trials sahnesi oyuncuyu oluştururken bir PlayerMovementRules atar.
+## (scripts/player/player_movement_rules.gd). Tip bilerek Resource: global sınıf önbelleğine bağımlı olmasın.
+@export var movement_rules: Resource = null
+
+# Trials: anında yeniden deneme. die() sahneyi yeniden yüklemez, bu sinyali verir.
+signal trials_died(at: Vector2)
+# Trials: bir küre (çift zıplama / dash) kullanıldı; Trials sahnesi küreyi tüketir.
+signal trials_orb_used(orb: Area2D)
 
 const FLASHLIGHT_ENERGY := 1.35
 const FLASHLIGHT_TEXTURE_SCALE := 2.45
@@ -33,6 +42,18 @@ var _ambient_light: PointLight2D = null
 var _lantern_light: PointLight2D = null
 var sarmasikta_mi: bool = false
 var _dying := false
+
+# --- Trials (yalnızca movement_rules != null iken kullanılır) ---
+var trials_drain_enabled := false   # oda karanlık hasarına izin veriyorsa Trials sahnesi açar
+var _t_coyote := 0.0
+var _t_jump_buffer := 0.0
+var _t_jump_rising := false
+var _t_dash_dir := Vector2.RIGHT
+var _t_dash_left := 0.0
+var _t_orbs: Array[Area2D] = []
+var _t_layer := 1
+var _t_mask := 1
+var _t_respawn_frames := 0   # yeniden doğuştan sonra katman (alanların bizi görmesi) birkaç kare kapalı
 
 
 func _resolve_health_bar() -> ProgressBar:
@@ -69,8 +90,14 @@ func _ready() -> void:
 	if use_darkness_mechanics:
 		_setup_ambient_light()
 
+	if movement_rules != null:
+		_trials_ready()
+
 
 func _physics_process(delta: float) -> void:
+	if movement_rules != null:
+		_trials_physics_process(delta)
+		return
 	if not health_component.can_receive_actions():
 		velocity += get_gravity() * delta
 		move_and_slide()
@@ -153,6 +180,10 @@ func _update_dash_cooldown_ui() -> void:
 
 
 func take_damage(amount: int) -> void:
+	if movement_rules != null and movement_rules.one_hit_kill:
+		if health_component.can_receive_actions():
+			die()
+		return
 	if health_component.apply_damage(health_bar, amount):
 		die()
 	elif health_component.can_receive_actions():
@@ -166,6 +197,9 @@ func heal(amount: int) -> void:
 func die() -> void:
 	# Aynı anda birden fazla kaynak (onlarca karanlık bloğu, killzone, diken) die()
 	# çağırabilir; ölüm dizisi yalnızca bir kez çalışmalı.
+	if movement_rules != null and movement_rules.instant_retry:
+		_trials_die()
+		return
 	if _dying:
 		return
 	_dying = true
@@ -223,6 +257,8 @@ func _on_orbit_detector_area_entered(area: Area2D) -> void:
 		double_jump_orbit_overlap_count += 1
 	if area.is_in_group("dash_orbit"):
 		dash_orbit_overlap_count += 1
+	if movement_rules != null and not _t_orbs.has(area):
+		_t_orbs.append(area)
 
 
 func _on_orbit_detector_area_exited(area: Area2D) -> void:
@@ -230,9 +266,19 @@ func _on_orbit_detector_area_exited(area: Area2D) -> void:
 		double_jump_orbit_overlap_count = max(double_jump_orbit_overlap_count - 1, 0)
 	if area.is_in_group("dash_orbit"):
 		dash_orbit_overlap_count = max(dash_orbit_overlap_count - 1, 0)
+	if movement_rules != null:
+		_t_orbs.erase(area)
 
 
 func _on_darkness_damage_timer_timeout() -> void:
+	if movement_rules != null:
+		# Trials: ortam karanlığı sadece oda izin verdiyse can eritir (tek vuruşta öldürmez)
+		if trials_drain_enabled and safe_zones == 0 and health_component.can_receive_actions():
+			if health_component.apply_damage(health_bar, 5):
+				die()
+			else:
+				_sfx("hurt", 0.08)
+		return
 	if not darkness_damage_enabled:
 		return
 	if safe_zones == 0 and health_component.can_receive_actions():
@@ -401,3 +447,206 @@ func _create_cone_texture() -> ImageTexture:
 			var angle_falloff: float = 1.0 - angle / half_angle
 			img.set_pixel(x, y, Color(1.0, 1.0, 1.0, clampf(dist_falloff * sqrt(angle_falloff), 0.0, 1.0)))
 	return ImageTexture.create_from_image(img)
+
+
+# =====================================================================================
+# Trials modu (opt-in). Buradaki fonksiyonlar yalnızca movement_rules != null iken çağrılır;
+# hikaye modunun kod yolu yukarıda olduğu gibi kalır.
+# =====================================================================================
+
+func _trials_ready() -> void:
+	_t_layer = collision_layer
+	_t_mask = collision_mask
+	if has_dash_skill:
+		dash_component.can_dash = true
+	if dash_bar_ui != null:
+		dash_bar_ui.hide()
+	if health_bar != null:
+		health_bar.visible = false
+
+
+func _trials_physics_process(delta: float) -> void:
+	var r = movement_rules
+	if not health_component.can_receive_actions():
+		return # öldü: trials_respawn() gelene kadar donuk
+	if _t_respawn_frames > 0:
+		_t_respawn_frames -= 1
+		if _t_respawn_frames == 0:
+			collision_layer = _t_layer
+
+	var on_floor := is_on_floor()
+	var dashing: bool = dash_component.dashing
+	if dashing:
+		_t_dash_left -= delta
+		if _t_dash_left <= 0.0:
+			dash_component.on_dash_stop_timeout()
+			velocity.y = _t_dash_dir.y * dash_component.dash_speed * r.dash_end_vertical_factor
+			dashing = false
+
+	if not dashing:
+		jump_wall_component.apply_gravity(self, delta)
+		if r.max_fall_speed > 0.0 and velocity.y > r.max_fall_speed:
+			velocity.y = r.max_fall_speed
+
+	if on_floor:
+		_t_coyote = r.coyote_time
+		jump_component.reset_on_floor(self)
+		if r.dash_refill_on_floor and not dashing and has_dash_skill:
+			dash_component.can_dash = true
+	else:
+		_t_coyote = maxf(_t_coyote - delta, 0.0)
+
+	var direction := Input.get_axis("move_left", "move_right")
+	var touching_wall: bool = jump_wall_component.apply_wall_slide(self, not dashing)
+
+	if Input.is_action_just_pressed("jump"):
+		_t_jump_buffer = r.jump_buffer_time + 0.0001
+	if _t_jump_buffer > 0.0 and not dashing:
+		if on_floor or _t_coyote > 0.0:
+			jump_component.jump_from_floor(self)
+			_t_coyote = 0.0
+			_t_jump_buffer = 0.0
+			_t_jump_rising = true
+			_sfx("jump")
+		elif touching_wall and sarmasikta_mi:
+			jump_wall_component.wall_jump(self, jump_component.jump_velocity)
+			jump_component.restore_extra_jumps()
+			_t_jump_buffer = 0.0
+			_t_jump_rising = true
+			_sfx("jump")
+		else:
+			var orb := _t_active_orb("double_jump_orbit")
+			if orb != null:
+				var ok := false
+				if r.orb_jump_ignores_extra_limit:
+					velocity.y = jump_component.jump_velocity
+					ok = true
+				else:
+					ok = jump_component.try_extra_jump(self, true)
+				if ok:
+					_t_jump_buffer = 0.0
+					_t_jump_rising = true
+					_sfx("orb_jump", 0.02)
+					trials_orb_used.emit(orb)
+	_t_jump_buffer = maxf(_t_jump_buffer - delta, 0.0)
+
+	# Değişken zıplama yüksekliği: yükselirken tuş bırakılırsa hız kesilir
+	if _t_jump_rising:
+		if velocity.y >= 0.0 or dashing:
+			_t_jump_rising = false
+		elif not Input.is_action_pressed("jump"):
+			velocity.y *= r.jump_cut_factor
+			_t_jump_rising = false
+
+	if has_dash_skill and not dashing:
+		if not dash_component.can_dash:
+			var dorb := _t_active_orb("dash_orbit")
+			if dorb != null:
+				dash_component.can_dash = true
+				_sfx("orb_dash", 0.02)
+				trials_orb_used.emit(dorb)
+		if Input.is_action_just_pressed("dash") and dash_component.can_dash:
+			dash_component.dashing = true
+			dash_component.can_dash = false
+			dash_component.recovery_time_left = 0.0
+			dash_component.trail_time_accumulator = 0.0
+			_t_dash_left = r.dash_duration
+			_t_dash_dir = _trials_dash_direction(r)
+			_t_jump_rising = false
+			_t_jump_buffer = 0.0
+			dashing = true
+			_sfx("dash")
+
+	movement_component.apply_facing(animated_sprite, direction)
+
+	if dashing:
+		velocity = _t_dash_dir * dash_component.dash_speed
+		dash_component.spawn_dash_trail(self, animated_sprite, delta)
+		animated_sprite.play("dash")
+	else:
+		if not dash_component.apply_recovery_movement(self, direction, movement_component.speed, delta):
+			movement_component.apply_horizontal_movement(self, direction)
+		if is_on_floor():
+			if direction == 0:
+				animated_sprite.play("idle_torch" if has_flashlight_skill else "idle")
+			else:
+				animated_sprite.play("run_torch" if has_flashlight_skill else "run")
+		elif touching_wall:
+			animated_sprite.play("wall_slide")
+		else:
+			animated_sprite.play("idle_jump" if direction == 0 else "jump")
+
+	move_and_slide()
+	animated_sprite.self_modulate = Color.WHITE if (dash_component.can_dash or not has_dash_skill) else r.no_dash_tint
+
+	if has_flashlight_skill:
+		flashlight_component.flashlight_update(delta)
+		_update_flashlight_direction()
+
+
+func _trials_dash_direction(r) -> Vector2:
+	var x := Input.get_axis("move_left", "move_right")
+	var y := 0.0
+	if r.dash_8way and InputMap.has_action("move_up") and InputMap.has_action("move_down"):
+		y = Input.get_axis("move_up", "move_down")
+	var v := Vector2(signf(x), signf(y))
+	if v == Vector2.ZERO:
+		v = Vector2(-1.0 if animated_sprite.flip_h else 1.0, 0.0)
+	return v.normalized()
+
+
+func _t_active_orb(group: String) -> Area2D:
+	for a in _t_orbs:
+		if is_instance_valid(a) and a.is_inside_tree() and a.is_in_group(group) and bool(a.get_meta("trials_active", true)):
+			return a
+	return null
+
+
+func _trials_die() -> void:
+	if _dying or _t_respawn_frames > 0:
+		return
+	_dying = true
+	health_component.mark_dead()
+	_sfx(movement_rules.death_sfx, 0.05)
+	velocity = Vector2.ZERO
+	dash_component.dashing = false
+	set_deferred("collision_layer", 0)
+	set_deferred("collision_mask", 0)
+	trials_died.emit(global_position)
+
+
+## Trials: oyuncuyu verilen noktada (ayak hizası) canlandırır; hız, dash, zıplama durumu sıfırlanır.
+func trials_respawn(pos: Vector2) -> void:
+	global_position = pos
+	velocity = Vector2.ZERO
+	_dying = false
+	health_component.revive()
+	if health_bar != null:
+		health_bar.init_health(health_component.initial_health)
+	# Maske hemen (zemine basalım), katman 2 fizik karesi sonra: ölümdeki eski konumdan kalan
+	# alan çakışması (diken vb.) yeni doğan oyuncuyu bir daha öldürmesin.
+	collision_mask = _t_mask
+	collision_layer = 0
+	_t_respawn_frames = 2
+	dash_component.dashing = false
+	dash_component.recovery_time_left = 0.0
+	dash_component.can_dash = has_dash_skill
+	jump_component.restore_extra_jumps()
+	_t_coyote = 0.0
+	_t_jump_buffer = 0.0
+	_t_jump_rising = false
+	_t_dash_left = 0.0
+	animated_sprite.self_modulate = Color.WHITE
+	animated_sprite.modulate = Color.WHITE
+	animated_sprite.scale = Vector2.ONE
+	animated_sprite.play("idle_torch" if has_flashlight_skill else "idle")
+
+
+## Trials: oda geçişinde/küre ile dash yenile.
+func trials_refill_dash() -> void:
+	if has_dash_skill and not dash_component.dashing:
+		dash_component.can_dash = true
+
+
+func trials_is_dead() -> bool:
+	return _dying
