@@ -17,7 +17,7 @@ extends Node
 @export var auto_turn_on: bool = false
 @export var aura_energy: float = 0.55
 @export var aura_scale: float = 3.4
-@export var pickup_hint: String = "Z: Feneri aç / kapat\nFener gölgeleri durdurur."
+@export var pickup_hint: String = "Z: Feneri yak / kapat\nFener gölgeleri durdurur."
 
 const THEME := preload("res://ui/game_theme.tres")
 
