@@ -180,10 +180,10 @@ func _draw() -> void:
 				if mask & (1 << i):
 					_draw_edge(tl, i, c, young, lvl, tick)
 		# doğuş parlaması: yalnızca cephede doğan hücrede kısa, yarı saydam bir "pop" (3 adım, küçülerek)
-		if age < 0.21 and mask != 0:
+		if age < 0.07 and mask != 0:
 			var step := int(age / 0.07)
 			var inset: float = [6.0, 9.0, 12.0][mini(step, 2)]
-			var col: Color = [Color(C_BLOOM[1], 0.38), Color(C_BLOOM[2], 0.26), Color(C_BLOOM[3], 0.16)][mini(step, 2)]
+			var col: Color = [Color(C_BLOOM[1], 0.2), Color(C_BLOOM[2], 0.26), Color(C_BLOOM[3], 0.16)][mini(step, 2)]
 			# artı biçimli piksel kümesi (kare kutu gibi görünmesin)
 			var w := CELL - inset * 2.0
 			draw_rect(Rect2(tl + Vector2(inset + 4.0, inset), Vector2(w - 8.0, w)), col)
