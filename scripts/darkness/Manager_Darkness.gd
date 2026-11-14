@@ -104,10 +104,12 @@ var contiguity_violations := 0 # komşusu olmadan konan blok sayısı (her zaman
 
 @onready var muzik = $Muzik
 
-# canavar_escape.wav içindeki hazır bölümler: [başlangıç, bitiş] saniye
-const MUZIK_YAVAS := Vector2(0.0, 4.5)
-const MUZIK_ORTA := Vector2(4.5, 9.5)
-const MUZIK_HIZLI := Vector2(9.5, 14.35)
+# canavar_escape.wav içindeki hazır bölümler: [başlangıç, bitiş] saniye (tools/audio/make_chase.py üretir).
+# Her bölüm 16 s'lik (120 bpm, 8 ölçü) kesintisiz bir döngü + 0.3 s devamı. bitiş = başlangıç + 16 + 0.042:
+# aşağıdaki "bitiş - 0.05" kontrolü kare başına yapıldığından atlama ölçü sınırına ~±8 ms içinde düşer.
+const MUZIK_YAVAS := Vector2(0.0, 16.042)
+const MUZIK_ORTA := Vector2(16.3, 32.342)
+const MUZIK_HIZLI := Vector2(32.6, 48.642)
 
 var loop_baslangic: float = MUZIK_ORTA.x
 var loop_bitis: float = MUZIK_ORTA.y

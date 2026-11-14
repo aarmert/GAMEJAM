@@ -64,8 +64,12 @@ const ENDING_FROM_SCENE := "res://scenes/levels/level1_2.tscn"
 # Sahnede bulunup Music bus'ına taşınacak hazır müzik düğümleri (level1 kovalamaca müziği)
 const SCENE_MUSIC_NODE_NAMES := ["Muzik"]
 # canavar_escape.wav ~ -12.4 LUFS -> 0 dB + Music bus -3 = ~-15.4 LUFS: oyunun en yüksek müziği
-# (orman ~-23, fener mağarası ~-22). Dosyanın tepe değeri ~+0.3 dBTP; Master limiter korur.
+# (orman ~-23, fener mağarası ~-22). Bölümler: yavaş -13.2, orta -12.5, hızlı -11.8 LUFS; tepe -1.2 dBFS
+# (tools/audio/make_chase.py; eski dosya canavar_escape_original.wav).
 const SCENE_MUSIC_NODE_DB := 3.0
+# Kovalamaca müziği bölüm değiştirince (Manager_Darkness.loop_baslangic değişir, müzik yeni bölümün başına
+# atlar) eski bölüm bu kadar saniyede sönerek biter: sert kesme yerine kısa bir geçiş. Yeni bölüm anında başlar.
+const SCENE_MUSIC_TAIL_TIME := 0.18
 
 const SFX := {
 	"jump": "res://audio/sfx/jump.wav",
@@ -160,6 +164,7 @@ var _music_tweens := {}
 var _music_base_db := {}        # müzik oynatıcısı -> o parçanın normal seviyesi (duck sonrası dönülecek)
 var _chimed_checkpoints := {}   # checkpoint sesi çalmış alanlar (yeniden doğunca tekrar çalmasın)
 var _chime_scene_path := ""
+var _music_tails: Node = null     # kovalamaca müziği bölüm geçişi kuyrukları (bkz. _SceneMusicTails)
 
 
 func _ready() -> void:
@@ -171,6 +176,9 @@ func _ready() -> void:
 	_sting_player = _make_player("Sting", MUSIC_BUS)
 	for i in SFX_POOL_SIZE:
 		_sfx_pool.append(_make_player("Sfx%d" % i, SFX_BUS))
+	_music_tails = _SceneMusicTails.new()
+	_music_tails.name = "SceneMusicTails"
+	add_child(_music_tails)
 	var st := get_node_or_null("/root/SceneTransition")
 	if st != null and st.has_signal("transition_started"):
 		st.transition_started.connect(_on_transition_started)
@@ -330,9 +338,53 @@ func _on_transition_started() -> void:
 
 
 func _route_scene_music(scene: Node) -> void:
-	for n in _scene_music_nodes(scene):
+	var nodes := _scene_music_nodes(scene)
+	for n in nodes:
 		n.bus = MUSIC_BUS
 		n.volume_db = SCENE_MUSIC_NODE_DB
+	if _music_tails:
+		_music_tails.watch(nodes)
+
+
+## Sahne müziği bölüm geçişi: Manager_Darkness bölüm değişince müziği yeni bölümün başından çalar (sert kesme).
+## Bu düğüm her karede, Manager_Darkness'tan SONRA (process_priority) çalışır; loop_baslangic değiştiyse eski
+## bölümü aynı konumdan bir kardeş oynatıcıda sürdürüp SCENE_MUSIC_TAIL_TIME'da söndürür. Bölüm içi döngü
+## (seek) loop_baslangic'i değiştirmediği için kuyruk üretmez.
+class _SceneMusicTails extends Node:
+	var _watched := {}  # müzik düğümü -> [loop_baslangic, son konum]
+
+	func _ready() -> void:
+		process_mode = Node.PROCESS_MODE_ALWAYS
+		process_priority = 100
+
+	func watch(nodes: Array[Node]) -> void:
+		_watched.clear()
+		for n in nodes:
+			_watched[n] = [null, -1.0]
+
+	func _process(delta: float) -> void:
+		for n in _watched.keys():
+			if not is_instance_valid(n):
+				_watched.erase(n)
+				continue
+			var parent: Node = n.get_parent()
+			var section = parent.get("loop_baslangic") if parent else null
+			var st: Array = _watched[n]
+			if section != null and st[0] != null and section != st[0] and st[1] >= 0.0:
+				_spawn_tail(n, st[1] + delta * n.pitch_scale)
+			st[0] = section
+			st[1] = n.get_playback_position() if n.playing else -1.0
+
+	func _spawn_tail(n: Node, from: float) -> void:
+		var tail: Node = n.duplicate(0)
+		tail.name = "MuzikTail"
+		tail.autoplay = false
+		tail.volume_db = n.volume_db - 4.0  # yeni bölüm tam seviyede başlıyor: toplam tepe artmasın
+		n.add_sibling(tail)  # aynı ebeveyn + aynı yerel konum: 2D kaydırma/zayıflama aynı kalır
+		tail.play(from)
+		var tw := tail.create_tween()
+		tw.tween_property(tail, "volume_db", n.volume_db - 40.0, SCENE_MUSIC_TAIL_TIME)
+		tw.tween_callback(tail.queue_free)
 
 
 func _scene_music_nodes(scene: Node) -> Array[Node]:
