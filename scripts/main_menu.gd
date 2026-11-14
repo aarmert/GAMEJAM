@@ -20,6 +20,8 @@ const STORY_LEVELS := [
 	{"label": "Story 2  -  Cave Chase", "scene": "res://scenes/levels/level1.tscn", "images": ["res://assets/cutscene2.png"]},
 	{"label": "Story 3  -  Lantern Cave", "scene": "res://scenes/levels/level1_2.tscn", "images": []},
 ]
+# Trials bolumleri henuz demo; hazir olunca true yap.
+const SHOW_TRIALS := false
 const TRIALS := [
 	{"numeral": "I", "id": "chapter1", "scene": "res://trials/scenes/trials_chapter1.tscn", "file": "res://trials/chapters/chapter1.gd"},
 	{"numeral": "II", "id": "chapter2", "scene": "res://trials/scenes/trials_chapter2.tscn", "file": "res://trials/chapters/chapter2.gd"},
@@ -119,8 +121,9 @@ func _build_select() -> void:
 		b.pressed.connect(_on_story_pressed.bind(s))
 		if _select_first == null:
 			_select_first = b
-	v.add_child(_header("TRIALS"))
-	for t in TRIALS:
+	if SHOW_TRIALS:
+		v.add_child(_header("TRIALS"))
+	for t in (TRIALS if SHOW_TRIALS else []):
 		var title := ""
 		if ResourceLoader.exists(t.file):
 			title = TrialsParser.parse_file(t.file).title
