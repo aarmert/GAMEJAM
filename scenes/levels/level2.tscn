@@ -976,6 +976,7 @@ position = Vector2(3648, 380)
 metadata/hold = 0.7
 
 [node name="Hints" type="Node2D" parent="."]
+modulate = Color(5, 5, 5, 1)
 
 [node name="HintMove" type="Label" parent="Hints"]
 offset_left = 72
@@ -991,7 +992,7 @@ offset_left = 816
 offset_top = 242
 offset_right = 1056
 offset_bottom = 254
-text = "yeşil küre: havada bir kez daha zıpla"
+text = "altın küre: havada bir kez daha zıpla"
 label_settings = SubResource("LabelSettings_hint")
 horizontal_alignment = 1
 

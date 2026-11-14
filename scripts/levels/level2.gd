@@ -189,7 +189,7 @@ func play_preview(index: int, force: bool = false) -> void:
 	preview_camera.global_position = start
 	preview_camera.make_current()
 	_skipping = false
-	_show_hint("Space: geç")
+	_show_hint("Space: atla")
 
 	_tween = create_tween()
 	_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
