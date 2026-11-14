@@ -2,7 +2,7 @@ extends Node
 
 # Son bölümün sade fener akışı:
 #  - Fener alındığı anda kendiliğinden yanar
-#  - Pil bitmez (drain yok), istersen F ile kapatıp açabilirsin
+#  - Pil bitmez (drain yok), istersen Z ile (flashlight eylemi) kapatıp açabilirsin
 #  - Rastgele karartma (blackout) yok
 #
 # Inspector'dan pil tüketimini geri açmak istersen drain_rate'i değiştir.
