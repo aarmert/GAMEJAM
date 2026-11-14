@@ -6,6 +6,9 @@
 .export.cfg
 *.translation
 .godot/
-.DS_Store.claude/
+.DS_Store
 .claude/
 .claude/
+.vscode/settings.json
+__pycache__/
+export_presets.cfg

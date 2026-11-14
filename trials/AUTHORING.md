@@ -19,7 +19,7 @@ The chapter is wrapped in a GDScript raw string, so exported builds include it (
 dropped by the export filter). Do not put `"""` inside the text. Nothing else in the `.gd` needs
 changing.
 
-## Quick start (run from the repo root, `/home/taytay/.t3/projects/GAMEJAM`)
+## Quick start (run from the repo root)
 
 ```bash
 tools/trials/validate.sh trials/chapters/chapter2.gd          # format + structure check (headless, ~3 s)
