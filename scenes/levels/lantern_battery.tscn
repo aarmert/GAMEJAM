@@ -1,0 +1,19 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/lantern_battery.gd" id="1_bat"]
+[ext_resource type="Script" path="res://scripts/levels/lantern_crystal.gd" id="2_cry"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_bat"]
+radius = 14.0
+
+[node name="LanternBattery" type="Area2D"]
+script = ExtResource("1_bat")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -8)
+shape = SubResource("CircleShape2D_bat")
+
+[node name="Gem" type="Node2D" parent="."]
+script = ExtResource("2_cry")
+color = Color(1, 0.78, 0.3, 1)
+light_scale = 0.8

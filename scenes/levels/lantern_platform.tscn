@@ -1,0 +1,21 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/lantern_mover.gd" id="1_mov"]
+[ext_resource type="Texture2D" uid="uid://btls0ltayq6y3" path="res://assets/tileset-Sheet.png" id="2_ts"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_plat"]
+size = Vector2(92, 12)
+
+[node name="LanternPlatform" type="AnimatableBody2D"]
+script = ExtResource("1_mov")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_ts")
+centered = false
+offset = Vector2(-48, -2)
+region_enabled = true
+region_rect = Rect2(32, 128, 96, 32)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 6)
+shape = SubResource("RectangleShape2D_plat")
