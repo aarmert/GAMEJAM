@@ -1,7 +1,10 @@
 [gd_scene format=3 uid="uid://ef13r7dcuoxl"]
 
 [ext_resource type="Script" uid="uid://diiski368v7cb" path="res://scripts/orbit/orbit_zone.gd" id="1_orbit"]
-[ext_resource type="Texture2D" uid="uid://cu0kbp5sl3b0i" path="res://blockholders/sprites/coin.png" id="2_coin"]
+[ext_resource type="Texture2D" uid="uid://baheju01k0cug" path="res://assets/orbs/orb_dash.png" id="2_orb"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_glow"]
+light_mode = 1
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_orbit"]
 radius = 14.0
@@ -17,8 +20,18 @@ scale = Vector2(2, 2)
 shape = SubResource("CircleShape2D_orbit")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1676329413]
-modulate = Color(0.45, 0.85, 1, 0.95)
-scale = Vector2(1.7, 1.7)
-texture = ExtResource("2_coin")
-region_enabled = true
-region_rect = Rect2(1, 1, 14, 13)
+material = SubResource("CanvasItemMaterial_glow")
+texture = ExtResource("2_orb")
+offset = Vector2(0, -2)
+hframes = 8
+vframes = 2
+
+[node name="Burst" type="Sprite2D" parent="." unique_id=1676329420]
+visible = false
+z_index = 1
+material = SubResource("CanvasItemMaterial_glow")
+texture = ExtResource("2_orb")
+offset = Vector2(0, -2)
+hframes = 8
+vframes = 2
+frame = 11
