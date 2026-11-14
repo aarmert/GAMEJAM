@@ -5,6 +5,17 @@
 [ext_resource type="Texture2D" uid="uid://bhdy5biuylj7" path="res://assets/parallax-demon-woods-far-trees.png" id="2_8ln24"]
 [ext_resource type="Texture2D" uid="uid://d20y2ct2gwg00" path="res://assets/parallax-demon-woods-mid-trees.png" id="3_rtw2f"]
 [ext_resource type="Texture2D" uid="uid://dp3b1xnfyae5e" path="res://assets/parallax-demon-woods-close-trees.png" id="4_oa1go"]
+[ext_resource type="Texture2D" uid="uid://b1kdcq6qrlxro" path="res://assets/Title.png" id="5_title"]
+
+[sub_resource type="Gradient" id="Gradient_shade"]
+offsets = PackedFloat32Array(0, 0.28, 0.72, 1)
+colors = PackedColorArray(0.03, 0.02, 0.06, 0.92, 0.03, 0.02, 0.06, 0, 0.03, 0.02, 0.06, 0, 0.03, 0.02, 0.06, 0.95)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_shade"]
+gradient = SubResource("Gradient_shade")
+width = 8
+height = 128
+fill_to = Vector2(0, 1)
 
 [node name="main_menu" type="Node2D" unique_id=142355369]
 script = ExtResource("1_8ln24")
@@ -26,6 +37,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+offset_left = -264.0
+offset_top = -239.0
+offset_right = 264.0
+offset_bottom = 65.0
 mouse_filter = 2
 texture = ExtResource("1_wu84c")
 expand_mode = 1
@@ -37,6 +52,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+offset_left = -264.0
+offset_top = -239.0
+offset_right = 264.0
+offset_bottom = 65.0
 mouse_filter = 2
 texture = ExtResource("2_8ln24")
 expand_mode = 1
@@ -48,6 +67,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+offset_left = -264.0
+offset_top = -239.0
+offset_right = 264.0
+offset_bottom = 65.0
 mouse_filter = 2
 texture = ExtResource("3_rtw2f")
 expand_mode = 1
@@ -59,40 +82,83 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+offset_left = -264.0
+offset_top = -239.0
+offset_right = 264.0
+offset_bottom = 65.0
 mouse_filter = 2
 texture = ExtResource("4_oa1go")
 expand_mode = 1
 
+[node name="Shade" type="TextureRect" parent="Control/CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_shade")
+expand_mode = 1
+
+[node name="Title" type="TextureRect" parent="Control/CanvasLayer"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -352.0
+offset_top = 44.0
+offset_right = 352.0
+offset_bottom = 172.0
+grow_horizontal = 2
+mouse_filter = 2
+texture = ExtResource("5_title")
+expand_mode = 1
+
 [node name="start" type="Button" parent="Control/CanvasLayer" unique_id=717964225]
-custom_minimum_size = Vector2(400, 100)
+custom_minimum_size = Vector2(420, 72)
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -200.0
-offset_top = -50.0
-offset_right = 200.0
-offset_bottom = 50.0
+offset_left = -210.0
+offset_top = -28.0
+offset_right = 210.0
+offset_bottom = 44.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 48
+theme_override_font_sizes/font_size = 40
 text = "Start"
 
-[node name="exit" type="Button" parent="Control/CanvasLayer" unique_id=1902089925]
-custom_minimum_size = Vector2(400, 100)
+[node name="levels" type="Button" parent="Control/CanvasLayer"]
+custom_minimum_size = Vector2(420, 72)
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -200.0
-offset_top = 76.0
-offset_right = 200.0
-offset_bottom = 176.0
+offset_left = -210.0
+offset_top = 60.0
+offset_right = 210.0
+offset_bottom = 132.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 48
+theme_override_font_sizes/font_size = 40
+text = "Level Select"
+
+[node name="exit" type="Button" parent="Control/CanvasLayer" unique_id=1902089925]
+custom_minimum_size = Vector2(420, 72)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -210.0
+offset_top = 148.0
+offset_right = 210.0
+offset_bottom = 220.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 40
 text = "Exit"
 
 [connection signal="pressed" from="Control/CanvasLayer/start" to="." method="_on_start_pressed"]
